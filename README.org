@@ -84,6 +84,8 @@ en Lean:
 #+INCLUDE: "./src/Basicos/Ejemplo_de_rw_sobre_hipotesis.lean" src lean
 #+INCLUDE: "./src/Basicos/Ejemplo_de_rw_sobre_hipotesis.org"
 
+#+BEGIN_COMMENT
+
 # *** [[./src/Basicos/Ejercicio_de_rw_sobre_hipotesis.lean][Ejercicio de rw con hipótesis]]
 # #+INCLUDE: "./src/Basicos/Ejercicio_de_rw_sobre_hipotesis.lean" src lean
 
@@ -643,6 +645,8 @@ en Lean:
 # *** [[./src/Conjuntos/Teorema_de_Cantor.lean][Teorema de Cantor]]
 # #+INCLUDE: "./src/Conjuntos/Teorema_de_Cantor.lean" src lean
 
+#+END_COMMENT
+
 * Bibliografía
 
 + [[https://raw.githubusercontent.com/madvorak/lean4-cheatsheet/main/lean-tactics.pdf][Lean 4 cheatsheet]]. ~ Martin Dvořák.
@@ -651,15 +655,5 @@ en Lean:
 + [[https://github.com/madvorak/lean3-tactic-lean4/blob/main/README.md][Reference sheet for people who know Lean 3 and want to write tactic-based proofs in Lean 4]]. ~ Martin Dvořák.
 + [[https://leanprover.github.io/theorem_proving_in_lean4/title_page.html][Theorem proving in Lean 4]]. ~ Jeremy Avigad, Leonardo de Moura, Soonho
   Kong y Sebastian Ullrich.
-
-# + [[https://github.com/mavam/abstract-algebra-cheatsheet][Abstract algebra cheatsheet]]. de Matthias Vallentin.
-# + [[https://gist.github.com/utensil/dc635f2991255f76d8da797efdabbf15][Basic guide to tactics]] de Kevin Buzzard.
-# + [[https://leanprover-community.github.io/mathlib_docs/][Lean mathlib documentation]].
-# + [[https://leanprover-community.github.io/mathematics_in_lean/index.html][Mathematics in Lean]] de Jeremy Avigad, Kevin Buzzard, Robert Y. Lewis y Patrick
-#   Massot.
-# + [[https://github.com/kbuzzard/xena/tree/master/Maths_Challenges][Maths challenges for the Lean curious]] de Kevin Buzzard.
-# + [[https://leanprover.github.io/reference/index.html][The Lean reference manual]] de Jeremy Avigad, Gabriel Ebner y Sebastian Ullrich.
-# + [[https://leanprover-community.github.io/undergrad.html][Undergraduate mathematics in mathlib]] y
-#   [[https://leanprover-community.github.io/undergrad_todo.html][Missing undergraduate mathematics in mathlib]].
 
 #+LATEX: \end{document}
