@@ -10,7 +10,6 @@
 * Contenido                                                             :TOC:
 - [[#introducción][Introducción]]
   - [[#resumen][Resumen]]
-  - [[#creación-del-proyecto][Creación del proyecto]]
   - [[#presentación-panorámica-de-lean][Presentación panorámica de Lean]]
 - [[#aspectos-básicos-del-razonamiento-matemático-en-lean][Aspectos básicos del razonamiento matemático en Lean]]
   - [[#cálculos][Cálculos]]
@@ -28,13 +27,13 @@ Los ejercicios se han ido publicando, desde el 10 de julio de 2022, en
 el blog [[https://www.glc.us.es/~jalonso/calculemus][Calculemus]] y su código en [[https://github.com/jaalonso/Calculemus2][GitHub]].
 
 #+BEGIN_COMMENT
-** Creación del proyecto
-
-+ Se crea con
-  : lake +leanprover/lean4:nightly-2023-07-06 new Matematicas_en_Lean4 math
-  : cd Matematicas_en_Lean4/
-  : lake update
-  : lake exe cache get
+# ** Creación del proyecto
+#
+# + Se crea con
+#   : lake +leanprover/lean4:nightly-2023-07-06 new Matematicas_en_Lean4 math
+#   : cd Matematicas_en_Lean4/
+#   : lake update
+#   : lake exe cache get
 #+END_COMMENT
 
 ** Presentación panorámica de Lean

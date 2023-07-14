@@ -1,10 +1,10 @@
 \input preambulo
 
 \chapter{Introducción}
-\label{sec:org3dbd36f}
+\label{sec:org1697995}
 
 \section{Resumen}
-\label{sec:orgd787200}
+\label{sec:orgd6eb0b0}
 
 El objetivo de este trabajo es presentar el uso de \href{https://leanprover.github.io/lean4/doc/}{Lean4} (y su librería
 matemática \href{https://github.com/leanprover-community/mathlib4}{mathlib4}) mediante ejemplos matemáticos. Está basado en el
@@ -13,11 +13,26 @@ libro \href{https://leanprover-community.github.io/mathematics\_in\_lean/mathema
 Los ejercicios se han ido publicando, desde el 10 de julio de 2022, en
 el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su código en \href{https://github.com/jaalonso/Calculemus2}{GitHub}.
 
+\#+BEGIN\_COMMENT
+\section{Creación del proyecto}
+\label{sec:org0b24e61}
+
+\begin{itemize}
+\item Se crea con
+\begin{verbatim}
+lake +leanprover/lean4:nightly-2023-07-06 new Matematicas_en_Lean4 math
+cd Matematicas_en_Lean4/
+lake update
+lake exe cache get
+\end{verbatim}
+\end{itemize}
+\#+END\_COMMENT
+
 \section{Presentación panorámica de Lean}
-\label{sec:org1cc3145}
+\label{sec:orgbf445e0}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_evaluacion.lean}{Ejemplo de evaluación}}
-\label{sec:org6d7e4fd}
+\label{sec:orgcb5da9e}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Calcular el valor de 2+3.
@@ -30,7 +45,7 @@ el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su códi
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_comprobacion\_con\_check.lean}{Ejemplo de comprobación con check}}
-\label{sec:org44ba804}
+\label{sec:orgaa2cc60}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio: Calcular el tipo de la expresión 2+3.
@@ -45,7 +60,7 @@ el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su códi
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_definicion\_de\_funciones.lean}{Ejemplo de definición de funciones}}
-\label{sec:orgd74a0bd}
+\label{sec:org624f9ab}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -79,7 +94,7 @@ def f (x : ℕ) :=
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_proposiciones.lean}{Ejemplo de proposiciones}}
-\label{sec:org28bd36b}
+\label{sec:org4c91466}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -106,7 +121,7 @@ def ultimo_teorema_de_Fermat :=
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_teoremas.lean}{Ejemplo de teoremas}}
-\label{sec:orge124728}
+\label{sec:org5b55050}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -167,7 +182,7 @@ sorry
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_demostracion.lean}{Ejemplo de demostración}}
-\label{sec:orgd27aada}
+\label{sec:org6d8c1e6}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los productos de los números naturales por
@@ -491,7 +506,7 @@ y simples, mientras que otras exploran diferentes enfoques y estilos de
 escritura en Lean.
 
 \chapter{Aspectos básicos del razonamiento matemático en Lean}
-\label{sec:org8b3c320}
+\label{sec:org2d4e1ba}
 
 En este capítulo se presentan los aspectos básicos del razonamiento matemático
 en Lean:
@@ -502,10 +517,10 @@ en Lean:
 \end{itemize}
 
 \section{Cálculos}
-\label{sec:orgc0ecb7d}
+\label{sec:org7573cfd}
 
 \subsection{\href{./src/Basicos/Asociativa\_conmutativa\_de\_los\_reales.lean}{Asociativa conmutativa de los reales}}
-\label{sec:org791588c}
+\label{sec:orgec196f0}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -614,7 +629,7 @@ reescritura y propiedades algebraicas básicas. Cada demostración
 presenta un enfoque distinto, pero todos llegan al mismo resultado.
 
 \subsection{\href{./src/Basicos/Ejercicio\_sobre\_aritmetica\_real\_1.lean}{Ejercicio sobre aritmética real (1)}}
-\label{sec:org2812fca}
+\label{sec:org810f6e0}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -732,7 +747,7 @@ reescrituras (\texttt{rw}), cálculos sucesivos (\texttt{calc}), y la táctica a
 \texttt{ring}.
 
 \subsection{\href{./src/Basicos/Ejercicio\_sobre\_aritmetica\_real\_2.lean}{Ejercicio sobre aritmética real (2)}}
-\label{sec:orgb8b4d72}
+\label{sec:org91b8c33}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -852,7 +867,7 @@ demostración utiliza la táctica \texttt{ring} para demostrar automáticamente 
 igualdad utilizando propiedades algebraicas.
 
 \subsection{\href{./src/Basicos/Ejemplo\_de\_rw\_sobre\_hipotesis.lean}{Ejemplo de rw con hipótesis}}
-\label{sec:org69f9563}
+\label{sec:org03c2425}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c, d, e y f son números reales
@@ -981,7 +996,7 @@ ventajas y puede ser preferido dependiendo del contexto y de la
 experiencia del desarrollador.
 
 \chapter{Bibliografía}
-\label{sec:org2227bb6}
+\label{sec:org630500b}
 
 \begin{itemize}
 \item \href{https://raw.githubusercontent.com/madvorak/lean4-cheatsheet/main/lean-tactics.pdf}{Lean 4 cheatsheet}. \textasciitilde{} Martin Dvořák.
