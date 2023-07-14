@@ -1,6 +1,6 @@
 #+TITLE: Matemáticas en Lean4
 #+STARTUP: showall
-#+OPTIONS: ^:nil
+#+OPTIONS: ^:nil num:t
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./estilo.css" />
 #+LATEX_CLASS: book-noparts
 #+LATEX_CLASS_OPTIONS: [a4paper,12pt,twoside]
