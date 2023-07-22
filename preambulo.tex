@@ -5,6 +5,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Configuración para XeLaTeX
+\usepackage{tocloft}
+\setlength{\cftbeforechapskip}{2ex}
+\setlength{\cftbeforesecskip}{0.5ex}
+\setlength{\cftchapnumwidth}{2em}
+\setlength{\cftsecnumwidth}{2em}
+\setlength{\cftsubsecnumwidth}{4em}
+\setlength{\cftsubsecindent}{4em}
+\cftsetindents{chapter}{0em}{\cftchapnumwidth}
+
 \usepackage{fontspec}
 \usepackage{xltxtra}
 \defaultfontfeatures{Ligatures=TeX,Numbers=OldStyle}

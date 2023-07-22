@@ -3,9 +3,26 @@
 --    (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
 -- ---------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-variables a b : ℝ
+-- Por la siguiente cadena de igualdades
+--    (a + b)(a + b)
+--    = (a + b)a + (a + b)b    [por la distributiva]
+--    = aa + ba + (a + b)b     [por la distributiva]
+--    = aa + ba + (ab + bb)    [por la distributiva]
+--    = aa + ba + ab + bb      [por la asociativa]
+--    = aa + (ba + ab) + bb    [por la asociativa]
+--    = aa + (ab + ab) + bb    [por la conmutativa]
+--    = aa + 2(ab) + bb        [por def. de doble]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c : ℝ)
 
 -- 1ª demostración
 -- ===============
@@ -14,13 +31,13 @@ example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
 calc
   (a + b) * (a + b)
-      = (a + b) * a + (a + b) * b       : by rw mul_add
-  ... = a * a + b * a + (a + b) * b     : by rw add_mul
-  ... = a * a + b * a + (a * b + b * b) : by rw add_mul
-  ... = a * a + b * a + a * b + b * b   : by rw ← add_assoc
-  ... = a * a + (b * a + a * b) + b * b : by rw add_assoc (a * a)
-  ... = a * a + (a * b + a * b) + b * b : by rw mul_comm b a
-  ... = a * a + 2 * (a * b) + b * b     : by rw ← two_mul
+    = (a + b) * a + (a + b) * b       := by rw [mul_add]
+  _ = a * a + b * a + (a + b) * b     := by rw [add_mul]
+  _ = a * a + b * a + (a * b + b * b) := by rw [add_mul]
+  _ = a * a + b * a + a * b + b * b   := by rw [←add_assoc]
+  _ = a * a + (b * a + a * b) + b * b := by rw [add_assoc (a * a)]
+  _ = a * a + (a * b + a * b) + b * b := by rw [mul_comm b a]
+  _ = a * a + 2 * (a * b) + b * b     := by rw [←two_mul]
 
 -- 2ª demostración
 -- ===============
@@ -29,9 +46,9 @@ example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
 calc
   (a + b) * (a + b)
-      = a * a + b * a + (a * b + b * b) : by rw [mul_add, add_mul, add_mul]
-  ... = a * a + (b * a + a * b) + b * b : by rw [←add_assoc, add_assoc (a * a)]
-  ... = a * a + 2 * (a * b) + b * b     : by rw [mul_comm b a, ←two_mul]
+    = a * a + b * a + (a * b + b * b) := by rw [mul_add, add_mul, add_mul]
+  _ = a * a + (b * a + a * b) + b * b := by rw [←add_assoc, add_assoc (a * a)]
+  _ = a * a + 2 * (a * b) + b * b     := by rw [mul_comm b a, ←two_mul]
 
 -- 3ª demostración
 -- ===============
@@ -40,9 +57,9 @@ example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
 calc
   (a + b) * (a + b)
-      = a * a + b * a + (a * b + b * b) : by ring
-  ... = a * a + (b * a + a * b) + b * b : by ring
-  ... = a * a + 2 * (a * b) + b * b     : by ring
+    = a * a + b * a + (a * b + b * b) := by ring
+  _ = a * a + (b * a + a * b) + b * b := by ring
+  _ = a * a + 2 * (a * b) + b * b     := by ring
 
 -- 4ª demostración
 -- ===============
@@ -56,53 +73,60 @@ by ring
 
 example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
-begin
-  rw mul_add,
-  rw add_mul,
-  rw add_mul,
-  rw ← add_assoc,
-  rw add_assoc (a * a),
-  rw mul_comm b a,
-  rw ← two_mul,
-end
+by
+  rw [mul_add]
+  rw [add_mul]
+  rw [add_mul]
+  rw [←add_assoc]
+  rw [add_assoc (a * a)]
+  rw [mul_comm b a]
+  rw [←two_mul]
+
 
 -- El desarrollo de la prueba es
 --
 --    a b : ℝ
 --    ⊢ (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
--- rw mul_add,
+-- rw [mul_add]
 --    ⊢ (a + b) * a + (a + b) * b = a * a + 2 * (a * b) + b * b
--- rw add_mul,
+-- rw [add_mul]
 --    ⊢ a * a + b * a + (a + b) * b = a * a + 2 * (a * b) + b * b
--- rw add_mul,
+-- rw [add_mul]
 --    ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
--- rw ← add_assoc,
+-- rw [←add_assoc]
 --    ⊢ a * a + b * a + a * b + b * b = a * a + 2 * (a * b) + b * b
--- rw add_assoc (a * a),
+-- rw add_assoc (a * a)]
 --    ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw mul_comm b a,
+-- rw [mul_comm b a]
 --    ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw ← two_mul,
---    no goals
+-- rw [←two_mul]
+--    goals accomplished
 
 -- 6ª demostración
 -- ===============
 
 example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
-begin
-  rw [mul_add, add_mul, add_mul],
-  rw [←add_assoc, add_assoc (a * a)],
-  rw [mul_comm b a, ←two_mul],
-end
+by
+  rw [mul_add, add_mul, add_mul]
+  rw [←add_assoc, add_assoc (a * a)]
+  rw [mul_comm b a, ←two_mul]
 
 -- El desarrollo de la prueba es
 --
 --    a b : ℝ
 --    ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw [mul_add, add_mul, add_mul],
+-- rw [mul_add, add_mul, add_mul]
 --    ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
--- rw [←add_assoc, add_assoc (a * a)],
+-- rw [←add_assoc, add_assoc (a * a)]
 --    ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
 -- rw [mul_comm b a, ←two_mul]
---    no goals
+--    goals accomplished
+
+-- Comentario:
+-- Los lemas usados son:
+-- + add_assoc a b c : a + b + c = a + (b + c)
+-- + add_mul a b c   : (a + b) * c = a * c + b * c
+-- + mul_add a b c   : a * (b + c) = a * b + a * c
+-- + mul_comm a b    : a * b = b * a
+-- + two_mul a       : 2 * a = a + a

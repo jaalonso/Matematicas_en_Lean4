@@ -13,6 +13,7 @@
   - [[#presentación-panorámica-de-lean][Presentación panorámica de Lean]]
 - [[#aspectos-básicos-del-razonamiento-matemático-en-lean][Aspectos básicos del razonamiento matemático en Lean]]
   - [[#cálculos][Cálculos]]
+  - [[#demostraciones-en-estructuras-algebraicas][Demostraciones en estructuras algebraicas]]
 - [[#bibliografía][Bibliografía]]
 
 * Introducción
@@ -55,7 +56,6 @@ el blog [[https://www.glc.us.es/~jalonso/calculemus][Calculemus]] y su código e
 
 *** [[./src/Introduccion/Ejemplo_de_demostracion.lean][Ejemplo de demostración]]
 #+INCLUDE: "./src/Introduccion/Ejemplo_de_demostracion.lean" src lean
-#+INCLUDE: "./src/Introduccion/Ejemplo_de_demostracion.org"
 
 * Aspectos básicos del razonamiento matemático en Lean
 
@@ -69,62 +69,61 @@ en Lean:
 
 *** [[./src/Basicos/Asociativa_conmutativa_de_los_reales.lean][Asociativa conmutativa de los reales]]
 #+INCLUDE: "./src/Basicos/Asociativa_conmutativa_de_los_reales.lean" src lean
-#+INCLUDE: "./src/Basicos/Asociativa_conmutativa_de_los_reales.org"
 
 *** [[./src/Basicos/Ejercicio_sobre_aritmetica_real_1.lean][Ejercicio sobre aritmética real (1)]]
 #+INCLUDE: "./src/Basicos/Ejercicio_sobre_aritmetica_real_1.lean" src lean
-#+INCLUDE: "./src/Basicos/Ejercicio_sobre_aritmetica_real_1.org"
 
 *** [[./src/Basicos/Ejercicio_sobre_aritmetica_real_2.lean][Ejercicio sobre aritmética real (2)]]
 #+INCLUDE: "./src/Basicos/Ejercicio_sobre_aritmetica_real_2.lean" src lean
-#+INCLUDE: "./src/Basicos/Ejercicio_sobre_aritmetica_real_2.org"
 
 *** [[./src/Basicos/Ejemplo_de_rw_sobre_hipotesis.lean][Ejemplo de rw con hipótesis]]
 #+INCLUDE: "./src/Basicos/Ejemplo_de_rw_sobre_hipotesis.lean" src lean
-#+INCLUDE: "./src/Basicos/Ejemplo_de_rw_sobre_hipotesis.org"
+
+*** [[./src/Basicos/Ejercicio_de_rw_sobre_hipotesis_1.lean][Ejercicio de rw con hipótesis (1)]]
+#+INCLUDE: "./src/Basicos/Ejercicio_de_rw_sobre_hipotesis_1.lean" src lean
+
+*** [[./src/Basicos/Ejercicio_de_rw_sobre_hipotesis_2.lean][Ejercicio de rw con hipótesis (2)]]
+#+INCLUDE: "./src/Basicos/Ejercicio_de_rw_sobre_hipotesis_2.lean" src lean
+
+*** [[./src/Basicos/Declaracion_de_variables_en_secciones.lean][Declaración de variables en secciones]]
+#+INCLUDE: "./src/Basicos/Declaracion_de_variables_en_secciones.lean" src lean
+
+*** [[./src/Basicos/Demostracion_con_calc.lean][Demostración con calc]]
+#+INCLUDE: "./src/Basicos/Demostracion_con_calc.lean" src lean
+
+*** [[./src/Basicos/Ejercicio_con_calc.lean][Ejercicio con calc]]
+#+INCLUDE: "./src/Basicos/Ejercicio_con_calc.lean" src lean
+
+*** [[./src/Basicos/Ejercicio_Suma_por_diferencia.lean][Ejercicio: Suma por diferencia]]
+#+INCLUDE: "./src/Basicos/Ejercicio_Suma_por_diferencia.lean" src lean
+
+*** [[./src/Basicos/Reescritura_en_hipotesis_y_tactica_exact.lean][Reescritura en hipótesis y táctica exact]]
+#+INCLUDE: "./src/Basicos/Reescritura_en_hipotesis_y_tactica_exact.lean" src lean
+
+*** [[./src/Basicos/Demostraciones_con_ring.lean][Demostraciones con ring]]
+#+INCLUDE: "./src/Basicos/Demostraciones_con_ring.lean" src lean
+
++ [[./src/Basicos/Ejemplo_con_nth_rewrite.lean][Ejemplo con nth\_rewrite]]
+#+INCLUDE: "./src/Basicos/Ejemplo_con_nth_rewrite.lean" src lean
+
+** Demostraciones en estructuras algebraicas
+
+*** Demostraciones en anillos
+
+*** [[./src/Basicos/Axiomas_de_anillos.lean][Axiomas de anillos]]
+#+INCLUDE: "./src/Basicos/Axiomas_de_anillos.lean" src lean
+
+*** [[./src/Basicos/Propiedades_de_anillos_conmutativos.lean][Propiedades de anillos conmutativos]]
+#+INCLUDE: "./src/Basicos/Propiedades_de_anillos_conmutativos.lean" src lean
+
+*** [[./src/Basicos/Propiedades_basicas_de_anillos.lean][Propiedades básicas de anillos]]
+#+INCLUDE: "./src/Basicos/Propiedades_basicas_de_anillos.lean" src lean
+
+*** [[./src/Basicos/neg_add_cancel_left.lean][Lema neg_add_cancel_left]]
+#+INCLUDE: "./src/Basicos/neg_add_cancel_left.lean" src lean
 
 #+BEGIN_COMMENT
 
-# *** [[./src/Basicos/Ejercicio_de_rw_sobre_hipotesis.lean][Ejercicio de rw con hipótesis]]
-# #+INCLUDE: "./src/Basicos/Ejercicio_de_rw_sobre_hipotesis.lean" src lean
-
-# *** [[./src/Basicos/Reescritura_con_varios_lemas.lean][Reescritura con varios lemas]]
-# #+INCLUDE: "./src/Basicos/Reescritura_con_varios_lemas.lean" src lean
-#
-# *** [[./src/Basicos/Declaracion_de_variables_en_secciones.lean][Declaración de variables en secciones]]
-# #+INCLUDE: "./src/Basicos/Declaracion_de_variables_en_secciones.lean" src lean
-#
-# *** [[./src/Basicos/Demostracion_con_calc.lean][Demostración con calc]]
-# #+INCLUDE: "./src/Basicos/Demostracion_con_calc.lean" src lean
-#
-# *** [[./src/Basicos/Ejercicio_con_calc.lean][Ejercicio con calc]]
-# #+INCLUDE: "./src/Basicos/Ejercicio_con_calc.lean" src lean
-#
-# *** [[./src/Basicos/Ejercicio_Suma_por_diferencia.lean][Ejercicio: Suma por diferencia]]
-# #+INCLUDE: "./src/Basicos/Ejercicio_Suma_por_diferencia.lean" src lean
-#
-# *** [[./src/Basicos/Reescritura_en_hipotesis_y_tactica_exact.lean][Reescritura en hipótesis y táctica exact]]
-# #+INCLUDE: "./src/Basicos/Reescritura_en_hipotesis_y_tactica_exact.lean" src lean
-#
-# *** [[./src/Basicos/Demostraciones_con_ring.lean][Demostraciones con ring]]
-# #+INCLUDE: "./src/Basicos/Demostraciones_con_ring.lean" src lean
-#
-# ** Demostraciones en estructuras algebraicas
-#
-# *** Demostraciones en anillos
-#
-# *** [[./src/Basicos/Axiomas_de_anillos.lean][Axiomas de anillos]]
-# #+INCLUDE: "./src/Basicos/Axiomas_de_anillos.lean" src lean
-#
-# *** [[./src/Basicos/Propiedades_de_anillos_conmutativos.lean][Propiedades de anillos conmutativos]]
-# #+INCLUDE: "./src/Basicos/Propiedades_de_anillos_conmutativos.lean" src lean
-#
-# *** [[./src/Basicos/Propiedades_basicas_de_anillos.lean][Propiedades básicas de anillos]]
-# #+INCLUDE: "./src/Basicos/Propiedades_basicas_de_anillos.lean" src lean
-#
-# *** [[./src/Basicos/neg_add_cancel_left.lean][Lema neg_add_cancel_left]]
-# #+INCLUDE: "./src/Basicos/neg_add_cancel_left.lean" src lean
-#
 # *** [[./src/Basicos/neg_add_cancel_right.lean][Ejercicio neg_add_cancel_right]]
 # #+INCLUDE: "./src/Basicos/neg_add_cancel_right.lean" src lean
 #
@@ -303,7 +302,7 @@ en Lean:
 # En este capítulo se muestra el razonamiento con Lean sobre las conectivas y
 # cuantificadores; es decir, las tácticas para introducirlos en la conclusión o
 # eliminarlos de las hipótesis. Como aplicación, se demostrarán propiedades sobre
-# límites de sucesiones.
+# límites de sucesiones.org
 #
 # ** Implicación y cuantificación universal
 #

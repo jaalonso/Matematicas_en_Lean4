@@ -2,24 +2,32 @@
 -- Ejercicio 1. Importar la teoría de anillos.
 -- ----------------------------------------------------------------------
 
-import algebra.ring
+import Mathlib.Algebra.Ring.Defs
 
 -- ---------------------------------------------------------------------
--- Ejercicio 2. Crear el espacio de nombre my_ring
+-- Ejercicio 2. Crear el espacio de nombre MyRing
 -- ----------------------------------------------------------------------
 
-namespace my_ring
+namespace MyRing
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Declarar R como una variable sobre anillos.
 -- ----------------------------------------------------------------------
 
-variables {R : Type*} [ring R]
+variable {R : Type _} [Ring R]
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 5. Demostrar que para todo a, b ∈ R,
 --    -a + (a + b) = b
 -- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    -a + (a + b) = (-a + a) + b [por la asociativa]
+--                 = 0 + b        [por inverso por la izquierda]
+--                 = b            [por cero por la izquierda]
 
 -- 1ª demostración
 -- ===============
@@ -27,10 +35,9 @@ variables {R : Type*} [ring R]
 example
   (a b : R)
   : -a + (a + b) = b :=
-calc -a + (a + b)
-     = (-a + a) + b : by rw ← add_assoc
- ... = 0 + b        : by rw add_left_neg
- ... = b            : by rw zero_add
+calc -a + (a + b) = (-a + a) + b := by rw [← add_assoc]
+                _ = 0 + b        := by rw [add_left_neg]
+                _ = b            := by rw [zero_add]
 
 -- 2ª demostración
 -- ===============
@@ -54,7 +61,7 @@ by rw [←add_assoc, add_left_neg, zero_add]
 --    no goals
 
 -- ---------------------------------------------------------------------
--- Ejercicio 6. Cerrar el espacio de nombre my_ring.
+-- Ejercicio 6. Cerrar el espacio de nombre MyRing.
 -- ----------------------------------------------------------------------
 
-end my_ring
+end MyRing

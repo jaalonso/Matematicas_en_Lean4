@@ -3,31 +3,55 @@
 --    (a + b) * (a - b) = a^2 - b^2
 -- ---------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-variables a b c d : ℝ
+-- Por la siguiente cadena de igualdades:
+--    (a + b)(a - b)
+--    = a(a - b) + b(a - b)            [por la distributiva]
+--    = (aa - ab) + b(a - b)           [por la distributiva]
+--    = (a^2 - ab) + b(a - b)          [por def. de cuadrado]
+--    = (a^2 - ab) + (ba - bb)         [por la distributiva]
+--    = (a^2 - ab) + (ba - b^2)        [por def. de cuadrado]
+--    = (a^2 + -(ab)) + (ba - b^2)     [por def. de resta]
+--    = a^2 + (-(ab) + (ba - b^2))     [por la asociativa]
+--    = a^2 + (-(ab) + (ba + -b^2))    [por def. de resta]
+--    = a^2 + ((-(ab) + ba) + -b^2)    [por la asociativa]
+--    = a^2 + ((-(ab) + ab) + -b^2)    [por la conmutativa]
+--    = a^2 + (0 + -b^2)               [por def. de opuesto]
+--    = (a^2 + 0) + -b^2               [por asociativa]
+--    = a^2 + -b^2                     [por def. de cero]
+--    = a^2 - b^2                      [por def. de resta]
 
--- 1ª demostración (con calc)
--- ==========================
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c d : ℝ)
+
+-- 1ª demostración
+-- ===============
 
 example : (a + b) * (a - b) = a^2 - b^2 :=
 calc
   (a + b) * (a - b)
-      = a * (a - b) + b * (a - b)         : by rw add_mul
-  ... = (a * a - a * b) + b * (a - b)     : by rw mul_sub
-  ... = (a^2 - a * b) + b * (a - b)       : by rw ← pow_two
-  ... = (a^2 - a * b) + (b * a - b * b)   : by rw mul_sub
-  ... = (a^2 - a * b) + (b * a - b^2)     : by rw ← pow_two
-  ... = (a^2 + -(a * b)) + (b * a - b^2)  : by ring
-  ... = a^2 + (-(a * b) + (b * a - b^2))  : by rw add_assoc
-  ... = a^2 + (-(a * b) + (b * a + -b^2)) : by ring
-  ... = a^2 + ((-(a * b) + b * a) + -b^2) : by rw ← add_assoc
-                                               (-(a * b)) (b * a) (-b^2)
-  ... = a^2 + ((-(a * b) + a * b) + -b^2) : by rw mul_comm
-  ... = a^2 + (0 + -b^2)                  : by rw neg_add_self (a * b)
-  ... = (a^2 + 0) + -b^2                  : by rw ← add_assoc
-  ... = a^2 + -b^2                        : by rw add_zero
-  ... = a^2 - b^2                         : by linarith
+    = a * (a - b) + b * (a - b)         := by rw [add_mul]
+  _ = (a * a - a * b) + b * (a - b)     := by rw [mul_sub]
+  _ = (a^2 - a * b) + b * (a - b)       := by rw [← pow_two]
+  _ = (a^2 - a * b) + (b * a - b * b)   := by rw [mul_sub]
+  _ = (a^2 - a * b) + (b * a - b^2)     := by rw [← pow_two]
+  _ = (a^2 + -(a * b)) + (b * a - b^2)  := by ring
+  _ = a^2 + (-(a * b) + (b * a - b^2))  := by rw [add_assoc]
+  _ = a^2 + (-(a * b) + (b * a + -b^2)) := by ring
+  _ = a^2 + ((-(a * b) + b * a) + -b^2) := by rw [← add_assoc
+                                              (-(a * b)) (b * a) (-b^2)]
+  _ = a^2 + ((-(a * b) + a * b) + -b^2) := by rw [mul_comm]
+  _ = a^2 + (0 + -b^2)                  := by rw [neg_add_self (a * b)]
+  _ = (a^2 + 0) + -b^2                  := by rw [← add_assoc]
+  _ = a^2 + -b^2                        := by rw [add_zero]
+  _ = a^2 - b^2                         := by linarith
 
 -- Comentario. Se han usado los siguientes lemas:
 -- + pow_two a : a ^ 2 = a * a
@@ -37,26 +61,26 @@ calc
 -- + sub_sub a b c : a - b - c = a - (b + c)
 -- + add_zero a : a + 0 = a
 
--- 2ª demostración (con calc)
--- ==========================
+-- 2ª demostración
+-- ===============
 
 example : (a + b) * (a - b) = a^2 - b^2 :=
 calc
   (a + b) * (a - b)
-      = a * (a - b) + b * (a - b)         : by ring
-  ... = (a * a - a * b) + b * (a - b)     : by ring
-  ... = (a^2 - a * b) + b * (a - b)       : by ring
-  ... = (a^2 - a * b) + (b * a - b * b)   : by ring
-  ... = (a^2 - a * b) + (b * a - b^2)     : by ring
-  ... = (a^2 + -(a * b)) + (b * a - b^2)  : by ring
-  ... = a^2 + (-(a * b) + (b * a - b^2))  : by ring
-  ... = a^2 + (-(a * b) + (b * a + -b^2)) : by ring
-  ... = a^2 + ((-(a * b) + b * a) + -b^2) : by ring
-  ... = a^2 + ((-(a * b) + a * b) + -b^2) : by ring
-  ... = a^2 + (0 + -b^2)                  : by ring
-  ... = (a^2 + 0) + -b^2                  : by ring
-  ... = a^2 + -b^2                        : by ring
-  ... = a^2 - b^2                         : by ring
+    = a * (a - b) + b * (a - b)         := by ring
+  _ = (a * a - a * b) + b * (a - b)     := by ring
+  _ = (a^2 - a * b) + b * (a - b)       := by ring
+  _ = (a^2 - a * b) + (b * a - b * b)   := by ring
+  _ = (a^2 - a * b) + (b * a - b^2)     := by ring
+  _ = (a^2 + -(a * b)) + (b * a - b^2)  := by ring
+  _ = a^2 + (-(a * b) + (b * a - b^2))  := by ring
+  _ = a^2 + (-(a * b) + (b * a + -b^2)) := by ring
+  _ = a^2 + ((-(a * b) + b * a) + -b^2) := by ring
+  _ = a^2 + ((-(a * b) + a * b) + -b^2) := by ring
+  _ = a^2 + (0 + -b^2)                  := by ring
+  _ = (a^2 + 0) + -b^2                  := by ring
+  _ = a^2 + -b^2                        := by ring
+  _ = a^2 - b^2                         := by ring
 
 -- 3ª demostración
 -- ===============
@@ -73,41 +97,41 @@ by ring
 
 -- La demostración es
 example : (a + b) * (a - b) = a^2 - b^2 :=
-begin
-  rw sub_eq_add_neg,
-  rw aux,
-  rw mul_neg,
-  rw add_assoc (a * a),
-  rw mul_comm b a,
-  rw neg_add_self,
-  rw add_zero,
-  rw ← pow_two,
-  rw mul_neg,
-  rw ← pow_two,
-  rw ← sub_eq_add_neg,
-end
+by
+  rw [sub_eq_add_neg]
+  rw [aux]
+  rw [mul_neg]
+  rw [add_assoc (a * a)]
+  rw [mul_comm b a]
+  rw [neg_add_self]
+  rw [add_zero]
+  rw [← pow_two]
+  rw [mul_neg]
+  rw [← pow_two]
+  rw [← sub_eq_add_neg]
+
 
 -- El desarrollo de la demostración es
 --    ⊢ (a + b) * (a - b) = a ^ 2 - b ^ 2
--- rw sub_eq_add_neg,
+-- rw [sub_eq_add_neg]
 --    ⊢ (a + b) * (a + -b) = a ^ 2 - b ^ 2
--- rw aux,
+-- rw aux]
 --    ⊢ a * a + a * -b + b * a + b * -b = a ^ 2 - b ^ 2
--- rw mul_neg_eq_neg_mul_symm,
+-- rw [mul_neg_eq_neg_mul_symm]
 --    ⊢ a * a + -(a * b) + b * a + b * -b = a ^ 2 - b ^ 2
--- rw add_assoc (a * a),
+-- rw [add_assoc (a * a)]
 --    ⊢ a * a + (-(a * b) + b * a) + b * -b = a ^ 2 - b ^ 2
--- rw mul_comm b a,
+-- rw [mul_comm b a]
 --    ⊢ a * a + (-(a * b) + a * b) + b * -b = a ^ 2 - b ^ 2
--- rw neg_add_self,
+-- rw [neg_add_self]
 --    ⊢ a * a + 0 + b * -b = a ^ 2 - b ^ 2
--- rw add_zero,
+-- rw [add_zero]
 --    ⊢ a * a + b * -b = a ^ 2 - b ^ 2
--- rw ← pow_two,
+-- rw [← pow_two]
 --    ⊢ a ^ 2 + b * -b = a ^ 2 - b ^ 2
--- rw mul_neg_eq_neg_mul_symm,
+-- rw [mul_neg_eq_neg_mul_symm]
 --    ⊢ a ^ 2 + -(b * b) = a ^ 2 - b ^ 2
--- rw ← pow_two,
+-- rw [← pow_two]
 --    ⊢ a ^ 2 + -b ^ 2 = a ^ 2 - b ^ 2
--- rw ← sub_eq_add_neg,
---    no goals
+-- rw [← sub_eq_add_neg]
+--    goals accomplished

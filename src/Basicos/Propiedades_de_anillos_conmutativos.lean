@@ -2,20 +2,20 @@
 -- Ejercicio 1. Importar la librería de las tácticas.
 -- ----------------------------------------------------------------------
 
-import tactic
+import Mathlib.Tactic
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Declarar R como una variable de tipo de los anillos
 -- conmutativos.
 -- ----------------------------------------------------------------------
 
-variables (R : Type*) [comm_ring R]
+variable (R : Type _) [CommRing R]
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Declarar a, b, c y d como variables sobre R.
 -- ----------------------------------------------------------------------
 
-variables a b c d : R
+variable (a b c d : R)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que
@@ -53,7 +53,6 @@ example
   (h1 : c = d * a + b)
   (h2 : b = a * d)
   : c = 2 * a * d :=
-begin
-  rw [h1, h2],
+by
+  rw [h1, h2]
   ring
-end

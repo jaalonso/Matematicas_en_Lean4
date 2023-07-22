@@ -3,6 +3,16 @@
 -- números pares son pares.
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Si n es par, entonces (por la definición de `Even`) existe un k tal que
+--    n = k + k         (1)
+-- Por tanto,
+--    mn = m(k + k)     (por (1))
+--       = mk + mk      (por la propiedad distributiva)
+-- Por consiguiente, mn es par.
+
 import Mathlib.Data.Nat.Basic
 import Mathlib.Data.Nat.Parity
 import Mathlib.Tactic

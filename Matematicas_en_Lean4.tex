@@ -1,10 +1,10 @@
 \input preambulo
 
 \chapter{Introducción}
-\label{sec:org1697995}
+\label{sec:org506f43c}
 
 \section{Resumen}
-\label{sec:orgd6eb0b0}
+\label{sec:org1e874c5}
 
 El objetivo de este trabajo es presentar el uso de \href{https://leanprover.github.io/lean4/doc/}{Lean4} (y su librería
 matemática \href{https://github.com/leanprover-community/mathlib4}{mathlib4}) mediante ejemplos matemáticos. Está basado en el
@@ -13,26 +13,11 @@ libro \href{https://leanprover-community.github.io/mathematics\_in\_lean/mathema
 Los ejercicios se han ido publicando, desde el 10 de julio de 2022, en
 el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su código en \href{https://github.com/jaalonso/Calculemus2}{GitHub}.
 
-\#+BEGIN\_COMMENT
-\section{Creación del proyecto}
-\label{sec:org0b24e61}
-
-\begin{itemize}
-\item Se crea con
-\begin{verbatim}
-lake +leanprover/lean4:nightly-2023-07-06 new Matematicas_en_Lean4 math
-cd Matematicas_en_Lean4/
-lake update
-lake exe cache get
-\end{verbatim}
-\end{itemize}
-\#+END\_COMMENT
-
 \section{Presentación panorámica de Lean}
-\label{sec:orgbf445e0}
+\label{sec:orgfacd955}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_evaluacion.lean}{Ejemplo de evaluación}}
-\label{sec:orgcb5da9e}
+\label{sec:org4153a72}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Calcular el valor de 2+3.
@@ -45,7 +30,7 @@ lake exe cache get
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_comprobacion\_con\_check.lean}{Ejemplo de comprobación con check}}
-\label{sec:orgaa2cc60}
+\label{sec:org06c8444}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio: Calcular el tipo de la expresión 2+3.
@@ -60,7 +45,7 @@ lake exe cache get
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_definicion\_de\_funciones.lean}{Ejemplo de definición de funciones}}
-\label{sec:org624f9ab}
+\label{sec:org4696dba}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -94,7 +79,7 @@ def f (x : ℕ) :=
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_proposiciones.lean}{Ejemplo de proposiciones}}
-\label{sec:org4c91466}
+\label{sec:org147fbcb}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -121,7 +106,7 @@ def ultimo_teorema_de_Fermat :=
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_teoremas.lean}{Ejemplo de teoremas}}
-\label{sec:org5b55050}
+\label{sec:orgb363e33}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -182,12 +167,22 @@ sorry
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_demostracion.lean}{Ejemplo de demostración}}
-\label{sec:org6d8c1e6}
+\label{sec:orgb22cf80}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los productos de los números naturales por
 -- números pares son pares.
 -- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Si n es par, entonces (por la definición de `Even`) existe un k tal que
+--    n = k + k         (1)
+-- Por tanto,
+--    mn = m(k + k)     (por (1))
+--       = mk + mk      (por la propiedad distributiva)
+-- Por consiguiente, mn es par.
 
 import Mathlib.Data.Nat.Basic
 import Mathlib.Data.Nat.Parity
@@ -272,241 +267,9 @@ example : ∀ m n : Nat, Even n → Even (m * n) := by
 -- 5. Al mover el cursor sobre las pruebas se actualiza la ventana de
 --    objetivos.
 \end{verbatim}
-\subsubsection*{Demostraciones comentadas}
-
-Las demostraciones presentadas tienen como objetivo demostrar la
-proposición de que, para cualquier número natural \texttt{m} y \texttt{n}, si \texttt{n} es par
-(\texttt{Even}), entonces el producto de \texttt{m} y \texttt{n} también es par. A continuación,
-analizaremos cada demostración en detalle:
-
-La \textbf{1ª demostración} comienza con el comando \texttt{example}, que establece la
-meta que se desea demostrar. Luego, se introducen las variables \texttt{m} y
-\texttt{n} utilizando el comando \texttt{rintro}, lo que permite utilizarlas en la
-prueba. A continuación, se introduce la hipótesis de que \texttt{n} es par
-utilizando \texttt{⟨k, hk⟩}, donde \texttt{k} es un número natural y \texttt{hk} es una
-prueba de que \texttt{n = k + k}.
-
-Para demostrar que \texttt{m * n} es par, se utiliza el comando \texttt{use m * k},
-que establece \texttt{m * k} como el número natural que demostrará que \texttt{m * n}
-es par. Luego, se utiliza el comando \texttt{rw [hk]} para reemplazar \texttt{n} en la
-meta con \texttt{k + k}, utilizando la prueba \texttt{hk}.
-
-Finalmente, se utiliza el comando \texttt{ring} para simplificar la expresión
-\texttt{m * (k + k)} a \texttt{m * k + m * k} utilizando las propiedades algebraicas
-de los números naturales.
-
-En resumen, la demostración establece que si \texttt{n} es par, entonces
-\texttt{m * n} también es par, utilizando la propiedad de la paridad de los números
-naturales.
-
-La \textbf{2ª demostración} es similar a la primera, pero incluye un paso
-adicional utilizando el comando \texttt{rw [mul\_add]}.
-
-Al igual que en la primera demostración, se comienza con el comando
-\texttt{example}, se introducen las variables \texttt{m} y \texttt{n} con \texttt{rintro}, y se
-establece la hipótesis de que \texttt{n} es par utilizando \texttt{⟨k, hk⟩}. A
-continuación, se utiliza el comando \texttt{use m * k} para establecer \texttt{m * k}
-como el número natural que demostrará que \texttt{m * n} es par.
-
-Después de eso, se utiliza el comando \texttt{rw [hk]} para reemplazar \texttt{n} en
-la meta por \texttt{k *+ k}, utilizando la prueba \texttt{hk}. Esto es similar a la
-primera demostración.
-
-Sin embargo, en la segunda demostración se agrega el comando
-\texttt{rw [mul\_add]} adicionalmente. Este comando utiliza la propiedad
-distributiva de la multiplicación respecto a la adición en los números
-naturales. Al aplicar \texttt{rw [mul\_add]}, se expande la expresión
-\texttt{m * (k + k)} en la meta a \texttt{m * k + m * k}.
-
-En resumen, la segunda demostración es una extensión de la primera,
-donde se agrega el paso adicional \texttt{rw [mul\_add]} para aplicar la
-propiedad distributiva de la multiplicación respecto a la adición en los
-números naturales. Esto permite expandir la expresión \texttt{m * (k + k)} a
-\texttt{m * k + m * k} en la meta de la demostración.
-
-La \textbf{3ª demostración} comienza con el comando \texttt{rintro} seguido de
-\texttt{m n ⟨k, hk⟩}. Esto introduce las variables \texttt{m} y \texttt{n}, así como una hipótesis
-\texttt{hk} de la forma \texttt{⟨k, hk⟩} que establece que \texttt{n} es par.
-
-Luego se utiliza \texttt{use m * k} para establecer \texttt{m * k} como el número
-demostrará que \texttt{m * n} es par. Esto se logra al utilizar el comando \texttt{rw}
-(reemplazo) con \texttt{[hk, mul\_add]}. El reemplazo se realiza en dos
-pasos. Primero, se reemplaza \texttt{hk}, lo que resulta en la sustitución de
-\texttt{n} por \texttt{k + k} en la meta. Luego, se aplica la propiedad distributiva
-de la multiplicación respecto a la adición en los números naturales,
-expandiendo la expresión \texttt{m * (k + k)} a \texttt{m * k + m * k}.
-
-En resumen, la tercera demostración utiliza la introducción de
-variables, la asignación de un número específico (\texttt{m * k}) para
-demostrar la paridad de \texttt{m * n}, y luego realiza reemplazos para
-simplificar la expresión y llegar al resultado deseado.
-
-La \textbf{4ª demostración} utiliza una notación más compacta en comparación
-con las demostraciones anteriores. Comienza con el comando
-\texttt{rintro m n ⟨k, hk⟩}, que introduce las variables \texttt{m} y \texttt{n}, así como
-una hipótesis \texttt{hk} de la forma \texttt{⟨k, hk⟩} que establece que \texttt{n} es par.
-
-Luego se utiliza \texttt{use m * k} para establecer \texttt{m * k} como el número que
-demostrará que \texttt{m * n} es par. Esta es una abreviatura de \texttt{use (m * k)}.
-
-A continuación, se utiliza el comando \texttt{rw [hk, mul\_add]} para realizar
-dos reemplazos en un solo paso. Primero, se reemplaza \texttt{hk}, lo que
-sustituye \texttt{n} por \texttt{k + k} en la meta. Luego, se aplica la propiedad
-distributiva de la multiplicación respecto a la adición en los números
-naturales, expandiendo la expresión \texttt{m * (k + k)} a \texttt{m * k + m * k}.
-
-En resumen, la cuarta demostración utiliza una notación más compacta
-para introducir variables y establecer el número que demuestra la
-paridad de \texttt{m * n}, y luego realiza los reemplazos necesarios para
-simplificar la expresión y alcanzar el resultado deseado.
-
-La \textbf{5ª demostración} comienza con el comando \texttt{rintro} para introducir
-las variables \texttt{m} y \texttt{n}, y luego \texttt{⟨k, hk⟩} se utiliza para establecer la
-hipótesis de paridad \texttt{n = k + k}, donde \texttt{k} es un número natural y \texttt{hk}
-es una prueba de esta igualdad.
-
-Luego se utiliza el comando \texttt{exact ⟨m * k, by rw [hk, mul\_add]⟩} para
-establecer directamente \texttt{⟨m * k, …⟩} como la prueba requerida de que
-\texttt{m * n} es par. Aquí, \texttt{⟨m * k, …⟩} representa el número \texttt{m * k} como
-testigo de la paridad, y \texttt{by rw [hk, mul\_add]} proporciona una prueba
-que muestra que ese número es par.
-
-Dentro de \texttt{by rw [hk, mul\_add]}, se realiza el reemplazo utilizando
-\texttt{rw}. Primero, se reemplaza \texttt{hk}, lo que sustituye \texttt{n} por \texttt{k + k} en la
-meta. Luego, se aplica la propiedad distributiva de la multiplicación
-respecto a la adición en los números naturales, expandiendo la expresión
-\texttt{m * (k + k)} a \texttt{m * k + m * k}.
-
-En resumen, la quinta demostración utiliza el comando \texttt{rintro} para
-introducir las variables y la hipótesis de paridad, y luego utiliza
-\texttt{exact} para establecer directamente el número y la prueba requeridos
-para demostrar la paridad de \texttt{m * n}. Proporciona una solución directa y
-concisa al problema planteado.
-
-La \textbf{6ª demostración} utiliza una notación de función lambda para
-definir directamente la prueba requerida. Comienza con
-\texttt{fun m n ⟨k, hk⟩ ↦}, donde se introducen las variables \texttt{m} y \texttt{n}, y se
-establece una hipótesis \texttt{⟨k, hk⟩} que afirma que \texttt{n} es par.
-
-Luego, se utiliza \texttt{⟨m * k, by rw [hk, mul\_add]⟩} para establecer
-directamente \texttt{m * k} como el número que demostrará que \texttt{m * n} es
-par. Esto se hace mediante el uso de la notación \texttt{⟨valor, prueba⟩},
-donde \texttt{valor} representa el número que se utilizará como testigo de la
-paridad y \texttt{prueba} es una prueba que muestra que ese valor es par.
-
-En este caso, se establece \texttt{m * k} como el valor y se proporciona prueba
-utilizando by \texttt{rw [hk, mul\_add]}. Aquí, \texttt{rw [hk, mul\_add]} realiza dos
-reemplazos en un solo paso. Primero, se reemplaza \texttt{hk}, lo que sustituye
-\texttt{n} por \texttt{k + k} en la meta. Luego, se aplica la propiedad distributiva
-de la multiplicación respecto a la adición en los números naturales,
-expandiendo la expresión \texttt{m * (k + k)} a \texttt{m * k + m * k}.
-
-En resumen, la sexta demostración utiliza una función lambda para
-definir directamente el valor y la prueba necesarios para demostrar la
-paridad de \texttt{m * n}. Proporciona una solución concisa y directa al
-problema planteado, al igual que la quinta demostración.
-
-La \textbf{7ª demostración} comienza con el comando \texttt{rintro} para introducir
-las variables \texttt{m} y \texttt{n}, y luego \texttt{⟨k, hk⟩} se utiliza para establecer la
-hipótesis de paridad \texttt{n = k + k}, donde \texttt{k} es un número natural y \texttt{hk}
-es una prueba de esta igualdad.
-
-A continuación, se utiliza \texttt{use m * k} para establecer \texttt{m * k} como el
-número que demostrará que \texttt{m * n} es par.
-
-Luego se utiliza \texttt{rw [hk]} para reemplazar \texttt{n} en la meta por \texttt{k + k},
-utilizando la prueba \texttt{hk}.
-
-Finalmente, se utiliza \texttt{exact mul\_add m k k} para establecer que
-\texttt{m * (k + k)} es igual a \texttt{m * k + m * k}. Esto se logra utilizando la
-propiedad distributiva de la multiplicación respecto a la adición en los
-números naturales.
-
-En resumen, la séptima demostración utiliza los comandos \texttt{rintro},
-\texttt{use}, \texttt{rw} y \texttt{exact} para introducir variables, establecer el número
-testigo, realizar reemplazos y proporcionar una prueba final que
-demuestra la paridad de \texttt{m * n}.
-
-La \textbf{8ª demostración} comienza con el comando \texttt{intros m n hn} para
-introducir las variables \texttt{m} y \texttt{n}, así como la hipótesis de paridad
-\texttt{hn}. Luego se utiliza \texttt{unfold Even at *} para desplegar la definición
-de paridad en todos los lugares relevantes.
-
-A continuación, se utiliza \texttt{cases hn with | intro k hk =>} para realizar
-un análisis de casos sobre la hipótesis de paridad \texttt{hn}. En el caso en
-que \texttt{hn} se cumple y se puede demostrar que \texttt{n = k + k}, se introduce
-una nueva variable \texttt{k} y una prueba \texttt{hk} que establece esa igualdad.
-
-Dentro de este caso, se utiliza \texttt{use m * k} para establecer \texttt{m * k} como
-el número que demostrará que \texttt{m * n} es par. Luego se utiliza
-\texttt{rw [hk, mul\_add]} para realizar los reemplazos correspondientes.
-
-En resumen, la octava demostración utiliza \texttt{intros} para introducir las
-variables \texttt{m}, \texttt{n} y la hipótesis de paridad \texttt{hn}. Luego se utiliza
-\texttt{unfold Even at *} para desplegar la definición de paridad en todos los
-lugares relevantes. A continuación, se realiza un análisis de casos
-sobre la hipótesis de paridad utilizando \texttt{cases}, y se introduce el
-número testigo utilizando \texttt{use}. Finalmente, se realiza el reemplazo
-utilizando \texttt{rw} para simplificar la expresión y demostrar la paridad de
-\texttt{m * n}.
-
-La \textbf{9ª demostración} comienza con el comando \texttt{intros m n hn} para
-introducir las variables \texttt{m} y \texttt{n}, así como la hipótesis de paridad
-\texttt{hn}. Luego se utiliza \texttt{unfold Even at *} para desplegar la definición
-de paridad en todos los lugares relevantes.
-
-A continuación, se utiliza \texttt{cases hn with | intro k hk =>} para realizar
-un análisis de casos sobre la hipótesis de paridad \texttt{hn}. En el caso en
-que hn se cumple y se puede demostrar que \texttt{n = k + k}, se introduce una
-nueva variable \texttt{k} y una prueba \texttt{hk} que establece esa igualdad.
-
-Dentro de este caso, se utiliza \texttt{use m * k} para establecer \texttt{m * k} como
-el número que demostrará que \texttt{m * n} es par.
-
-Luego, se utiliza \texttt{calc m * n = m * (k + k) := by exact congrArg (HMul.hMul m) hk}
-para realizar un razonamiento algebraico paso a
-paso. La igualdad se deriva aplicando el lema \texttt{congrArg} al valor \texttt{m} y
-la prueba \texttt{hk} para mostrar que la multiplicación preserva la
-igualdad. Esto establece que \texttt{m * n} es igual a \texttt{m * (k + k)}.
-
-Finalmente, se utiliza \texttt{\_ = m * k + m * k := by exact mul\_add m k k}
-para aplicar el lema \texttt{mul\_add} y establecer que \texttt{m * k + m * k} es igual
-a \texttt{m * (k + k)}. Esto se logra utilizando la propiedad distributiva de
-la multiplicación respecto a la adición en los números naturales.
-
-En resumen, la novena demostración utiliza \texttt{intros} para introducir las
-variables \texttt{m}, \texttt{n} y la hipótesis de paridad \texttt{hn}. Luego se utiliza
-\texttt{unfold Even at *} para desplegar la definición de paridad en todos los
-lugares relevantes. A continuación, se realiza un análisis de casos
-sobre la hipótesis de paridad utilizando \texttt{cases}, se introduce el número
-testigo utilizando \texttt{use}, y se utiliza \texttt{calc} y \texttt{by} para realizar
-razonamientos algebraicos paso a paso y establecer la igualdad
-necesaria.
-
-La \textbf{10ª demostración} utiliza una estrategia de simplificación (\texttt{simp})
-con las expresiones \texttt{*}, \texttt{parity\_simps}. El comando \texttt{intros} se utiliza
-para introducir las variables y se utiliza \texttt{;} para combinar múltiples
-comandos en una sola línea.
-
-El \texttt{simp} se aplica a las expresiones \texttt{*} y \texttt{parity\_simps}. La expresión
-\texttt{*} indica que se deben aplicar simplificaciones con el contexto y la
-meta, mientras que \texttt{parity\_simps} indica que se deben aplicar
-simplificaciones específicas relacionadas con la paridad de los números
-naturales.
-
-En resumen, la décima demostración utiliza \texttt{intros} para introducir las
-variablesy luego aplica el comando \texttt{simp} con \texttt{*}, \texttt{parity\_simps} para
-realizar las simplificaciones necesarias en la expresión \texttt{m * n} y
-demostrar su paridad. Esta estrategia simplificada permite una
-demostración concisa y automática del resultado deseado.
-
-En \textbf{resumen}, todas las demostraciones presentadas son válidas y
-demuestran la misma proposición. Algunas utilizan tácticas más directas
-y simples, mientras que otras exploran diferentes enfoques y estilos de
-escritura en Lean.
 
 \chapter{Aspectos básicos del razonamiento matemático en Lean}
-\label{sec:org2d4e1ba}
+\label{sec:org50dc1d1}
 
 En este capítulo se presentan los aspectos básicos del razonamiento matemático
 en Lean:
@@ -517,10 +280,10 @@ en Lean:
 \end{itemize}
 
 \section{Cálculos}
-\label{sec:org7573cfd}
+\label{sec:org53b6f37}
 
 \subsection{\href{./src/Basicos/Asociativa\_conmutativa\_de\_los\_reales.lean}{Asociativa conmutativa de los reales}}
-\label{sec:orgec196f0}
+\label{sec:org6a0d15c}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -528,25 +291,46 @@ en Lean:
 --    (a * b) * c = b * (a * c)
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    (ab)c = (ba)c   [por la conmutativa]
+--          = b(ac)   [por la asociativa]
+
+-- Demostraciones con Lean4
+-- ========================
+
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 
 -- 1ª demostración
 -- ===============
 
+example
+  (a b c : ℝ)
+  : (a * b) * c = b * (a * c) :=
+calc
+  (a * b) * c = (b * a) * c := by rw [mul_comm a b]
+            _ = b * (a * c) := by rw [mul_assoc b a c]
+
+-- Comentarios:
+-- + El entorno calc permite escribir demostraciones ecuacionales.
+-- + La táctica (rw [es]) reescribe una expresión usando las ecuaciones es.
+-- + Al colocar el cursor sobre el nombre de un lema se ve su enunciado.
+-- + Para completar el nombre de un lema basta escribir parte de su
+--   nombre y completar con S-SPC (es decir, simultáneamente las teclas
+--   de mayúscula y la de espacio).
+-- + Los lemas usados son
+--   + mul_com   : (∀ a b : G),   a * b = b * a
+--   + mul_assoc : (∀ a b c : G), (a * b) * c = a * (b * c)
+
+-- 2ª demostración
+-- ===============
+
 example (a b c : ℝ) : (a * b) * c = b * (a * c) := by
   rw [mul_comm a b]
   rw [mul_assoc b a c]
-
--- Comentarios:
--- 1. Al colocar el cursor sobre el nombre de un lema se ve su enunciado.
--- 2. Para completar el nombre de un lema basta escribir parte de su
---    nombre y completar con S-SPC (es decir, simultáneamente las teclas
---    de mayúscula y la de espacio).
--- 3. Los lemas usados son
---    + mul_com   : (∀ a b : G),   a * b = b * a
---    + mul_assoc : (∀ a b c : G), (a * b) * c = a * (b * c)
--- 4. La táctica (rw [es]) reescribe una expresión usando las ecuaciones es.
 
 -- El desarrollo de la prueba es:
 --
@@ -559,19 +343,6 @@ example (a b c : ℝ) : (a * b) * c = b * (a * c) := by
 --    rw [mul_assoc b a c]
 --       goals accomplished
 
--- 2ª demostración
--- ===============
-
-example
-  (a b c : ℝ)
-  : (a * b) * c = b * (a * c) :=
-calc
-  (a * b) * c = (b * a) * c := by rw [mul_comm a b]
-            _ = b * (a * c) := by rw [mul_assoc b a c]
-
--- Comentario: El entorno calc permite escribir demostraciones
--- ecuacionales.
-
 -- 3ª demostración
 -- ===============
 
@@ -581,55 +352,9 @@ by ring
 -- Comentario: La táctica ring demuestra ecuaciones aplicando las
 -- propiedades de anillos.
 \end{verbatim}
-\subsubsection*{Demostraciones comentadas}
-
-En estas demostraciones, se muestra que para cualquier número real \texttt{a}, \texttt{b}
-y \texttt{c}, se cumple la igualdad \texttt{(a * b) * c = b * (a * c)}. A continuación, se
-explica cada demostración en detalle:
-
-En la \textbf{1ª demostración} se utiliza la táctica \texttt{by} junto con la táctica \texttt{rw}
-(\texttt{rewrite}) para reescribir la expresión y llegar a la igualdad deseada.
-
-La táctica \texttt{rw [mul\_comm a b]} se utiliza para aplicar la conmutatividad
-de la multiplicación y cambiar el orden de \texttt{a} y \texttt{b} en la expresión
-\texttt{(a * b)}. Después, la táctica \texttt{rw [mul\_assoc b a c]} se utiliza para aplicar la
-asociatividad de la multiplicación y reagrupar los términos de la
-expresión \texttt{((b * a) * c)} en \texttt{(b * (a * c))}.
-
-Al combinar estas dos tácticas, se reescribe la expresión original hasta
-llegar a la igualdad deseada.
-
-En \textbf{2ª demostración} se utiliza la táctica \texttt{calc} para realizar una
-cadena de igualdades y llegar a la igualdad deseada.
-
-La cadena de igualdades comienza con \texttt{(a * b) * c} y se utiliza la táctica
-\texttt{rw [mul\_comm a b]} para reescribir \texttt{(a * b)} como \texttt{(b * a)}. Luego, se
-utiliza la táctica \texttt{rw [mul\_assoc b a c]} para reescribir \texttt{(b * a) * c} como
-\texttt{b * (a * c)}.
-
-Al utilizar la táctica calc de esta manera, se muestra paso a paso cómo
-se llega a la igualdad deseada a través de una cadena de reescrituras.
-
-En la \textbf{3ª demostración} se utiliza la táctica \texttt{by ring} para demostrar
-la igualdad directamente utilizando propiedades algebraicas conocidas.
-
-La táctica \texttt{by ring} se utiliza cuando se trabaja con anillos, como en
-este caso con los números reales. Esta táctica aplica automáticamente
-las reglas algebraicas básicas, como la conmutatividad y la
-asociatividad de la multiplicación, para simplificar y demostrar la
-igualdad.
-
-En este caso, la táctica \texttt{by ring} reorganiza automáticamente los términos
-en la expresión \texttt{(a * b) * c} y llega a la forma \texttt{b * (a * c)}, demostrando
-así la igualdad.
-
-En \textbf{resumen}, estas demostraciones muestran diferentes enfoques para
-demostrar la igualdad \texttt{(a * b) * c = b * (a * c)} utilizando tácticas de
-reescritura y propiedades algebraicas básicas. Cada demostración
-presenta un enfoque distinto, pero todos llegan al mismo resultado.
 
 \subsection{\href{./src/Basicos/Ejercicio\_sobre\_aritmetica\_real\_1.lean}{Ejercicio sobre aritmética real (1)}}
-\label{sec:org810f6e0}
+\label{sec:orga8d723b}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -637,10 +362,34 @@ presenta un enfoque distinto, pero todos llegan al mismo resultado.
 --    (c * b) * a = b * (a * c)
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades:
+--    (c * b) * a
+--    = (b * c) * a    [por la conmutativa]
+--    = b * (c * a)    [por la asociativa]
+--    = b * (a * c)    [por la conmutativa]
+
+-- Demostraciones con Lean4
+-- ========================
+
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 
 -- 1ª demostración
+-- ===============
+
+example
+  (a b c : ℝ)
+  : (c * b) * a = b * (a * c) :=
+calc
+  (c * b) * a
+    = (b * c) * a := by rw [mul_comm c b]
+  _ = b * (c * a) := by rw [mul_assoc]
+  _ = b * (a * c) := by rw [mul_comm c a]
+
+-- 2ª demostración
 -- ===============
 
 example
@@ -665,18 +414,6 @@ by
 -- rw [mul_comm c a]
 --    goals accomplished
 
--- 2ª demostración
--- ===============
-
-example
-  (a b c : ℝ)
-  : (c * b) * a = b * (a * c) :=
-calc
-  (c * b) * a
-    = (b * c) * a := by rw [mul_comm c b]
-  _ = b * (c * a) := by rw [mul_assoc]
-  _ = b * (a * c) := by rw [mul_comm c a]
-
 -- 3ª demostración
 -- ===============
 
@@ -685,69 +422,9 @@ example
   : (c * b) * a = b * (a * c) :=
 by ring
 \end{verbatim}
-\subsubsection*{Demostraciones comentadas}
-
-Las tres demostraciones son variantes equivalentes para demostrar la
-misma igualdad, utilizando tácticas diferentes. Voy a explicar
-cada una de ellas en detalle:
-
-En la \textbf{1ª demostración} se utiliza la táctica \texttt{rw} para realizar
-reescrituras. La igualdad que se quiere demostrar es \texttt{(c * b) * a = b *
-(a * c)}. La demostración comienza con \texttt{by}, que indica que se utilizarán
-tácticas para completar la prueba.
-
-Luego, se utiliza \texttt{rw [mul\_comm c b]}, que aplica la regla de reescritura
-para intercambiar \texttt{c} y \texttt{b} en la expresión \texttt{(c * b) * a}, obteniendo así \texttt{(b *
-c) * a}.
-
-A continuación, se utiliza \texttt{rw [mul\_assoc]}, que aplica la regla de
-asociatividad de la multiplicación para reagrupar los términos,
-obteniendo \texttt{b * (c * a)}.
-
-Finalmente, se utiliza \texttt{rw [mul\_comm c a]}, que aplica la regla de
-reescritura para intercambiar \texttt{c} y \texttt{a} en la expresión \texttt{b * (c * a)},
-obteniendo así \texttt{b * (a * c)}. La prueba se considera completada y se ha
-demostrado la igualdad deseada.
-
-En la \textbf{2ª demostración} se utiliza la táctica \texttt{calc} para realizar
-cálculos sucesivos. La igualdad que se quiere demostrar es
-\texttt{(c * b) * a = b * (a * c)}.
-
-La prueba comienza con \texttt{(c * b) * a}, y utilizando \texttt{:=} se establece que es
-igual a \texttt{(b * c) * a}. Esto se logra mediante \texttt{by rw [mul\_comm c b]}, que
-aplica la regla de reescritura para intercambiar \texttt{c} y \texttt{b}.
-
-A continuación, se utiliza \texttt{\_ =} para indicar que el resultado actual es
-igual a \texttt{b * (c * a)}. Esto se logra mediante \texttt{by rw [mul\_assoc]}, que
-aplica la regla de asociatividad de la multiplicación.
-
-Finalmente, se utiliza \texttt{\_ =} nuevamente para indicar que el resultado actual
-es igual a \texttt{b * (a * c)}. Esto se logra mediante \texttt{by rw [mul\_comm c a]}, que
-aplica la regla de reescritura para intercambiar \texttt{c} y \texttt{a}. La prueba se
-considera completada y se ha demostrado la igualdad deseada.
-
-En la \textbf{3ª demostración} se utiliza la táctica \texttt{ring} para demostrar la
-igualdad automáticamente. La táctica \texttt{ring} es capaz de manejar
-expresiones algebraicas y aplicar reglas de simplificación y reescritura
-para demostrar igualdades.
-
-La prueba comienza con \texttt{by ring}, que indica que se utilizará la táctica
-ring para completar la prueba. Esta táctica analiza la expresión
-\texttt{(c * b) * a} y la iguala automáticamente a \texttt{b * (a * c)} aplicando las reglas
-algebraicas necesarias.
-
-La táctica \texttt{ring} es muy útil para demostrar igualdades algebraicas
-simples de forma automática, sin necesidad de especificar pasos
-intermedios. En este caso, la igualdad se demuestra de manera automática
-y la prueba se considera completada.
-
-En \textbf{resumen}, las tres demostraciones son equivalentes y demuestran la
-igualdad \texttt{(c * b) * a = b * (a * c)} utilizando tácticas diferentes:
-reescrituras (\texttt{rw}), cálculos sucesivos (\texttt{calc}), y la táctica automática
-\texttt{ring}.
 
 \subsection{\href{./src/Basicos/Ejercicio\_sobre\_aritmetica\_real\_2.lean}{Ejercicio sobre aritmética real (2)}}
-\label{sec:org91b8c33}
+\label{sec:org91c5f45}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -755,10 +432,34 @@ reescrituras (\texttt{rw}), cálculos sucesivos (\texttt{calc}), y la táctica a
 --    a * (b * c) = b * (a * c)
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades:
+--    a(bc)
+--    = (ab)c    [por la asociativa]
+--    = (ba)c    [por la conmutativa]
+--    = b(ac)    [por la asociativa]
+
+-- Demostraciones en Lean4
+-- =======================
+
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 
 -- 1ª demostración
+-- ===============
+
+example
+  (a b c : ℝ)
+  : a * (b * c) = b * (a * c) :=
+calc
+  a * (b * c)
+    = (a * b) * c := by rw [←mul_assoc]
+  _ = (b * a) * c := by rw [mul_comm a b]
+  _ = b * (a * c) := by rw [mul_assoc]
+
+-- 2ª demostración
 -- ===============
 
 example
@@ -786,18 +487,6 @@ by
 -- rw [mul_assoc]
 --    goals accomplished
 
--- 2ª demostración
--- ===============
-
-example
-  (a b c : ℝ)
-  : a * (b * c) = b * (a * c) :=
-calc
-  a * (b * c)
-    = (a * b) * c := by rw [←mul_assoc]
-  _ = (b * a) * c := by rw [mul_comm a b]
-  _ = b * (a * c) := by rw [mul_assoc]
-
 -- 3ª demostración
 -- ===============
 
@@ -806,68 +495,9 @@ example
   : a * (b * c) = b * (a * c) :=
 by ring
 \end{verbatim}
-\subsubsection*{Demostraciones comentadas}
-
-Las tres demostraciones son formas diferentes de demostrar la igualdad
-\texttt{a * (b * c) = b * (a * c)}, donde \texttt{a}, \texttt{b} y \texttt{c} son números reales.
-
-En la \textbf{1ª demostración}, se utilizan las tácticas de reescritura (\texttt{rw})
-para manipular la expresión y llegar al resultado deseado. La
-demostración se realiza en un bloque \texttt{by}, lo que significa que todas
-las tácticas se aplican secuencialmente. Aquí se muestra el paso a paso:
-\begin{enumerate}
-\item Se utiliza la táctica \texttt{rw [←mul\_assoc]} para reescribir la expresión
-\texttt{a * (b * c)} como \texttt{(a * b) * c}. Esto se hace utilizando la
-asociatividad de la multiplicación.
-\item Luego, se utiliza \texttt{rw [mul\_comm a b]} para reescribir la expresión
-\texttt{a * b} como \texttt{b * a}. Esto se hace utilizando la conmutatividad de la
-multiplicación.
-\item Finalmente, se utiliza \texttt{rw [mul\_assoc]} para reescribir la expresión
-\texttt{(b * a) * c} como \texttt{b * (a * c)}. Nuevamente, se aplica la
-asociatividad de la multiplicación.
-\end{enumerate}
-
-Al seguir estos pasos, se llega a la igualdad deseada:
-\texttt{a * (b * c) = b * (a * c)}.
-
-En la \textbf{2ª demostración}, se utiliza la táctica \texttt{calc} para realizar la
-demostración utilizando un estilo más conciso y estructurado. Aquí se
-muestra el paso a paso:
-\begin{enumerate}
-\item Se inicia con la expresión \texttt{a * (b * c)}.
-\item Luego, se utiliza la táctica \texttt{by rw [←mul\_assoc]} para reescribir la
-expresión como \texttt{(a * b) * c}. Esto se hace utilizando la
-asociatividad de la multiplicación.
-\item A continuación, se utiliza la táctica \texttt{by rw [mul\_comm a b]} para
-reescribir la expresión como \texttt{(b * a) * c}. Esto se hace utilizando
-la conmutatividad de la multiplicación.
-\item Por último, se utiliza la táctica \texttt{by rw [mul\_assoc]} para reescribir
-la expresión como \texttt{b * (a * c)}. Se aplica la asociatividad de la
-multiplicación nuevamente.
-\end{enumerate}
-
-Al seguir estos pasos, se llega a la igualdad deseada:
-\texttt{a * (b * c) = b * (a * c)}.
-
-En la \textbf{3ª demostración}, se utiliza la táctica \texttt{ring} para demostrar la
-igualdad. La táctica \texttt{ring} es una táctica poderosa que puede demostrar
-automáticamente muchas identidades algebraicas.
-
-Al utilizar \texttt{by ring}, se le indica al sistema de demostración
-automática que pruebe la igualdad utilizando propiedades algebraicas. En
-este caso, el sistema reconoce automáticamente que se puede aplicar la
-conmutatividad y la asociatividad de la multiplicación para llegar al
-resultado deseado.
-
-En \textbf{resumen}, las tres demostraciones utilizan diferentes tácticas y
-estilos para llegar a la igualdad \texttt{a * (b * c) = b * (a * c)}. La
-primera y segunda demostración utilizan las tácticas \texttt{rw} y \texttt{calc},
-respectivamente, para reescribir la expresión paso a paso. La tercera
-demostración utiliza la táctica \texttt{ring} para demostrar automáticamente la
-igualdad utilizando propiedades algebraicas.
 
 \subsection{\href{./src/Basicos/Ejemplo\_de\_rw\_sobre\_hipotesis.lean}{Ejemplo de rw con hipótesis}}
-\label{sec:org03c2425}
+\label{sec:orgf05a058}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c, d, e y f son números reales
@@ -878,10 +508,38 @@ igualdad utilizando propiedades algebraicas.
 --    a * (b * e) = c * (d * f)
 -- ---------------------------------------------------------------------
 
+-- Demostración en leguaje natural
+-- ===============================
+
+-- Por la siguiente cadena de igualdades
+--    a(be)
+--    = a(bf)    [por la segunda hipótesis]
+--    = (ab)f    [por la asociativa]
+--    = (cd)f    [por la primera hipótesis]
+--    = c(df)    [por la asociativa]
+
+-- Demostraciones en Lean4
+-- =======================
+
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 
 -- 1ª demostración
+-- ===============
+
+example
+  (a b c d e f : ℝ)
+  (h1 : a * b = c * d)
+  (h2 : e = f)
+  : a * (b * e) = c * (d * f) :=
+calc
+  a * (b * e)
+    = a * (b * f) := by rw [h2]
+  _ = (a * b) * f := by rw [←mul_assoc]
+  _ = (c * d) * f := by rw [h1]
+  _ = c * (d * f) := by rw [mul_assoc]
+
+-- 2ª demostración
 -- ===============
 
 example
@@ -924,21 +582,6 @@ by
 --         h1 : a * b = c * d,
 --         h2 : e = f}
 
--- 2ª demostración
--- ===============
-
-example
-  (a b c d e f : ℝ)
-  (h1 : a * b = c * d)
-  (h2 : e = f)
-  : a * (b * e) = c * (d * f) :=
-calc
-  a * (b * e)
-    = a * (b * f) := by rw [h2]
-  _ = (a * b) * f := by rw [←mul_assoc]
-  _ = (c * d) * f := by rw [h1]
-  _ = c * (d * f) := by rw [mul_assoc]
-
 -- 3ª demostración
 -- ===============
 
@@ -950,53 +593,1207 @@ example
 by
   simp [*, ←mul_assoc]
 \end{verbatim}
-\subsubsection{Demostraciones comentadas}
 
-Las tres demostraciones presentadas tienen como objetivo demostrar la
-igualdad: \texttt{a * (b * e) = c * (d * f)}, utilizando las hipótesis
-\texttt{h1: a * b = c * d} y \texttt{h2: e = f}. A continuación, comentaré cada una de
-las demostraciones:
+\subsection{\href{./src/Basicos/Ejercicio\_de\_rw\_sobre\_hipotesis\_1.lean}{Ejercicio de rw con hipótesis (1)}}
+\label{sec:org9790691}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si a, b, c, d, e y f son números reales
+-- tales que
+--    b * c = e * f
+-- entonces
+--    ((a * b) * c) * d = ((a * e) * f) * d
+-- ---------------------------------------------------------------------
 
-En la \textbf{1ª demostración} se utiliza el enfoque de reescribir (\texttt{rw})
-expresiones utilizando las igualdades dadas. El primer paso es reemplazar
-\texttt{e} por \texttt{f} usando la hipótesis \texttt{h2} (\texttt{rw [h2]}). Luego, se utiliza el
-lema de asociatividad de la multiplicación en sentido inverso
-(\texttt{←mul\_assoc}) para reorganizar los términos y obtener
-\texttt{(a * b) * f = (c * d) * f}. Por último, se utiliza la hipótesis
-\texttt{h1} (\texttt{rw [h1]}) para reemplazar \texttt{a * b} por \texttt{c * d} y, finalmente,
-usando la asociatividad se llega a la igualdad deseada.
+-- Demostración en lenguaje natural
+-- ================================
 
-En la \textbf{2ª demostración} se utiliza el enfoque de cálculo (\texttt{calc}) para
-realizar una secuencia de pasos de igualdad. Comienza con\textasciitilde{}a * (b * e)\textasciitilde{}
-y se utiliza la hipótesis \texttt{h2} para reemplazar \texttt{e} por \texttt{f}
-(\texttt{by rw [h2]}). Luego, se utiliza el lema de asociatividad de la
-multiplicación en sentido inverso (\texttt{←mul\_assoc}) para reorganizar los
-términos y obtener \texttt{a * (b * f) = (a * b) * f}. A continuación, se
-utiliza la hipótesis \texttt{h1} para reemplazar \texttt{a * b} por
-\texttt{c * d} (\texttt{by rw [h1]}) y se obtiene \texttt{(c * d) * f}. Finalmente, se
-utiliza nuevamente el lema de asociatividad de la multiplicación en
-sentido directo (\texttt{mul\_assoc}) para reorganizar los términos y obtener
-\texttt{c * (d * f)}, llegando así a la igualdad deseada.
+-- Por la siguiente cadena de igualdades
+--    ((ab)c)d
+--    = (a(bc))d    [por la asociativa]
+--    = (a(ef))d    [por la hipótesis]
+--    = ((ae)f)d    [por la asociativa]
 
-En la \textbf{3ª demostración} se utiliza el enfoque de simplificación
-(\texttt{simp}). Se utiliza el modificador \texttt{*} para indicar que se deben
-utilizar todas las hipótesis y lemas disponibles. En este caso, se
-utiliza \texttt{*} y \texttt{←mul\_assoc} para aplicar el lema de asociatividad de la
-multiplicación en sentido inverso. El objetivo es simplificar
-\texttt{a * (b * e)} a \texttt{c * (d * f)} directamente, aprovechando las igualdades
-\texttt{h1} y \texttt{h2}. Este enfoque permite simplificar la demostración a una sola
-línea.
+-- Demostraciones con Lean4
+-- ========================
 
-En \textbf{resumen}, las tres demostraciones logran el mismo objetivo de
-demostrar la igualdad \texttt{a * (b * e) = c * (d * f)} utilizando diferentes
-enfoques. La primera utiliza reescrituras explícitas (\texttt{rw}), la segunda
-utiliza el enfoque de cálculo (\texttt{calc}) y la tercera utiliza la
-simplificación automática (\texttt{simp}). Cada enfoque tiene sus propias
-ventajas y puede ser preferido dependiendo del contexto y de la
-experiencia del desarrollador.
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+-- 1ª demostración
+-- ===============
+
+example
+  (a b c d e f : ℝ)
+  (h : b * c = e * f)
+  : ((a * b) * c) * d = ((a * e) * f) * d :=
+calc
+  ((a * b) * c) * d
+    = (a * (b * c)) * d := by rw [mul_assoc a]
+  _ = (a * (e * f)) * d := by rw [h]
+  _ = ((a * e) * f) * d := by rw [←mul_assoc a]
+
+-- 2ª demostración
+-- ===============
+
+example
+  (a b c d e f : ℝ)
+  (h : b * c = e * f)
+  : ((a * b) * c) * d = ((a * e) * f) * d :=
+by
+  rw [mul_assoc a]
+  rw [h]
+  rw [←mul_assoc a]
+
+-- El desarrollo de la prueba es
+--
+-- inicio
+--    a b c d e f : ℝ,
+--    h : b * c = e * f
+--    ⊢ (a * (b * c)) * d = ((a * e) * f) * d
+-- rw [mul_assoc a]
+--    S
+--    ⊢ a * (b * c) * d = a * e * f * d
+-- rw [h]
+--    S
+--    ⊢ a * (e * f) * d = a * e * f * d
+-- rw [←mul_assoc a]
+--    goals accomplished
+--
+-- En el desarrollo anterior, S es el conjunto de hipótesis; es decir,
+--    S = {a b c d e f : ℝ,
+--         h : b * c = e * f}
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Ejercicio\_de\_rw\_sobre\_hipotesis\_2.lean}{Ejercicio de rw con hipótesis (2)}}
+\label{sec:org7306244}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si a, b, c y d son números reales tales
+-- que
+--    c = b * a - d
+--    d = a * b
+-- entonces
+--    c = 0
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    c = ba - d     [por la primera hipótesis]
+--      = ab - d     [por la conmutativa]
+--      = ab - ab    [por la segunda hipótesis]
+--      = 0
+
+-- Demostraciones en Lean4
+-- =======================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+-- 1ª demostración
+-- ===============
+
+example
+  (a b c d : ℝ)
+  (h1 : c = b * a - d)
+  (h2 : d = a * b)
+  : c = 0 :=
+calc
+  c = b * a - d     := by rw [h1]
+  _ = a * b - d     := by rw [mul_comm]
+  _ = a * b - a * b := by rw [h2]
+  _ = 0             := by rw [sub_self]
+
+-- 2ª demostración
+-- ===============
+
+example
+  (a b c d : ℝ)
+  (h1 : c = b * a - d)
+  (h2 : d = a * b)
+  : c = 0 :=
+by
+  rw [h1]
+  rw [mul_comm]
+  rw [h2]
+  rw [sub_self]
+
+-- Comentario: El último lema se puede encontrar escribiendo previamente
+--    exact?
+-- y afirma que
+--    ∀ (a : G), a - a = 0
+
+-- Desarrollo de la prueba:
+--
+-- inicio
+--    a b c d : ℝ,
+--    h1 : c = b * a - d,
+--    h2 : d = a * b
+--    ⊢ c = 0
+-- rw [h1]
+--    S
+--    ⊢ b * a - d = 0
+-- rw [mul_comm]
+--    S
+--    ⊢ a * b - d = 0
+-- rw [h2]
+--    S
+--    ⊢ a * b - a * b = 0
+-- rw sub_self]
+--    goals accomplished
+--
+-- En el desarrollo anterior, S es el conjunto de hipótesis; es decir,
+--    S = {a b c d : ℝ,
+--         h1 : c = b * a - d,
+--         h2 : d = a * b}
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Declaracion\_de\_variables\_en\_secciones.lean}{Declaración de variables en secciones}}
+\label{sec:org29754dc}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Importar la librería básica de los números reales.
+-- ---------------------------------------------------------------------
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Crear una sección.
+-- ---------------------------------------------------------------------
+
+section
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Declarar que a, b y c son variables sobre los números
+-- reales.
+-- ---------------------------------------------------------------------
+
+variable (a b c : ℝ)
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Calcular el tipo de a.
+-- ---------------------------------------------------------------------
+
+#check a
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    a : ℝ
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Calcular el tipo de a + b.
+-- ---------------------------------------------------------------------
+
+#check a + b
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    a + b : ℝ
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Comprobar que a es un número real.
+-- ---------------------------------------------------------------------
+
+#check (a : ℝ)
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    a : ℝ
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Calcular el tipo de
+--    mul_comm a b
+-- ---------------------------------------------------------------------
+
+#check mul_comm a b
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    mul_comm a b : a * b = b * a
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Comprobar que el tipo de
+--    mul_comm a b
+-- es
+--    a * b = b * a
+-- ---------------------------------------------------------------------
+
+#check (mul_comm a b : a * b = b * a)
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    mul_comm a b : a * b = b * a
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Calcular el tipo de
+--    mul_assoc c a b
+-- ---------------------------------------------------------------------
+
+#check mul_assoc c a b
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    mul_assoc c a b : c * a * b = c * (a * b)
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Calcular el tipo de
+--    mul_comm a
+-- ---------------------------------------------------------------------
+
+#check mul_comm a
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    mul_comm a : ∀ (b : ℝ), a * b = b * a
+
+-- ---------------------------------------------------------------------
+-- Ejercicio. Calcular el tipo de
+--    mul_comm
+-- ---------------------------------------------------------------------
+
+#check mul_comm
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    mul_comm.{u_1} {G : Type u_1} [inst : CommSemigroup G] (a b : G) :
+--    a * b = b * a
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 12. Calcular el tipo de
+--    @mul_comm
+-- ---------------------------------------------------------------------
+
+#check @mul_comm
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    mul_comm.{u_1} {G : Type u_1} [inst : CommSemigroup G] (a b : G),
+--    a * b = b * a
+
+end
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Demostracion\_con\_calc.lean}{Demostración con calc}}
+\label{sec:org83b8ef3}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si a y b son números reales, entonces
+--    (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    (a + b)(a + b)
+--    = (a + b)a + (a + b)b    [por la distributiva]
+--    = aa + ba + (a + b)b     [por la distributiva]
+--    = aa + ba + (ab + bb)    [por la distributiva]
+--    = aa + ba + ab + bb      [por la asociativa]
+--    = aa + (ba + ab) + bb    [por la asociativa]
+--    = aa + (ab + ab) + bb    [por la conmutativa]
+--    = aa + 2(ab) + bb        [por def. de doble]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c : ℝ)
+
+-- 1ª demostración
+-- ===============
+
+example :
+  (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+calc
+  (a + b) * (a + b)
+    = (a + b) * a + (a + b) * b       := by rw [mul_add]
+  _ = a * a + b * a + (a + b) * b     := by rw [add_mul]
+  _ = a * a + b * a + (a * b + b * b) := by rw [add_mul]
+  _ = a * a + b * a + a * b + b * b   := by rw [←add_assoc]
+  _ = a * a + (b * a + a * b) + b * b := by rw [add_assoc (a * a)]
+  _ = a * a + (a * b + a * b) + b * b := by rw [mul_comm b a]
+  _ = a * a + 2 * (a * b) + b * b     := by rw [←two_mul]
+
+-- 2ª demostración
+-- ===============
+
+example :
+  (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+calc
+  (a + b) * (a + b)
+    = a * a + b * a + (a * b + b * b) := by rw [mul_add, add_mul, add_mul]
+  _ = a * a + (b * a + a * b) + b * b := by rw [←add_assoc, add_assoc (a * a)]
+  _ = a * a + 2 * (a * b) + b * b     := by rw [mul_comm b a, ←two_mul]
+
+-- 3ª demostración
+-- ===============
+
+example :
+  (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+calc
+  (a + b) * (a + b)
+    = a * a + b * a + (a * b + b * b) := by ring
+  _ = a * a + (b * a + a * b) + b * b := by ring
+  _ = a * a + 2 * (a * b) + b * b     := by ring
+
+-- 4ª demostración
+-- ===============
+
+example :
+  (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+by ring
+
+-- 5ª demostración
+-- ===============
+
+example :
+  (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+by
+  rw [mul_add]
+  rw [add_mul]
+  rw [add_mul]
+  rw [←add_assoc]
+  rw [add_assoc (a * a)]
+  rw [mul_comm b a]
+  rw [←two_mul]
+
+
+-- El desarrollo de la prueba es
+--
+--    a b : ℝ
+--    ⊢ (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
+-- rw [mul_add]
+--    ⊢ (a + b) * a + (a + b) * b = a * a + 2 * (a * b) + b * b
+-- rw [add_mul]
+--    ⊢ a * a + b * a + (a + b) * b = a * a + 2 * (a * b) + b * b
+-- rw [add_mul]
+--    ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
+-- rw [←add_assoc]
+--    ⊢ a * a + b * a + a * b + b * b = a * a + 2 * (a * b) + b * b
+-- rw add_assoc (a * a)]
+--    ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
+-- rw [mul_comm b a]
+--    ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
+-- rw [←two_mul]
+--    goals accomplished
+
+-- 6ª demostración
+-- ===============
+
+example :
+  (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+by
+  rw [mul_add, add_mul, add_mul]
+  rw [←add_assoc, add_assoc (a * a)]
+  rw [mul_comm b a, ←two_mul]
+
+-- El desarrollo de la prueba es
+--
+--    a b : ℝ
+--    ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
+-- rw [mul_add, add_mul, add_mul]
+--    ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
+-- rw [←add_assoc, add_assoc (a * a)]
+--    ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
+-- rw [mul_comm b a, ←two_mul]
+--    goals accomplished
+
+-- Comentario:
+-- Los lemas usados son:
+-- + add_assoc a b c : a + b + c = a + (b + c)
+-- + add_mul a b c   : (a + b) * c = a * c + b * c
+-- + mul_add a b c   : a * (b + c) = a * b + a * c
+-- + mul_comm a b    : a * b = b * a
+-- + two_mul a       : 2 * a = a + a
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Ejercicio\_con\_calc.lean}{Ejercicio con calc}}
+\label{sec:orgfbc2eec}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si a, b, c y d son números reales, entonces
+--    (a + b) * (c + d) = a * c + a * d + b * c + b * d
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    (a + b)(c + d)
+--    = a(c + d) + b(c + d)    [por la distributiva]
+--    = ac + ad + b(c + d)     [por la distributiva]
+--    = ac + ad + (bc + bd)    [por la distributiva]
+--    = ac + ad + bc + bd      [por la asociativa]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c d : ℝ)
+
+-- 1ª demostración
+-- ===============
+
+example
+  : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+calc
+  (a + b) * (c + d)
+    = a * (c + d) + b * (c + d)       := by rw [add_mul]
+  _ = a * c + a * d + b * (c + d)     := by rw [mul_add]
+  _ = a * c + a * d + (b * c + b * d) := by rw [mul_add]
+  _ = a * c + a * d + b * c + b * d   := by rw [←add_assoc]
+
+-- 2ª demostración
+-- ===============
+
+example
+  : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+calc
+  (a + b) * (c + d)
+    = a * (c + d) + b * (c + d)       := by ring
+  _ = a * c + a * d + b * (c + d)     := by ring
+  _ = a * c + a * d + (b * c + b * d) := by ring
+  _ = a * c + a * d + b * c + b * d   := by ring
+
+-- 3ª demostración
+-- ===============
+
+example : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+by ring
+
+-- 4ª demostración
+-- ===============
+
+example
+  : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+by
+   rw [add_mul]
+   rw [mul_add]
+   rw [mul_add]
+   rw [← add_assoc]
+
+-- El desarrollo de la prueba es
+--
+--    a b c d : ℝ
+--    ⊢ (a + b) * (c + d) = a * c + a * d + b * c + b * d
+-- rw [add_mul]
+--    ⊢ a * (c + d) + b * (c + d) = a * c + a * d + b * c + b * d
+-- rw [mul_add]
+--    ⊢ a * c + a * d + b * (c + d) = a * c + a * d + b * c + b * d
+-- rw [mul_add]
+--    ⊢ a * c + a * d + (b * c + b * d) = a * c + a * d + b * c + b * d
+-- rw [← add_assoc]
+--    goals accomplished
+
+-- 5ª demostración
+-- ===============
+
+example : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+by rw [add_mul, mul_add, mul_add, ←add_assoc]
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Ejercicio\_Suma\_por\_diferencia.lean}{Ejercicio: Suma por diferencia}}
+\label{sec:orgb4fbe5c}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si a y b son números reales, entonces
+--    (a + b) * (a - b) = a^2 - b^2
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades:
+--    (a + b)(a - b)
+--    = a(a - b) + b(a - b)            [por la distributiva]
+--    = (aa - ab) + b(a - b)           [por la distributiva]
+--    = (a^2 - ab) + b(a - b)          [por def. de cuadrado]
+--    = (a^2 - ab) + (ba - bb)         [por la distributiva]
+--    = (a^2 - ab) + (ba - b^2)        [por def. de cuadrado]
+--    = (a^2 + -(ab)) + (ba - b^2)     [por def. de resta]
+--    = a^2 + (-(ab) + (ba - b^2))     [por la asociativa]
+--    = a^2 + (-(ab) + (ba + -b^2))    [por def. de resta]
+--    = a^2 + ((-(ab) + ba) + -b^2)    [por la asociativa]
+--    = a^2 + ((-(ab) + ab) + -b^2)    [por la conmutativa]
+--    = a^2 + (0 + -b^2)               [por def. de opuesto]
+--    = (a^2 + 0) + -b^2               [por asociativa]
+--    = a^2 + -b^2                     [por def. de cero]
+--    = a^2 - b^2                      [por def. de resta]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c d : ℝ)
+
+-- 1ª demostración
+-- ===============
+
+example : (a + b) * (a - b) = a^2 - b^2 :=
+calc
+  (a + b) * (a - b)
+    = a * (a - b) + b * (a - b)         := by rw [add_mul]
+  _ = (a * a - a * b) + b * (a - b)     := by rw [mul_sub]
+  _ = (a^2 - a * b) + b * (a - b)       := by rw [← pow_two]
+  _ = (a^2 - a * b) + (b * a - b * b)   := by rw [mul_sub]
+  _ = (a^2 - a * b) + (b * a - b^2)     := by rw [← pow_two]
+  _ = (a^2 + -(a * b)) + (b * a - b^2)  := by ring
+  _ = a^2 + (-(a * b) + (b * a - b^2))  := by rw [add_assoc]
+  _ = a^2 + (-(a * b) + (b * a + -b^2)) := by ring
+  _ = a^2 + ((-(a * b) + b * a) + -b^2) := by rw [← add_assoc
+                                              (-(a * b)) (b * a) (-b^2)]
+  _ = a^2 + ((-(a * b) + a * b) + -b^2) := by rw [mul_comm]
+  _ = a^2 + (0 + -b^2)                  := by rw [neg_add_self (a * b)]
+  _ = (a^2 + 0) + -b^2                  := by rw [← add_assoc]
+  _ = a^2 + -b^2                        := by rw [add_zero]
+  _ = a^2 - b^2                         := by linarith
+
+-- Comentario. Se han usado los siguientes lemas:
+-- + pow_two a : a ^ 2 = a * a
+-- + mul_sub a b c : a * (b - c) = a * b - a * c
+-- + add_mul a b c : (a + b) * c = a * c + b * c
+-- + add_sub a b c : a + (b - c) = a + b - c
+-- + sub_sub a b c : a - b - c = a - (b + c)
+-- + add_zero a : a + 0 = a
+
+-- 2ª demostración
+-- ===============
+
+example : (a + b) * (a - b) = a^2 - b^2 :=
+calc
+  (a + b) * (a - b)
+    = a * (a - b) + b * (a - b)         := by ring
+  _ = (a * a - a * b) + b * (a - b)     := by ring
+  _ = (a^2 - a * b) + b * (a - b)       := by ring
+  _ = (a^2 - a * b) + (b * a - b * b)   := by ring
+  _ = (a^2 - a * b) + (b * a - b^2)     := by ring
+  _ = (a^2 + -(a * b)) + (b * a - b^2)  := by ring
+  _ = a^2 + (-(a * b) + (b * a - b^2))  := by ring
+  _ = a^2 + (-(a * b) + (b * a + -b^2)) := by ring
+  _ = a^2 + ((-(a * b) + b * a) + -b^2) := by ring
+  _ = a^2 + ((-(a * b) + a * b) + -b^2) := by ring
+  _ = a^2 + (0 + -b^2)                  := by ring
+  _ = (a^2 + 0) + -b^2                  := by ring
+  _ = a^2 + -b^2                        := by ring
+  _ = a^2 - b^2                         := by ring
+
+-- 3ª demostración
+-- ===============
+
+example : (a + b) * (a - b) = a^2 - b^2 :=
+by ring
+
+-- 4ª demostración (por reescritura usando el lema anterior)
+-- =========================================================
+
+-- El lema anterior es
+lemma aux : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+by ring
+
+-- La demostración es
+example : (a + b) * (a - b) = a^2 - b^2 :=
+by
+  rw [sub_eq_add_neg]
+  rw [aux]
+  rw [mul_neg]
+  rw [add_assoc (a * a)]
+  rw [mul_comm b a]
+  rw [neg_add_self]
+  rw [add_zero]
+  rw [← pow_two]
+  rw [mul_neg]
+  rw [← pow_two]
+  rw [← sub_eq_add_neg]
+
+
+-- El desarrollo de la demostración es
+--    ⊢ (a + b) * (a - b) = a ^ 2 - b ^ 2
+-- rw [sub_eq_add_neg]
+--    ⊢ (a + b) * (a + -b) = a ^ 2 - b ^ 2
+-- rw aux]
+--    ⊢ a * a + a * -b + b * a + b * -b = a ^ 2 - b ^ 2
+-- rw [mul_neg_eq_neg_mul_symm]
+--    ⊢ a * a + -(a * b) + b * a + b * -b = a ^ 2 - b ^ 2
+-- rw [add_assoc (a * a)]
+--    ⊢ a * a + (-(a * b) + b * a) + b * -b = a ^ 2 - b ^ 2
+-- rw [mul_comm b a]
+--    ⊢ a * a + (-(a * b) + a * b) + b * -b = a ^ 2 - b ^ 2
+-- rw [neg_add_self]
+--    ⊢ a * a + 0 + b * -b = a ^ 2 - b ^ 2
+-- rw [add_zero]
+--    ⊢ a * a + b * -b = a ^ 2 - b ^ 2
+-- rw [← pow_two]
+--    ⊢ a ^ 2 + b * -b = a ^ 2 - b ^ 2
+-- rw [mul_neg_eq_neg_mul_symm]
+--    ⊢ a ^ 2 + -(b * b) = a ^ 2 - b ^ 2
+-- rw [← pow_two]
+--    ⊢ a ^ 2 + -b ^ 2 = a ^ 2 - b ^ 2
+-- rw [← sub_eq_add_neg]
+--    goals accomplished
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Reescritura\_en\_hipotesis\_y\_tactica\_exact.lean}{Reescritura en hipótesis y táctica exact}}
+\label{sec:org2cf7897}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si a, b, c y d son números reales tales que
+--    c = d * a + b
+--    b = a * d
+-- entonces
+--    c = 2 * a * d
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    c = da + b     [por la primera hipótesis]
+--      = da + ad    [por la segunda hipótesis]
+--      = ad + ad    [por la conmutativa]
+--      = 2(ad)      [por la def. de doble]
+--      = 2ad        [por la asociativa]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c d : ℝ)
+
+-- 1ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+calc
+  c = d * a + b     := by rw [h1]
+  _ = d * a + a * d := by rw [h2]
+  _ = a * d + a * d := by rw [mul_comm d a]
+  _ = 2 * (a * d)   := by rw [← two_mul (a * d)]
+  _ = 2 * a * d     := by rw [mul_assoc]
+
+-- 2ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by
+  rw [h2] at h1
+  clear h2
+  rw [mul_comm d a] at h1
+  rw [← two_mul (a*d)] at h1
+  rw [← mul_assoc 2 a d] at h1
+  exact h1
+
+-- Comentarios
+-- 1. La táctica (rw [e] at h) rescribe la parte izquierda de la
+--    ecuación e por la derecha en la hipótesis h.
+-- 2. La táctica (exact p) tiene éxito si el tipo de p se unifica con el
+--    objetivo.
+-- 3. La táctica (clear h) borra la hipótesis h.
+
+-- El desarrollo de la prueba es
+--
+--    a b c d : ℝ,
+--    h1 : c = d * a + b,
+--    h2 : b = a * d
+--    ⊢ c = 2 * a * d
+-- rw [h2] at h1
+--    a b c d : ℝ,
+--    h2 : b = a * d,
+--    h1 : c = d * a + a * d
+--    ⊢ c = 2 * a * d
+-- clear h2
+--    a b c d : ℝ,
+--    h1 : c = d * a + a * d
+--    ⊢ c = 2 * a * d
+-- rw [mul_comm d a] at h1
+--    a b c d : ℝ,
+--    h1 : c = a * d + a * d
+--    ⊢ c = 2 * a * d
+-- rw [← two_mul (a*d)] at h1
+--    a b c d : ℝ,
+--    h1 : c = 2 * (a * d)
+--    ⊢ c = 2 * a * d
+-- rewrite [← mul_assoc 2 a d] at h1
+--    a b c d : ℝ,
+--    h1 : c = 2 * a * d
+--    ⊢ c = 2 * a * d
+-- exact h1
+--    goals accomplished
+
+-- 3ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by rw [h1, h2, mul_comm d a, ← two_mul (a * d), mul_assoc]
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by
+  rw [h1]
+  rw [h2]
+  ring
+
+-- El desarrollo de la prueba es
+--
+--    a b c d : ℝ,
+--    h1 : c = d * a + b,
+--    h2 : b = a * d
+--    ⊢ c = 2 * a * d
+-- rw [h1]
+--    ⊢ d * a + b = 2 * a * d
+-- rw [h2]
+--    ⊢ d * a + a * d = 2 * a * d
+-- ring,
+--    goals accomplished
+
+-- 5ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by
+  rw [h1, h2]
+  ring
+
+-- 6ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by rw [h1, h2] ; ring
+
+-- 7ª demostración
+-- ===============
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by linarith
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Demostraciones\_con\_ring.lean}{Demostraciones con ring}}
+\label{sec:org283c25b}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Sean a, b, c y números reales. Demostrar, con la táctica
+-- ring, que
+--    (c * b) * a = b * (a * c)
+--    (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
+--    (a + b) * (a - b) = a^2 - b^2
+-- Además, si
+--    c = d * a + b
+--    b = a * d
+-- entonces
+--    c = 2 * a * d
+-- ---------------------------------------------------------------------
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c d : ℝ)
+
+example : (c * b) * a = b * (a * c) :=
+by ring
+
+example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+by ring
+
+example : (a + b) * (a - b) = a^2 - b^2 :=
+by ring
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by
+  rw [h1, h2]
+  ring
+\end{verbatim}
+
+\begin{itemize}
+\item \href{./src/Basicos/Ejemplo\_con\_nth\_rewrite.lean}{Ejemplo con nth$\backslash$\_rewrite}
+\end{itemize}
+\begin{verbatim}
+-- -----------------------------------------------------------
+-- Demostrar que si a, b y c son números reales tales que
+--    a + b = c,
+-- entonces
+--    (a + b) * (a + b) = a * c + b * c
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    (a + b)(a + b)
+--    = (a + b)c        [por la hipótesis]
+--    = ac + bc         [por la distributiva]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c : ℝ)
+
+-- 1ª demostración
+example
+  (h : a + b = c)
+  : (a + b) * (a + b) = a * c + b * c :=
+calc
+  (a + b) * (a + b)
+    = (a + b) * c   := by exact congrArg (HMul.hMul (a + b)) h
+  _ = a * c + b * c := by rw [add_mul]
+
+-- 2ª demostración
+example
+  (h : a + b = c)
+  : (a + b) * (a + b) = a * c + b * c :=
+by
+  nth_rewrite 2 [h]
+  rw [add_mul]
+\end{verbatim}
+
+\section{Demostraciones en estructuras algebraicas}
+\label{sec:org4a55134}
+
+\subsection{Demostraciones en anillos}
+\label{sec:orgc8a837d}
+
+\subsection{\href{./src/Basicos/Axiomas\_de\_anillos.lean}{Axiomas de anillos}}
+\label{sec:orgedb59fe}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio 1. Importar la librería de anillos.
+-- ----------------------------------------------------------------------
+
+import Mathlib.Algebra.Ring.Defs
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Declarar R como un tipo sobre los anillos.
+-- ----------------------------------------------------------------------
+
+variable (R : Type _) [Ring R]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 3. Comprobar que R verifica los axiomas de los anillos.
+-- ----------------------------------------------------------------------
+
+#check (add_assoc : ∀ a b c : R, a + b + c = a + (b + c))
+#check (add_comm : ∀ a b : R, a + b = b + a)
+#check (zero_add : ∀ a : R, 0 + a = a)
+#check (add_left_neg : ∀ a : R, -a + a = 0)
+#check (mul_assoc : ∀ a b c : R, a * b * c = a * (b * c))
+#check (mul_one : ∀ a : R, a * 1 = a)
+#check (one_mul : ∀ a : R, 1 * a = a)
+#check (mul_add : ∀ a b c : R, a * (b + c) = a * b + a * c)
+#check (add_mul : ∀ a b c : R, (a + b) * c = a * c + b * c)
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Propiedades\_de\_anillos\_conmutativos.lean}{Propiedades de anillos conmutativos}}
+\label{sec:org2c3f563}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio 1. Importar la librería de las tácticas.
+-- ----------------------------------------------------------------------
+
+import Mathlib.Tactic
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Declarar R como una variable de tipo de los anillos
+-- conmutativos.
+-- ----------------------------------------------------------------------
+
+variable (R : Type _) [CommRing R]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 3. Declarar a, b, c y d como variables sobre R.
+-- ----------------------------------------------------------------------
+
+variable (a b c d : R)
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 4. Demostrar que
+--     (c * b) * a = b * (a * c)
+-- ----------------------------------------------------------------------
+
+example : (c * b) * a = b * (a * c) :=
+by ring
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 5. Demostrar que
+--     (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
+-- ----------------------------------------------------------------------
+
+example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
+by ring
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 6. Demostrar que
+--     (a + b) * (a - b) = a^2 - b^2
+-- ----------------------------------------------------------------------
+
+example : (a + b) * (a - b) = a^2 - b^2 :=
+by ring
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 7. Demostrar que si
+--    c = d * a + b
+--    b = a * d
+-- entonces
+--    c = 2 * a * d
+-- ----------------------------------------------------------------------
+
+example
+  (h1 : c = d * a + b)
+  (h2 : b = a * d)
+  : c = 2 * a * d :=
+by
+  rw [h1, h2]
+  ring
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Propiedades\_basicas\_de\_anillos.lean}{Propiedades básicas de anillos}}
+\label{sec:orge05f9df}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio 1. Importar la teoría de anillos.
+-- ----------------------------------------------------------------------
+
+import Mathlib.Algebra.Ring.Defs
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Crear el espacio de nombres myRing (para evitar
+-- conflictos con los nombres).
+-- ----------------------------------------------------------------------
+
+namespace myRing
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Declarar R como una variable implícita sobre los anillos.
+-- ----------------------------------------------------------------------
+
+variable {R : Type _} [Ring R]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 3. Declarar a como una variable sobre R.
+-- ----------------------------------------------------------------------
+
+variable (a : R)
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 4. Demostrar que
+--    a + 0 = a
+-- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    a + 0 = 0 + a    [por la conmutativa de la suma]
+--          = a        [por el axioma del cero por la izquierda]
+
+-- 1ª demostración
+-- ===============
+
+example : a + 0 = a :=
+calc a + 0
+     = 0 + a := by rw [add_comm]
+   _ = a     := by rw [zero_add]
+
+-- 2ª demostración
+-- ===============
+
+example : a + 0 = a :=
+by
+  rw [add_comm]
+  rw [zero_add]
+
+-- El desarrollo de la prueba es
+--
+--    R : Type ?u.599
+--    inst : Ring R
+--    a : R
+--    ⊢ a + 0 = a
+-- rw [add_comm]
+--    ⊢ 0 + a = a
+-- rw [zero_add]
+--    goals accomplished
+
+-- 3ª demostración
+-- ===============
+
+theorem add_zero : a + 0 = a :=
+by rw [add_comm, zero_add]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 5. Demostrar que
+--    a + -a = 0
+-- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    a + -a = -a + a    [por la conmutativa de la suma]
+--           = 0         [por el axioma de inverso por la izquierda]
+
+-- 1ª demostración
+-- ===============
+
+example : a + -a = 0 :=
+calc a + -a
+     = -a + a := by rw [add_comm]
+   _ = 0      := by rw [add_left_neg]
+
+-- 2ª demostración
+-- ===============
+
+example : a + -a = 0 :=
+by
+  rw [add_comm]
+  rw [add_left_neg]
+
+-- El desarrollo de la prueba es
+--
+--    R : Type ?u.1925
+--    inst : Ring R
+--    a : R
+--    ⊢ a + -a = 0
+-- rw [add_comm]
+--    ⊢ -a + a = 0
+-- rw [add_left_neg]
+--    no goals
+
+-- 3ª demostración
+-- ===============
+
+theorem add_right_neg : a + -a = 0 :=
+by rw [add_comm, add_left_neg]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 6. Cerrar el espacio de nombre myRing.
+-- ----------------------------------------------------------------------
+
+end myRing
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 7. Calcular el tipo de @myRing.add_zero.
+-- ----------------------------------------------------------------------
+
+#check @myRing.add_zero
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    myRing.add_zero : ∀ {R : Type u_1} [_inst_1 : Ring R] (a : R),
+--                      a + 0 = a
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 8. Calcular el tipo de @add_zero.
+-- ----------------------------------------------------------------------
+
+#check @add_zero
+
+-- Comentario: Al colocar el cursor sobre check se obtiene
+--    @add_zero : ∀ {M : Type u_1} [inst : AddZeroClass M] (a : M),
+--                a + 0 = a
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/neg\_add\_cancel\_left.lean}{Lema neg\_add\_cancel\_left}}
+\label{sec:org88b921f}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio 1. Importar la teoría de anillos.
+-- ----------------------------------------------------------------------
+
+import Mathlib.Algebra.Ring.Defs
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Crear el espacio de nombre MyRing
+-- ----------------------------------------------------------------------
+
+namespace MyRing
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 3. Declarar R como una variable sobre anillos.
+-- ----------------------------------------------------------------------
+
+variable {R : Type _} [Ring R]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 5. Demostrar que para todo a, b ∈ R,
+--    -a + (a + b) = b
+-- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    -a + (a + b) = (-a + a) + b [por la asociativa]
+--                 = 0 + b        [por inverso por la izquierda]
+--                 = b            [por cero por la izquierda]
+
+-- 1ª demostración
+-- ===============
+
+example
+  (a b : R)
+  : -a + (a + b) = b :=
+calc -a + (a + b) = (-a + a) + b := by rw [← add_assoc]
+                _ = 0 + b        := by rw [add_left_neg]
+                _ = b            := by rw [zero_add]
+
+-- 2ª demostración
+-- ===============
+
+theorem neg_add_cancel_left
+  (a b : R)
+  : -a + (a + b) = b :=
+by rw [←add_assoc, add_left_neg, zero_add]
+
+-- El desarrollo de la prueba es
+--
+--    R : Type u_1,
+--    _inst_1 : ring R,
+--    a b : R
+--    ⊢ -a + (a + b) = b
+-- rw ← add_assoc,
+--    ⊢ -a + a + b = b
+-- rw add_left_neg,
+--    ⊢ 0 + b = b
+-- rw zero_add,
+--    no goals
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 6. Cerrar el espacio de nombre MyRing.
+-- ----------------------------------------------------------------------
+
+end MyRing
+\end{verbatim}
 
 \chapter{Bibliografía}
-\label{sec:org630500b}
+\label{sec:org9e25e2d}
 
 \begin{itemize}
 \item \href{https://raw.githubusercontent.com/madvorak/lean4-cheatsheet/main/lean-tactics.pdf}{Lean 4 cheatsheet}. \textasciitilde{} Martin Dvořák.

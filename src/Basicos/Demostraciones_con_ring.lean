@@ -11,9 +11,10 @@
 --    c = 2 * a * d
 -- ---------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
-variables a b c d : ℝ
+variable (a b c d : ℝ)
 
 example : (c * b) * a = b * (a * c) :=
 by ring
@@ -28,7 +29,6 @@ example
   (h1 : c = d * a + b)
   (h2 : b = a * d)
   : c = 2 * a * d :=
-begin
-  rw [h1, h2],
+by
+  rw [h1, h2]
   ring
-end
