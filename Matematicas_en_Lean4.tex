@@ -1,10 +1,10 @@
 \input preambulo
 
 \chapter{Introducción}
-\label{sec:org506f43c}
+\label{sec:orga8257c6}
 
 \section{Resumen}
-\label{sec:org1e874c5}
+\label{sec:org1077bff}
 
 El objetivo de este trabajo es presentar el uso de \href{https://leanprover.github.io/lean4/doc/}{Lean4} (y su librería
 matemática \href{https://github.com/leanprover-community/mathlib4}{mathlib4}) mediante ejemplos matemáticos. Está basado en el
@@ -14,10 +14,10 @@ Los ejercicios se han ido publicando, desde el 10 de julio de 2022, en
 el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su código en \href{https://github.com/jaalonso/Calculemus2}{GitHub}.
 
 \section{Presentación panorámica de Lean}
-\label{sec:orgfacd955}
+\label{sec:org2763e13}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_evaluacion.lean}{Ejemplo de evaluación}}
-\label{sec:org4153a72}
+\label{sec:org7b3cdbb}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Calcular el valor de 2+3.
@@ -30,7 +30,7 @@ el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su códi
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_comprobacion\_con\_check.lean}{Ejemplo de comprobación con check}}
-\label{sec:org06c8444}
+\label{sec:orgc00a439}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio: Calcular el tipo de la expresión 2+3.
@@ -45,7 +45,7 @@ el blog \href{https://www.glc.us.es/\~jalonso/calculemus}{Calculemus} y su códi
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_definicion\_de\_funciones.lean}{Ejemplo de definición de funciones}}
-\label{sec:org4696dba}
+\label{sec:org8e1e2c5}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -79,7 +79,7 @@ def f (x : ℕ) :=
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_proposiciones.lean}{Ejemplo de proposiciones}}
-\label{sec:org147fbcb}
+\label{sec:orgbb483be}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -106,7 +106,7 @@ def ultimo_teorema_de_Fermat :=
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_teoremas.lean}{Ejemplo de teoremas}}
-\label{sec:orgb363e33}
+\label{sec:org675ee13}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la teoría de los números naturales.
@@ -167,7 +167,7 @@ sorry
 \end{verbatim}
 
 \subsection{\href{./src/Introduccion/Ejemplo\_de\_demostracion.lean}{Ejemplo de demostración}}
-\label{sec:orgb22cf80}
+\label{sec:orgf53b29f}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los productos de los números naturales por
@@ -269,7 +269,7 @@ example : ∀ m n : Nat, Even n → Even (m * n) := by
 \end{verbatim}
 
 \chapter{Aspectos básicos del razonamiento matemático en Lean}
-\label{sec:org50dc1d1}
+\label{sec:org808e203}
 
 En este capítulo se presentan los aspectos básicos del razonamiento matemático
 en Lean:
@@ -280,10 +280,10 @@ en Lean:
 \end{itemize}
 
 \section{Cálculos}
-\label{sec:org53b6f37}
+\label{sec:org02f352b}
 
 \subsection{\href{./src/Basicos/Asociativa\_conmutativa\_de\_los\_reales.lean}{Asociativa conmutativa de los reales}}
-\label{sec:org6a0d15c}
+\label{sec:orgd1b0479}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -354,7 +354,7 @@ by ring
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejercicio\_sobre\_aritmetica\_real\_1.lean}{Ejercicio sobre aritmética real (1)}}
-\label{sec:orga8d723b}
+\label{sec:org03d4d85}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -424,7 +424,7 @@ by ring
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejercicio\_sobre\_aritmetica\_real\_2.lean}{Ejercicio sobre aritmética real (2)}}
-\label{sec:org91c5f45}
+\label{sec:orge4cd5af}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que los números reales tienen la siguiente
@@ -497,7 +497,7 @@ by ring
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejemplo\_de\_rw\_sobre\_hipotesis.lean}{Ejemplo de rw con hipótesis}}
-\label{sec:orgf05a058}
+\label{sec:org10fb3e9}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c, d, e y f son números reales
@@ -595,7 +595,7 @@ by
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejercicio\_de\_rw\_sobre\_hipotesis\_1.lean}{Ejercicio de rw con hipótesis (1)}}
-\label{sec:org9790691}
+\label{sec:orgbd8c341}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c, d, e y f son números reales
@@ -666,7 +666,7 @@ by
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejercicio\_de\_rw\_sobre\_hipotesis\_2.lean}{Ejercicio de rw con hipótesis (2)}}
-\label{sec:org7306244}
+\label{sec:org4c446bc}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c y d son números reales tales
@@ -751,7 +751,7 @@ by
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Declaracion\_de\_variables\_en\_secciones.lean}{Declaración de variables en secciones}}
-\label{sec:org29754dc}
+\label{sec:orgaecfd5c}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Importar la librería básica de los números reales.
@@ -868,7 +868,7 @@ end
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Demostracion\_con\_calc.lean}{Demostración con calc}}
-\label{sec:org83b8ef3}
+\label{sec:orgfe053cc}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a y b son números reales, entonces
@@ -1005,7 +1005,7 @@ by
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejercicio\_con\_calc.lean}{Ejercicio con calc}}
-\label{sec:orgfbc2eec}
+\label{sec:org94d2e13}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c y d son números reales, entonces
@@ -1092,7 +1092,7 @@ by rw [add_mul, mul_add, mul_add, ←add_assoc]
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Ejercicio\_Suma\_por\_diferencia.lean}{Ejercicio: Suma por diferencia}}
-\label{sec:orgb4fbe5c}
+\label{sec:org0684677}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a y b son números reales, entonces
@@ -1234,7 +1234,7 @@ by
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Reescritura\_en\_hipotesis\_y\_tactica\_exact.lean}{Reescritura en hipótesis y táctica exact}}
-\label{sec:org2cf7897}
+\label{sec:org5225127}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si a, b, c y d son números reales tales que
@@ -1393,7 +1393,7 @@ by linarith
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Demostraciones\_con\_ring.lean}{Demostraciones con ring}}
-\label{sec:org283c25b}
+\label{sec:orgeac6821}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio. Sean a, b, c y números reales. Demostrar, con la táctica
@@ -1477,13 +1477,13 @@ by
 \end{verbatim}
 
 \section{Demostraciones en estructuras algebraicas}
-\label{sec:org4a55134}
+\label{sec:orgcf25919}
 
 \subsection{Demostraciones en anillos}
-\label{sec:orgc8a837d}
+\label{sec:org931e098}
 
 \subsection{\href{./src/Basicos/Axiomas\_de\_anillos.lean}{Axiomas de anillos}}
-\label{sec:orgedb59fe}
+\label{sec:org3c22577}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Importar la librería de anillos.
@@ -1513,7 +1513,7 @@ variable (R : Type _) [Ring R]
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Propiedades\_de\_anillos\_conmutativos.lean}{Propiedades de anillos conmutativos}}
-\label{sec:org2c3f563}
+\label{sec:org03d3015}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Importar la librería de las tácticas.
@@ -1576,7 +1576,7 @@ by
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/Propiedades\_basicas\_de\_anillos.lean}{Propiedades básicas de anillos}}
-\label{sec:orge05f9df}
+\label{sec:orgc60116d}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Importar la teoría de anillos.
@@ -1721,7 +1721,7 @@ end myRing
 \end{verbatim}
 
 \subsection{\href{./src/Basicos/neg\_add\_cancel\_left.lean}{Lema neg\_add\_cancel\_left}}
-\label{sec:org88b921f}
+\label{sec:org5844dd2}
 \begin{verbatim}
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Importar la teoría de anillos.
@@ -1792,8 +1792,513 @@ by rw [←add_assoc, add_left_neg, zero_add]
 end MyRing
 \end{verbatim}
 
+\subsection{\href{./src/Basicos/neg\_add\_cancel\_right.lean}{Ejercicio neg\_add\_cancel\_right}}
+\label{sec:org3745a1f}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio 1. Importar la teoría de anillos.
+-- ----------------------------------------------------------------------
+
+import Mathlib.Algebra.Ring.Defs
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Crear el espacio de nombre MyRing.
+-- ----------------------------------------------------------------------
+
+namespace MyRing
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 3. Declara R una variable sobre anillos.
+-- ----------------------------------------------------------------------
+
+variable {R : Type _} [Ring R]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 4. Declarar a y b como variables sobre R.
+-- ----------------------------------------------------------------------
+
+variable (a b : R)
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 5. Demostrar que
+--    (a + b) + -b = a
+-- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    (a + b) + -b = a + (b + -b)    [por la asociativa]
+--               _ = a + 0           [por suma con opuesto]
+--               _ = a               [por suma con cero]
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
+theorem neg_add_cancel_right : (a + b) + -b = a :=
+calc
+  (a + b) + -b = a + (b + -b) := by rw [add_assoc]
+             _ = a + 0        := by rw [add_right_neg]
+             _ = a            := by rw [add_zero]
+
+-- 2ª demostración
+-- ===============
+
+example : (a + b) + -b = a :=
+by
+  rw [add_assoc]
+  rw [add_right_neg]
+  rw [add_zero]
+
+-- El desarrollo de la prueba es
+--
+--    R : Type ?u.930
+--    inst : Ring R
+--    a b : R
+--    ⊢ a + b + -b = a
+-- rw [add_assoc]
+--    ⊢ a + (b + -b) = a
+-- rw [add_right_neg]
+--    ⊢ a + 0 = a
+-- rw [add_zero]
+--    goals accomplished
+
+-- 3ª demostración
+-- ===============
+
+example : (a + b) + -b = a :=
+by rw [add_assoc, add_right_neg, add_zero]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 4. Cerrar la teoría MyRing
+-- ----------------------------------------------------------------------
+
+end MyRing
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/Cancelativas\_de\_la\_suma.lean}{Ejercicio: Cancelativas de la suma}}
+\label{sec:orge455f40}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio 1. Importar la teoría de anillos.
+-- ----------------------------------------------------------------------
+
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Tactic
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 2. Crear el espacio de nombre MyRing.
+-- ----------------------------------------------------------------------
+
+namespace MyRing
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 3. Declara R una variable sobre anillos.
+-- ----------------------------------------------------------------------
+
+variable {R : Type _} [Ring R]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 4. Declarar a, b y c como variables sobre R.
+-- ----------------------------------------------------------------------
+
+variable {a b c : R}
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 5. Demostrar que si
+--    a + b = a + c
+-- entonces
+--    b = c
+-- ----------------------------------------------------------------------
+
+-- Demostraciones en lenguaje natural (LN)
+-- ======================================
+
+-- 1ª demostración en LN
+-- =====================
+
+-- Por la siguiente cadena de igualdades
+--    b = 0 + b           [por suma con cero]
+--      = (-a + a) + b    [por suma con opuesto]
+--      = -a + (a + b)    [por asociativa]
+--      = -a + (a + c)    [por hipótesis]
+--      = (-a + a) + c    [por asociativa]
+--      = 0 + c           [por suma con opuesto]
+--      = c               [por suma con cero]
+
+-- 2ª demostración en LN
+-- =====================
+
+-- Por la siguiente cadena de implicaciones
+--    a + b = a + c
+--    ==> -a + (a + b) = -a + (a + c)     [sumando -a]
+--    ==>  (-a + a) + b = (-a + a) + c    [por la asociativa]
+--    ==>  0 + b = 0 + b                  [suma con opuesto]
+--    ==>  b = c                          [suma con cero]
+
+-- 3ª demostración en LN
+-- =====================
+
+-- Por la siguiente cadena de igualdades
+--    b = -a + (a + b)
+--      = -a + (a + c)   [por la hipótesis]
+--      = c
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
+theorem add_left_cancel
+  (h : a + b = a + c)
+  : b = c :=
+calc
+  b = 0 + b        := by rw [zero_add]
+  _ = (-a + a) + b := by rw [add_left_neg]
+  _ = -a + (a + b) := by rw [add_assoc]
+  _ = -a + (a + c) := by rw [h]
+  _ = (-a + a) + c := by rw [←add_assoc]
+  _ = 0 + c        := by rw [add_left_neg]
+  _ = c            := by rw [zero_add]
+
+-- 2ª demostración
+-- ===============
+
+example
+  (h : a + b = a + c)
+  : b = c :=
+by
+  have h1 : -a + (a + b) = -a + (a + c) :=
+    congrArg (HAdd.hAdd (-a)) h
+  clear h
+  rw [← add_assoc] at h1
+  rw [add_left_neg] at h1
+  rw [zero_add] at h1
+  rw [← add_assoc] at h1
+  rw [add_left_neg] at h1
+  rw [zero_add] at h1
+  exact h1
+
+-- El desarrollo de la prueba es
+--
+--    R : Type ?u.3961
+--    inst : Ring R
+--    a b c : R,
+--    h : a + b = a + c
+--    ⊢ b = c
+-- have h1 : -a + (a + b) = -a + (a + c)
+--    |    ⊢ -a + (a + b) = -a + (a + c) :=
+--    |          congrArg (HAdd.hAdd (-a)) h
+--    h : a + b = a + c,
+--    h1 : -a + (a + b) = -a + (a + c)
+--    ⊢ b = c
+-- clear h
+--    h1 : -a + (a + b) = -a + (a + c)
+--    ⊢ b = c
+-- rw [← add_assoc at h1]
+--    h1 : -a + a + b = -a + (a + c)
+--    ⊢ b = c
+-- rw [add_left_neg at h1]
+--    h1 : 0 + b = -a + (a + c)
+--    ⊢ b = c
+-- rw [zero_add at h1]
+--    h1 : b = -a + (a + c)
+--    ⊢ b = c
+-- rw [← add_assoc at h1]
+--    h1 : b = -a + a + c
+--    ⊢ b = c
+-- rw [add_left_neg at h1]
+--    h1 : b = 0 + c
+--    ⊢ b = c
+-- rw [zero_add at h1]
+--    h1 : b = c
+--    ⊢ b = c
+-- exact h1
+--    goals accomplished
+
+-- 3ª demostración
+-- ===============
+
+lemma neg_add_cancel_left (a b : R) : -a + (a + b) = b :=
+by simp
+
+example
+  (h : a + b = a + c)
+  : b = c :=
+calc
+  b = -a + (a + b) := by rw [neg_add_cancel_left a b]
+  _ = -a + (a + c) := by rw [h]
+  _ = c            := by rw [neg_add_cancel_left]
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h : a + b = a + c)
+  : b = c :=
+by
+  rw [← neg_add_cancel_left a b]
+  rw [h]
+  rw [neg_add_cancel_left]
+
+-- 5ª demostración
+-- ===============
+
+example
+  (h : a + b = a + c)
+  : b = c :=
+by
+  rw [← neg_add_cancel_left a b, h, neg_add_cancel_left]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 6. Demostrar que si
+--    a + b = c + b
+-- entonces
+--    a = c
+-- ----------------------------------------------------------------------
+
+-- Demostraciones en lenguaje natural (LN)
+-- =======================================
+
+-- 1ª demostración en LN
+-- =====================
+
+-- Por la siguiente cadena de igualdades
+--    a = a + 0           [por suma con cero]
+--      = a + (b + -b)    [por suma con opuesto]
+--      = (a + b) + -b    [por asociativa]
+--      = (c + b) + -b    [por hipótesis]
+--      = c + (b + -b)    [por asociativa]
+--      = c + 0           [por suma con opuesto]
+--      = c               [por suma con cero]
+
+-- 2ª demostración en LN
+-- =====================
+
+-- Por la siguiente cadena de igualdades
+--    a = (a + b) + -b
+--      = (c + b) + -b    [por hipótesis]
+--      = c
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración con Lean4
+-- =========================
+
+theorem add_right_cancel
+  (h : a + b = c + b)
+  : a = c :=
+calc
+  a = a + 0        := by rw [add_zero]
+  _ = a + (b + -b) := by rw [add_right_neg]
+  _ = (a + b) + -b := by rw [add_assoc]
+  _ = (c + b) + -b := by rw [h]
+  _ = c + (b + -b) := by rw [← add_assoc]
+  _ = c + 0        := by rw [← add_right_neg]
+  _ = c            := by rw [add_zero]
+
+-- 2ª demostración con Lean4
+-- =========================
+
+lemma neg_add_cancel_right (a b : R) : (a + b) + -b = a :=
+by simp
+
+example
+  (h : a + b = c + b)
+  : a = c :=
+calc
+  a = (a + b) + -b := by rw [neg_add_cancel_right a b]
+  _ = (c + b) + -b := by rw [h]
+  _ = c            := by rw [neg_add_cancel_right]
+
+-- 3ª demostración con Lean4
+-- =========================
+
+example
+  (h : a + b = c + b)
+  : a = c :=
+by
+  rw [← neg_add_cancel_right a b]
+  rw [h]
+  rw [neg_add_cancel_right]
+
+-- 4ª demostración con Lean4
+-- =========================
+
+example
+  (h : a + b = c + b)
+  : a = c :=
+by
+  rw [← neg_add_cancel_right a b, h, neg_add_cancel_right]
+
+-- ---------------------------------------------------------------------
+-- Ejercicio 7. Cerrar el espacio de nombre MyRing.
+-- ----------------------------------------------------------------------
+
+end MyRing
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/mul\_zero.lean}{Lema mul\_zero con have}}
+\label{sec:orgcf9870f}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que en los anillos
+--    a * 0 = 0
+-- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Basta aplicar la propiedad cancelativa a
+--    a.0 + a.0 = a.0 + 0
+-- que se demuestra mediante la siguiente cadena de igualdades
+--    a.0 + a.0 = a.(0 + 0)    [por la distributiva]
+--              = a.0          [por suma con cero]
+--              = a.0 + 0      [por suma con cero]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Tactic
+
+namespace MyRing
+
+variable {R : Type _} [Ring R]
+variable (a : R)
+
+-- 1ª demostración
+-- ===============
+
+example : a * 0 = 0 :=
+by
+  have h : a * 0 + a * 0 = a * 0 + 0 :=
+    calc a * 0 + a * 0 = a * (0 + 0) := by rw [mul_add a 0 0]
+                     _ = a * 0       := by rw [add_zero 0]
+                     _ = a * 0 + 0   := by rw [add_zero (a * 0)]
+  rw [add_left_cancel h]
+
+-- 2ª demostración
+-- ===============
+
+example : a * 0 = 0 :=
+by
+  have h : a * 0 + a * 0 = a * 0 + 0 :=
+    calc a * 0 + a * 0 = a * (0 + 0) := by rw [← mul_add]
+                     _ = a * 0       := by rw [add_zero]
+                     _ = a * 0 + 0   := by rw [add_zero]
+  rw [add_left_cancel h]
+
+-- 3ª demostración
+-- ===============
+
+example : a * 0 = 0 :=
+by
+  have h : a * 0 + a * 0 = a * 0 + 0 :=
+    by rw [← mul_add, add_zero, add_zero]
+  rw [add_left_cancel h]
+
+-- 4ª demostración
+-- ===============
+
+example : a * 0 = 0 :=
+by
+  have : a * 0 + a * 0 = a * 0 + 0 :=
+    calc a * 0 + a * 0 = a * (0 + 0) := by simp
+                     _ = a * 0       := by simp
+                     _ = a * 0 + 0   := by simp
+  simp
+
+end MyRing
+\end{verbatim}
+
+\subsection{\href{./src/Basicos/zero\_mul.lean}{Ejercicio zero\_mul}}
+\label{sec:orgc5c090b}
+\begin{verbatim}
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que en los anillos,
+--    0 * a = 0
+-- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Basta aplicar la propiedad cancelativa a
+--    0.a + 0.a = 0.a + 0
+-- que se demuestra mediante la siguiente cadena de igualdades
+--    0.a + 0.a = (0 + 0).a    [por la distributiva]
+--              = 0.a          [por suma con cero]
+--              = 0.a + 0      [por suma con cero]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Tactic
+
+namespace MyRing
+
+variable {R : Type _} [Ring R]
+variable (a : R)
+
+-- 1ª demostración
+-- ===============
+
+example : a = a + 0 := (add_zero a).symm
+example : a + 0 = a := add_zero a
+
+example : 0 * a = 0 :=
+by
+  have h : 0 * a + 0 * a = 0 * a + 0 :=
+    calc 0 * a + 0 * a = (0 + 0) * a := by rw [add_mul]
+                     _ = 0 * a       := by rw [add_zero]
+                     _ = 0 * a + 0   := by rw [add_zero]
+  rw [add_left_cancel h]
+
+-- 2ª demostración
+-- ===============
+
+example : 0 * a = 0 :=
+by
+  have h : 0 * a + 0 * a = 0 * a + 0 :=
+    by rw [←add_mul, add_zero, add_zero]
+  rw [add_left_cancel h]
+
+-- 3ª demostración
+-- ===============
+
+example : 0 * a = 0 :=
+by
+  have : 0 * a + 0 * a = 0 * a + 0 :=
+    calc 0 * a + 0 * a = (0 + 0) * a := by simp
+                     _ = 0 * a       := by simp
+                     _ = 0 * a + 0   := by simp
+  simp
+
+-- 4ª demostración
+-- ===============
+
+example : 0 * a = 0 :=
+by
+  have : 0 * a + 0 * a = 0 * a + 0 := by simp
+  simp
+
+-- 5ª demostración
+-- ===============
+
+example : 0 * a = 0 :=
+by simp
+
+end MyRing
+\end{verbatim}
+
 \chapter{Bibliografía}
-\label{sec:org9e25e2d}
+\label{sec:orgb0619aa}
 
 \begin{itemize}
 \item \href{https://raw.githubusercontent.com/madvorak/lean4-cheatsheet/main/lean-tactics.pdf}{Lean 4 cheatsheet}. \textasciitilde{} Martin Dvořák.

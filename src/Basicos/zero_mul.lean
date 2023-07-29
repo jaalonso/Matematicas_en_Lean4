@@ -3,61 +3,73 @@
 --    0 * a = 0
 -- ----------------------------------------------------------------------
 
-import algebra.ring
+-- Demostración en lenguaje natural
+-- ================================
 
-namespace my_ring
+-- Basta aplicar la propiedad cancelativa a
+--    0.a + 0.a = 0.a + 0
+-- que se demuestra mediante la siguiente cadena de igualdades
+--    0.a + 0.a = (0 + 0).a    [por la distributiva]
+--              = 0.a          [por suma con cero]
+--              = 0.a + 0      [por suma con cero]
 
-variables {R : Type*} [ring R]
+-- Demostraciones con Lean4
+-- ========================
 
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Tactic
+
+namespace MyRing
+
+variable {R : Type _} [Ring R]
 variable (a : R)
 
 -- 1ª demostración
 -- ===============
 
+example : a = a + 0 := (add_zero a).symm
+example : a + 0 = a := add_zero a
+
 example : 0 * a = 0 :=
-begin
-  have h : 0 * a + 0 * a = 0 * a + 0,
-    calc 0 * a + 0 * a
-         = (0 + 0) * a : (add_mul 0 0 a).symm
-     ... = 0 * a       : congr_arg (λ x, x * a) (add_zero 0)
-     ... = 0 * a + 0   : self_eq_add_right.mpr rfl,
-  rw add_left_cancel h
-end
+by
+  have h : 0 * a + 0 * a = 0 * a + 0 :=
+    calc 0 * a + 0 * a = (0 + 0) * a := by rw [add_mul]
+                     _ = 0 * a       := by rw [add_zero]
+                     _ = 0 * a + 0   := by rw [add_zero]
+  rw [add_left_cancel h]
 
 -- 2ª demostración
 -- ===============
 
 example : 0 * a = 0 :=
-begin
-  have h : 0 * a + 0 * a = 0 * a + 0,
-    calc 0 * a + 0 * a
-         = (0 + 0) * a : by rw add_mul
-     ... = 0 * a       : by rw add_zero
-     ... = 0 * a + 0   : by rw add_zero,
-  rw add_left_cancel h
-end
+by
+  have h : 0 * a + 0 * a = 0 * a + 0 :=
+    by rw [←add_mul, add_zero, add_zero]
+  rw [add_left_cancel h]
 
 -- 3ª demostración
 -- ===============
 
 example : 0 * a = 0 :=
-begin
-  have h : 0 * a + 0 * a = 0 * a + 0,
-  { rw [←add_mul, add_zero, add_zero] },
-  rw add_left_cancel h
-end
+by
+  have : 0 * a + 0 * a = 0 * a + 0 :=
+    calc 0 * a + 0 * a = (0 + 0) * a := by simp
+                     _ = 0 * a       := by simp
+                     _ = 0 * a + 0   := by simp
+  simp
 
 -- 4ª demostración
 -- ===============
 
 example : 0 * a = 0 :=
-begin
-  have h : 0 * a + 0 * a = 0 * a + 0,
-    calc 0 * a + 0 * a
-         = (0 + 0) * a : by simp
-     ... = 0 * a       : by simp
-     ... = 0 * a + 0   : by simp,
-  simp,
-end
+by
+  have : 0 * a + 0 * a = 0 * a + 0 := by simp
+  simp
 
-end my_ring
+-- 5ª demostración
+-- ===============
+
+example : 0 * a = 0 :=
+by simp
+
+end MyRing

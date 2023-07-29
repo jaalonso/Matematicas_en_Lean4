@@ -122,20 +122,20 @@ en Lean:
 *** [[./src/Basicos/neg_add_cancel_left.lean][Lema neg_add_cancel_left]]
 #+INCLUDE: "./src/Basicos/neg_add_cancel_left.lean" src lean
 
+*** [[./src/Basicos/neg_add_cancel_right.lean][Ejercicio neg_add_cancel_right]]
+#+INCLUDE: "./src/Basicos/neg_add_cancel_right.lean" src lean
+
+*** [[./src/Basicos/Cancelativas_de_la_suma.lean][Ejercicio: Cancelativas de la suma]]
+#+INCLUDE: "./src/Basicos/Cancelativas_de_la_suma.lean" src lean
+
+*** [[./src/Basicos/mul_zero.lean][Lema mul_zero con have]]
+#+INCLUDE: "./src/Basicos/mul_zero.lean" src lean
+
+*** [[./src/Basicos/zero_mul.lean][Ejercicio zero_mul]]
+#+INCLUDE: "./src/Basicos/zero_mul.lean" src lean
+
 #+BEGIN_COMMENT
 
-# *** [[./src/Basicos/neg_add_cancel_right.lean][Ejercicio neg_add_cancel_right]]
-# #+INCLUDE: "./src/Basicos/neg_add_cancel_right.lean" src lean
-#
-# *** [[./src/Basicos/Cancelativas_de_la_suma.lean][Ejercicio: Cancelativas de la suma]]
-# #+INCLUDE: "./src/Basicos/Cancelativas_de_la_suma.lean" src lean
-#
-# *** [[./src/Basicos/mul_zero.lean][Lema mul_zero con have]]
-# #+INCLUDE: "./src/Basicos/mul_zero.lean" src lean
-#
-# *** [[./src/Basicos/zero_mul.lean][Ejercicio zero_mul]]
-# #+INCLUDE: "./src/Basicos/zero_mul.lean" src lean
-#
 # *** [[./src/Basicos/Ejercicios_sobre_anillos.lean][Ejercicios sobre anillos]]
 # #+INCLUDE: "./src/Basicos/Ejercicios_sobre_anillos.lean" src lean
 #
