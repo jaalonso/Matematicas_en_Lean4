@@ -36,4 +36,5 @@ example
   : (a + b) * (a + b) = a * c + b * c :=
 by
   nth_rewrite 2 [h]
+  -- ⊢ (a + b) * c = a * c + b * c
   rw [add_mul]

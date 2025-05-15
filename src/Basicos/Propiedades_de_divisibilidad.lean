@@ -4,8 +4,8 @@
 --    2. Declarar x, y y z como variables sobre los naturales.
 -- ----------------------------------------------------------------------
 
-import data.nat.gcd   -- 1
-variables x y z : ℕ   -- 2
+import Mathlib.Data.Real.Basic
+variable (x y z : ℕ)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que si
@@ -26,74 +26,83 @@ dvd_trans h₀ h₁
 --    x ∣ y * x * z
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la transitividad de la divisibilidad aplicada a las relaciones
+--    x ∣ yx
+--    yx ∣ yxz
+
+
 -- 1ª demostración
 -- ===============
 
 example : x ∣ y * x * z :=
-begin
-  have h1 : x ∣ y * x,
-    { exact dvd_mul_left x y },
-  have h2 : (y * x) ∣ (y * x * z),
-    { exact dvd.intro z rfl},
-  show x ∣ y * x * z,
-    { exact dvd_trans h1 h2},
-end
+by
+  have h1 : x ∣ y * x :=
+    dvd_mul_left x y
+  have h2 : (y * x) ∣ (y * x * z) :=
+    dvd_mul_right (y * x) z
+  show x ∣ y * x * z
+  exact dvd_trans h1 h2
 
 -- 2ª demostración
 -- ===============
 
 example : x ∣ y * x * z :=
-dvd_trans (dvd_mul_left x y) (dvd.intro z rfl)
+dvd_trans (dvd_mul_left x y) (dvd_mul_right (y * x) z)
 
 -- 3ª demostración
 -- ===============
 
 example : x ∣ y * x * z :=
-begin
-  apply dvd_mul_of_dvd_left,
+by
+  apply dvd_mul_of_dvd_left
+  -- ⊢ x ∣ y * x
   apply dvd_mul_left
-end
-
--- Su desarrollo es
---
---    ⊢ x ∣ y * x * z
--- apply dvd_mul_of_dvd_left,
---    ⊢ x ∣ y * x
--- apply dvd_mul_left
---    no goals
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que si x ∈ ℕ, entonces
 --    x ∣ x^2
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se tiene que
+--    x ∣ xx
+-- y, por la definición del cuadrado,
+--    x ∣ x²
+
 -- 1ª demostración
 -- ===============
 
 example : x ∣ x^2 :=
-begin
-  rw pow_two,
-  apply dvd_mul_right,
-end
-
--- Su desarrollo es
---
---    ⊢ x ∣ x ^ 2
--- rw pow_two,
---    ⊢ x ∣ x * x
--- apply dvd_mul_left
---    no goals
+by
+  have : x ∣ x * x := dvd_mul_left x x
+  show x ∣ x^2
+  rwa [pow_two]
 
 -- 2ª demostración
 -- ===============
 
 example : x ∣ x^2 :=
-by apply dvd_mul_right
+by
+  rw [pow_two]
+  -- ⊢ x ∣ x * x
+  apply dvd_mul_right
+
+-- 3ª demostración
+-- ===============
+
+example : x ∣ x^2 :=
+by apply dvd_mul_left
 
 -- Lemas usados
 -- ============
 
 -- #check (dvd_trans : x ∣ y → y ∣ z → x ∣ z)
--- #check (dvd_mul_of_dvd_left : x ∣ y → ∀ (c : ℕ), x ∣ y * c)
 -- #check (dvd_mul_left : ∀ (a b : ℕ), a ∣ b * a)
+-- #check (dvd_mul_right : ∀ (a b : ℕ), a ∣ a * b)
+-- #check (dvd_mul_of_dvd_left : x ∣ y → ∀ (c : ℕ), x ∣ y * c)
 -- #check (pow_two : ∀ (a : ℕ), a ^ 2 = a * a)

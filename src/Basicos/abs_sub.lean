@@ -3,12 +3,63 @@
 --    |a| - |b| ≤ |a - b|
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostraciones en lenguaje natural (LN)
+-- =======================================
 
-variables a b : ℝ
+-- 1ª demostración en LN
+-- =====================
 
+-- Por la siguiente cadena de desigualdades
+--    |a| - |b| = |a - b + b| - |b|
+--              ≤ (|a - b| + |b|) - |b|   [por la desigualdad triangular]
+--              = |a - b|
+
+-- 2ª demostración en LN
+-- =====================
+
+-- Por la desigualdad triangular
+--    |a - b + b| ≤ |a - b| + |b|
+-- simplificando en la izquierda
+--    |a| ≤ |a - b| + |b|
+-- y, pasando |b| a la izquierda
+--    |a| - |b| ≤ |a - b|
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+
+variable (a b : ℝ)
+
+-- 1ª demostración (basada en la 1ª en LN)
 example : |a| - |b| ≤ |a - b| :=
 calc |a| - |b|
-     = |a - b + b| - |b|     : by simp
- ... ≤ (|a - b| + |b|) - |b| : sub_le_sub_right (abs_add (a - b) b) (|b|)
- ... = |a - b|               : add_sub_cancel (|a - b|) (|b|)
+     = |a - b + b| - |b| :=
+          congrArg (fun x => |x| - |b|) (sub_add_cancel a b).symm
+   _ ≤ (|a - b| + |b|) - |b| :=
+          sub_le_sub_right (abs_add (a - b) b) (|b|)
+   _ = |a - b| :=
+          add_sub_cancel (|a - b|) (|b|)
+
+-- 2ª demostración (basada en la 1ª en LN)
+example : |a| - |b| ≤ |a - b| :=
+calc |a| - |b|
+     = |a - b + b| - |b| := by
+          rw [sub_add_cancel]
+   _ ≤ (|a - b| + |b|) - |b| := by
+          apply sub_le_sub_right
+          apply abs_add
+   _ = |a - b| := by
+          rw [add_sub_cancel]
+
+-- 3ª demostración (basada en la 2ª en LN)
+example : |a| - |b| ≤ |a - b| :=
+by
+  have h1 : |a - b + b| ≤ |a - b| + |b| := abs_add (a - b) b
+  rw [sub_add_cancel] at h1
+  -- h1 : |a| ≤ |a - b| + |b|
+  exact abs_sub_abs_le_abs_sub a b
+
+-- 4ª demostración
+example : |a| - |b| ≤ |a - b| :=
+abs_sub_abs_le_abs_sub a b

@@ -2,84 +2,103 @@
 -- Ejercicio. Sean m y n números naturales. Demostrar que si
 --    m ∣ n ∧ m ≠ n
 -- entonces
---    m ∣ n ∧ ¬ n ∣ m
+--    m ∣ n ∧ ¬(n ∣ m)
 -- ----------------------------------------------------------------------
 
-import data.nat.gcd
+-- Demostración en lenguaje natural
+-- ================================
 
-open nat
+-- La primera parte de la conclusión coincide con la primera de la
+-- hipótesis. Nos queda demostrar la segunda parte; es decir, que
+-- ¬(n | m). Para ello, supongamos que n | m. Entonces, por la propiedad
+-- antisimétrica de la divisibilidad y la primera parte de la hipótesis,
+-- se tiene que m = n en contradicción con la segunda parte de la
+-- hipótesis.
 
-variables {m n : ℕ} 
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Nat.GCD.Basic
+
+variable {m n : ℕ}
 
 -- 1ª demostración
 -- ===============
 
-example 
-  (h : m ∣ n ∧ m ≠ n) 
+example
+  (h : m ∣ n ∧ m ≠ n)
   : m ∣ n ∧ ¬ n ∣ m :=
-begin
-  cases h with h₀ h₁,
-  split,
-    exact h₀,
-  contrapose! h₁,
-  apply dvd_antisymm h₀ h₁,
-end
-
--- Prueba
--- ======
-
-/-
-m n : ℕ,
-h : m ∣ n ∧ m ≠ n
-⊢ m ∣ n ∧ ¬n ∣ m
-  >> cases h with h₀ h₁,
-h₀ : m ∣ n,
-h₁ : m ≠ n
-⊢ m ∣ n ∧ ¬n ∣ m
-  >> split,
-| ⊢ m ∣ n
-|   >>   exact h₀,
-⊢ ¬n ∣ m
-  >> contrapose! h₁,
-h₁ : n ∣ m
-⊢ m = n
-  >> apply dvd_antisymm h₀ h₁,
-no goals
--/
+by
+  constructor
+  . -- ⊢ m ∣ n
+    exact h.left
+  . -- ⊢ ¬n ∣ m
+    intro h1
+    -- h1 : n ∣ m
+    have h2 : m = n := dvd_antisymm h.left h1
+    show False
+    exact h.right h2
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (h : m ∣ n ∧ m ≠ n) 
+example
+  (h : m ∣ n ∧ m ≠ n)
   : m ∣ n ∧ ¬ n ∣ m :=
-begin
-  rcases h with ⟨h₀, h₁⟩,
-  split,
-    exact h₀,
-  contrapose! h₁,
-  apply dvd_antisymm h₀ h₁,
-end
+by
+  constructor
+  . -- ⊢ m ∣ n
+    exact h.left
+  . -- ⊢ ¬n ∣ m
+    intro h1
+    -- h1 : n ∣ m
+    exact h.right (dvd_antisymm h.left h1)
 
--- Prueba
--- ======
+-- 3ª demostración
+-- ===============
 
-/-
-m n : ℕ,
-h : m ∣ n ∧ m ≠ n
-⊢ m ∣ n ∧ ¬n ∣ m
-  >> rcases h with ⟨h₀, h₁⟩,
-h₀ : m ∣ n,
-h₁ : m ≠ n
-⊢ m ∣ n ∧ ¬n ∣ m
-  >> split,
-| ⊢ m ∣ n
-|   >>   exact h₀,
-⊢ ¬n ∣ m
-  >> contrapose! h₁,
-h₁ : n ∣ m
-⊢ m = n
-  >> apply dvd_antisymm h₀ h₁,
-no goals
--/
+example
+  (h : m ∣ n ∧ m ≠ n)
+  : m ∣ n ∧ ¬ n ∣ m :=
+⟨h.left, fun h1 ↦ h.right (dvd_antisymm h.left h1)⟩
 
+-- 4ª demostración
+-- ===============
+
+example
+  (h : m ∣ n ∧ m ≠ n)
+  : m ∣ n ∧ ¬ n ∣ m :=
+by
+  rcases h with ⟨h1, h2⟩
+  -- h1 : m ∣ n
+  -- h2 : m ≠ n
+  constructor
+  . -- ⊢ m ∣ n
+    exact h1
+  . -- ⊢ ¬n ∣ m
+    contrapose! h2
+    -- h2 : n ∣ m
+    -- ⊢ m = n
+    apply dvd_antisymm h1 h2
+
+-- 5ª demostración
+-- ===============
+
+example
+  (h : m ∣ n ∧ m ≠ n)
+  : m ∣ n ∧ ¬ n ∣ m :=
+by
+  obtain ⟨h1, h2⟩ := h
+  constructor
+  . -- ⊢ m ∣ n
+    exact h1
+  . -- ⊢ ¬n ∣ m
+    contrapose! h2
+    -- h2 : n ∣ m
+    -- ⊢ m = n
+    apply dvd_antisymm h1 h2
+
+-- Lemas usados
+-- ============
+
+-- #check (dvd_antisymm : m ∣ n → n ∣ m → m = n)

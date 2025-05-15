@@ -49,18 +49,8 @@ calc a + 0
 example : a + 0 = a :=
 by
   rw [add_comm]
+  -- ⊢ 0 + a = a
   rw [zero_add]
-
--- El desarrollo de la prueba es
---
---    R : Type ?u.599
---    inst : Ring R
---    a : R
---    ⊢ a + 0 = a
--- rw [add_comm]
---    ⊢ 0 + a = a
--- rw [zero_add]
---    goals accomplished
 
 -- 3ª demostración
 -- ===============
@@ -94,18 +84,8 @@ calc a + -a
 example : a + -a = 0 :=
 by
   rw [add_comm]
+  -- ⊢ -a + a = 0
   rw [add_left_neg]
-
--- El desarrollo de la prueba es
---
---    R : Type ?u.1925
---    inst : Ring R
---    a : R
---    ⊢ a + -a = 0
--- rw [add_comm]
---    ⊢ -a + a = 0
--- rw [add_left_neg]
---    no goals
 
 -- 3ª demostración
 -- ===============

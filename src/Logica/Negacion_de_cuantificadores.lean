@@ -2,12 +2,12 @@
 -- Ejercicio 1. Realizar las siguientes acciones:
 -- 1. Inportar la librería de tácticas.
 -- 2. Declarar α como una variable de tipos.
--- 3. Declarar P una variable sobre las propiedades de α. 
+-- 3. Declarar P una variable sobre las propiedades de α.
 -- ----------------------------------------------------------------------
 
-import tactic              -- 1
-variables {α : Type*}      -- 2
-variables (P : α → Prop)   -- 3
+import Mathlib.Tactic
+variable {α : Type _}
+variable (P : α → Prop)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que si
@@ -16,71 +16,121 @@ variables (P : α → Prop)   -- 3
 --    ∀ x, ¬ P x
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Sea y un elemento cualquiera. Tenemos que demostrar ¬P(y). Para ello,
+-- supongamos que P(y). Entonces, (∃x)P(x) que es una contradicción con
+-- la hipótesis,
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∃ x, P x) 
+example
+  (h : ¬ ∃ x, P x)
   : ∀ x, ¬ P x :=
-begin
-  intros x h1,
-  apply h,
-  existsi x,
-  exact h1,
-end
+by
+  intros y h1
+  -- y : α
+  -- h1 : P x
+  -- ⊢ False
+  apply h
+  -- ⊢ ∃ x, P x
+  existsi y
+  -- ⊢ P y
+  exact h1
 
--- Prueba
--- ======
+-- Comentario: La táctica (existsi e) es la regla de introducción del
+-- existencial; es decir, sustituye en el cuerpo del objetivo
+-- existencial su variable por e
 
-/-
-α : Type u_1,
-P : α → Prop,
-h : ¬∃ (x : α), P x
-⊢ ∀ (x : α), ¬P x
-  >> intros x h1,
-x : α,
-h1 : P x
-⊢ false
-  >> apply h,
-⊢ ∃ (x : α), P x
-  >> existsi x,
-⊢ P x
-  >> exact h1,
-no goals
--/
+-- 2ª demostración
+-- ===============
 
--- Comentario: La táctica (existsi e) (ver https://bit.ly/3j21TtU) es la
--- regla de introducción del existencial; es decir, sustituye en el
--- cuerpo del objetivo existencial su variable por e 
-
-example 
-  (h : ¬ ∃ x, P x) 
+example
+  (h : ¬ ∃ x, P x)
   : ∀ x, ¬ P x :=
-not_exists.mp h
+by
+  intros y h1
+  -- y : α
+  -- h1 : P x
+  -- ⊢ False
+  apply h
+  -- ⊢ ∃ x, P x
+  use y
+  -- ⊢ P y
+  exact h1
 
 -- 3ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∃ x, P x) 
+example
+  (h : ¬ ∃ x, P x)
   : ∀ x, ¬ P x :=
-by finish
+by
+  intros y h1
+  -- y : α
+  -- h1 : P x
+  -- ⊢ False
+  apply h
+  -- ⊢ ∃ x, P x
+  exact ⟨y, h1⟩
 
 -- 4ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∃ x, P x) 
+example
+  (h : ¬ ∃ x, P x)
   : ∀ x, ¬ P x :=
-by clarify
+by
+  intros y h1
+  -- y : α
+  -- h1 : P x
+  -- ⊢ False
+  exact h ⟨y, h1⟩
 
--- 4ª demostración
+-- 5ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∃ x, P x) 
+example
+  (h : ¬ ∃ x, P x)
   : ∀ x, ¬ P x :=
-by safe
+fun y h1 ↦ h ⟨y, h1⟩
+
+-- 6ª demostración
+-- ===============
+
+example
+  (h : ¬ ∃ x, P x)
+  : ∀ x, ¬ P x :=
+by
+  push_neg at h
+  -- h : ∀ (x : α), ¬P x
+  exact h
+
+-- 7ª demostración
+-- ===============
+
+example
+  (h : ¬ ∃ x, P x)
+  : ∀ x, ¬ P x :=
+not_exists.mp h
+
+-- 8ª demostración
+-- ===============
+
+example
+  (h : ¬ ∃ x, P x)
+  : ∀ x, ¬ P x :=
+by aesop
+
+-- Lemas usados
+-- ============
+
+-- #check (not_exists : (¬∃ x, P x) ↔ ∀ (x : α), ¬P x)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
@@ -89,132 +139,157 @@ by safe
 --    ¬ ∃ x, P x
 -- ----------------------------------------------------------------------
 
-example 
-  (h : ∀ x, ¬ P x) 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Supongamos que (∃x)P(x). Sea y tal que P(y). Puesto que (∀x)¬P)x), se
+-- tiene que ¬P(y) que es una contradicción con P(y).
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
+example
+  (h : ∀ x, ¬ P x)
   : ¬ ∃ x, P x :=
-begin
-  intro h1,
-  cases h1 with x hx,
-  specialize h x,
-  apply h hx,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-P : α → Prop,
-h : ∀ (x : α), ¬P x
-⊢ ¬∃ (x : α), P x
-  >> intro h1,
-h1 : ∃ (x : α), P x
-⊢ false
-  >> cases h1 with x hx,
-x : α,
-hx : P x
-⊢ false
-  >> specialize h x,
-h : ¬P x
-⊢ false
-  >> apply h hx,
-no goals
--/
-
--- Comentario: La táctica (specialize h e) (ver https://bit.ly/328xYKy)
--- aplica la rela de eliminación del cuantificador universal a la
--- hipótesis h cambiando su variable  por e.
+by
+  intro h1
+  -- h1 : ∃ x, P x
+  -- ⊢ False
+  rcases h1 with ⟨y, hy⟩
+  -- y : α
+  -- hy : P y
+  have h2 : ¬P y := h y
+  exact h2 hy
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (h : ∀ x, ¬ P x) 
+example
+  (h : ∀ x, ¬ P x)
+  : ¬ ∃ x, P x :=
+by
+  intro h1
+  -- h1 : ∃ x, P x
+  -- ⊢ False
+  rcases h1 with ⟨y, hy⟩
+  -- y : α
+  -- hy : P y
+  exact (h y) hy
+
+-- 3ª demostración
+-- ===============
+
+example
+  (h : ∀ x, ¬ P x)
+  : ¬ ∃ x, P x :=
+by
+  rintro ⟨y, hy⟩
+  -- y : α
+  -- hy : P y
+  exact (h y) hy
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h : ∀ x, ¬ P x)
+  : ¬ ∃ x, P x :=
+fun ⟨y, hy⟩ ↦ (h y) hy
+
+-- 5ª demostración
+-- ===============
+
+example
+  (h : ∀ x, ¬ P x)
   : ¬ ∃ x, P x :=
 not_exists_of_forall_not h
 
--- 2ª demostración
+-- 6ª demostración
 -- ===============
 
-example 
-  (h : ∀ x, ¬ P x) 
+example
+  (h : ∀ x, ¬ P x)
   : ¬ ∃ x, P x :=
-by finish
+by aesop
+
+-- Lemas usados
+-- ============
+
+-- variable (q : Prop)
+-- #check (not_exists_of_forall_not : (∀ x, P x → q) → (∃ x, P x) → q)
 
 -- ---------------------------------------------------------------------
--- Ejercicio 4. Habilitar el uso de las reglas de la lógica clásica. 
--- ----------------------------------------------------------------------
-
-open_locale classical
-
--- ---------------------------------------------------------------------
--- Ejercicio 5. Demostrar que si
+-- Ejercicio 4. Demostrar que si
 --    ¬ ∀ x, P x
 -- entonces
 --    ∃ x, ¬ P x
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por reducción al absurdo, supongamos que ¬(∃x)¬P(x). Para obtener una
+-- contradicción, demostraremos la negación de la hipótesis; es decir,
+-- que (∀x)P(x). Para ello, sea y un elemento cualquiera y tenemos que
+-- demostrar P(y). De nuevo, lo haremos por reducción al absurdo: Para
+-- ello, supongamos que ¬P(y). Entonces, se tiene que (∃x)¬P(x) en
+-- contradicción con nuestro primer supuesto de ¬(∃x)¬P(x).
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∀ x, P x) 
+example
+  (h : ¬ ∀ x, P x)
   : ∃ x, ¬ P x :=
-begin
-  by_contradiction h',
-  apply h,
-  intro x,
-  by_contradiction h'',
-  exact h' ⟨x, h''⟩,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-P : α → Prop,
-h : ¬∀ (x : α), P x
-⊢ ∃ (x : α), ¬P x
-  >> by_contradiction h',
-h' : ¬∃ (x : α), ¬P x
-⊢ false
-  >> apply h,
-⊢ ∀ (x : α), P x
-  >> intro x,
-x : α
-⊢ P x
-  >> by_contradiction h'',
-h'' : ¬P x
-⊢ false
-  >> exact h' ⟨x, h''⟩,
-no goals
--/
+by
+  by_contra h1
+  -- h1 : ¬∃ x, ¬P x
+  -- ⊢ False
+  apply h
+  -- ⊢ ∀ (x : α), P x
+  intro y
+  -- y : α
+  -- ⊢ P y
+  show P y
+  by_contra h2
+  -- h2 : ¬P y
+  -- ⊢ False
+  exact h1 ⟨y, h2⟩
 
 -- Comentarios:
--- 1. La táctica (by_contradiction h) es la regla de reducción al
---    absurdo; es decir, si el objetivo es p añade la hipótesis (h : p) y
---    reduce el objetico a false (ver https://bit.ly/2Ckmadb). 
+-- 1. La táctica (by_contra h) es la regla de reducción al absurdo; es
+--    decir, si el objetivo es p añade la hipótesis (h : p) y reduce el
+--    objetivo a False.
 -- 2. La táctica (exact h1 ⟨x, h2⟩) es la regla de inntroducción del
 --    cuantificador existencial; es decir, si el objetivo es de la forma
---    (∃y, P y) demuestra (P x) con h2 y unifica h1 con (∃x, P x). 
---    (ver https://bit.ly/303lLE4).
+--    (∃y, P y) demuestra (P x) con h2 y unifica h1 con (∃x, P x).
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∀ x, P x) 
+example
+  (h : ¬ ∀ x, P x)
   : ∃ x, ¬ P x :=
 not_forall.mp h
 
--- 2ª demostración
+-- 3ª demostración
 -- ===============
 
-example 
-  (h : ¬ ∀ x, P x) 
+example
+  (h : ¬ ∀ x, P x)
   : ∃ x, ¬ P x :=
-by finish
+by aesop
+
+-- Lemas usados
+-- ============
+
+-- #check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6. Demostrar que si
@@ -223,61 +298,101 @@ by finish
 --    ¬ ∀ x, P x
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Supongamos que (∀x)P(x) y tenemos que demostrar una
+-- contradicción. Por hipótesis, (∃x)¬P(x). Sea y tal que
+-- ¬P(y). Entonces, como (∀x)P(x), se tiene que P(y) que es una
+-- contradicción con ¬P(y).
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
-example 
-  (h : ∃ x, ¬ P x) 
+example
+  (h : ∃ x, ¬ P x)
   : ¬ ∀ x, P x :=
-begin
-  intro h1,
-  cases h with x hx,
-  apply hx,
-  exact (h1 x),
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-P : α → Prop,
-h : ∃ (x : α), ¬P x
-⊢ ¬∀ (x : α), P x
-  >> intro h1,
-h1 : ∀ (x : α), P x
-⊢ false
-  >> cases h with x hx,
-x : α,
-hx : ¬P x
-⊢ false
-  >> apply hx,
-⊢ P x
-  >> exact (h1 x)
-no goals
--/
+by
+  intro h1
+  -- h1 : ∀ (x : α), P x
+  -- ⊢ False
+  rcases h with ⟨y, hy⟩
+  -- y : α
+  -- hy : ¬P y
+  apply hy
+  -- ⊢ P y
+  exact (h1 y)
 
 -- Comentarios:
 -- 1. La táctica (intro h), cuando el objetivo es una negación, es la
 --    regla de introducción de la negación; es decir, si el objetivo es
 --    ¬P entonces añade la hipótesis (h : P) y cambia el objetivo a
 --    false.
--- 2. La táctica (cases h with x hx), cuando la hipótesis es un
+-- 2. La táctica (cases' h with x hx), cuando la hipótesis es un
 --    existencial, es la regla de eliminación del existencial; es decir,
 --    si h es (∃ (y : α), P y) añade las hipótesis (x : α) y (hx : P x).
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (h : ∃ x, ¬ P x) 
+example
+  (h : ∃ x, ¬ P x)
   : ¬ ∀ x, P x :=
-not_forall.mpr h
+by
+  intro h1
+  -- h1 : ∀ (x : α), P x
+  -- ⊢ False
+  rcases h with ⟨y, hy⟩
+  -- y : α
+  -- hy : ¬P y
+  apply hy
+  -- ⊢ P y
+  exact (h1 y)
 
 -- 3ª demostración
 -- ===============
 
-example 
-  (h : ∃ x, ¬ P x) 
+example
+  (h : ∃ x, ¬ P x)
   : ¬ ∀ x, P x :=
-by finish
+by
+  intro h1
+  -- h1 : ∀ (x : α), P x
+  -- ⊢ False
+  rcases h with ⟨y, hy⟩
+  -- y : α
+  -- hy : ¬P y
+  exact hy (h1 y)
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h : ∃ x, ¬ P x)
+  : ¬ ∀ x, P x :=
+not_forall.mpr h
+
+-- 5ª demostración
+-- ===============
+
+example
+  (h : ∃ x, ¬ P x)
+  : ¬ ∀ x, P x :=
+not_forall_of_exists_not h
+
+-- 5ª demostración
+-- ===============
+
+example
+  (h : ∃ x, ¬ P x)
+  : ¬ ∀ x, P x :=
+by aesop
+
+-- Lemas usados
+-- ============
+
+-- #check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
+-- #check (not_forall_of_exists_not : (∃ x, ¬P x) → ¬∀ x, P x)

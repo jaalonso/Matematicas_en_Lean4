@@ -3,67 +3,78 @@
 --    max a b = max b a
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-variables a b : ℝ
+-- Es consecuencia de la siguiente propiedad
+--    max(a, b) ≤ max(b, a)                                          (1)
+-- En efecto, intercambiando las variables en (1) se obtiene
+--    max(b, a) ≤ max(a, b)                                          (2)
+-- Finalmente de (1) y (2) se obtiene
+--    max(b, a) = max(a, b)
+--
+-- Para demostrar (1), se observa que
+--    a ≤ max(b, a)
+--    b ≤ max(b, a)
+-- y, por tanto,
+--    max(a, b) ≤ max(b, a)
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+
+variable (a b : ℝ)
+
+-- Lema auxiliar
+-- =============
+
+-- 1ª demostración del lema auxiliar
+-- =================================
+
+example : max a b ≤ max b a :=
+by
+  have h1 : a ≤ max b a := le_max_right b a
+  have h2 : b ≤ max b a := le_max_left b a
+  show max a b ≤ max b a
+  exact max_le h1 h2
+
+-- 2ª demostración del lema auxiliar
+-- =================================
+
+example : max a b ≤ max b a :=
+by
+  apply max_le
+  . -- ⊢ a ≤ max b a
+    apply le_max_right
+  . -- ⊢ b ≤ max b a
+    apply le_max_left
+
+-- 3ª demostración del lema auxiliar
+-- =================================
+
+lemma aux : max a b ≤ max b a :=
+by exact max_le (le_max_right b a) (le_max_left b a)
 
 -- 1ª demostración
 -- ===============
 
 example : max a b = max b a :=
-begin
-  apply le_antisymm,
-  { show max a b ≤ max b a,
-    apply max_le,
-    { apply le_max_right },
-    { apply le_max_left }},
-  { show max b a ≤ max a b,
-    apply max_le,
-    { apply le_max_right },
-    { apply le_max_left }},
-end
+by
+  apply le_antisymm
+  . -- ⊢ max a b ≤ max b a
+    exact aux a b
+  . -- ⊢ max b a ≤ max a b
+    exact aux b a
 
 -- 2ª demostración
 -- ===============
 
 example : max a b = max b a :=
-begin
-  have h : ∀ x y, max x y ≤ max y x,
-  { intros x y,
-    apply max_le,
-    { apply le_max_right },
-    { apply le_max_left }},
-  apply le_antisymm,
-  apply h,
-  apply h
-end
+le_antisymm (aux a b) (aux b a)
 
 -- 3ª demostración
 -- ===============
 
 example : max a b = max b a :=
-begin
-  have h : ∀ {x y : ℝ}, max x y ≤ max y x,
-  { intros x y,
-    exact max_le (le_max_right y x) (le_max_left y x),},
-  exact le_antisymm h h,
-end
-
--- 4ª demostración
--- ===============
-
-example : max a b = max b a :=
-begin
-  apply le_antisymm,
-  repeat {
-    apply max_le,
-    apply le_max_right,
-    apply le_max_left },
-end
-
--- Lemas usados
--- ============
-
--- #check (le_max_left a b : a ≤ max a b)
--- #check (le_max_right a b : b ≤ max a b)
--- #check (max_le : a ≤ c → b ≤ c → max a b ≤ c)
+max_comm a b

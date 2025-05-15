@@ -1,18 +1,16 @@
 -- ---------------------------------------------------------------------
 -- Ejercicio. Definir la función
---     converges_to (ℕ → ℝ) → ℝ → Prop
--- tal que (converges_to s a) afirma que a es el límite de s.
+--     ConvergesTo (ℕ → ℝ) → ℝ → Prop
+-- tal que (ConvergesTo s a) afirma que a es el límite de s.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
 
-def converges_to (s : ℕ → ℝ) (a : ℝ) :=
-∀ ε > 0, ∃ N, ∀ n ≥ N, abs (s n - a) < ε
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) :=
+  ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
 
--- #print converges_to
+-- #print ConvergesTo
 
 -- Comentario: Al colocar el cursor sobre print se obtiene
---    def converges_to : (ℕ → ℝ) → ℝ → Prop :=
---    λ (s : ℕ → ℝ) (a : ℝ),
---      ∀ (ε : ℝ), ε > 0 → (∃ (N : ℕ), ∀ (n : ℕ),
---        n ≥ N → abs (s n - a) < ε)
+--    def ConvergesTo : (ℕ → ℝ) → ℝ → Prop :=
+--    fun s a => ∀ (ε : ℝ), ε > 0 → ∃ N, ∀ (n : ℕ), n ≥ N → |s n - a| < ε

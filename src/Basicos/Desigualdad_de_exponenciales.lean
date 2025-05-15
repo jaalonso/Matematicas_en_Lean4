@@ -5,15 +5,17 @@
 --    3. Declarar a y b como variables sobre los reales.
 -- ----------------------------------------------------------------------
 
-import analysis.special_functions.log.basic -- 1
-open real                                   -- 2
-variables (a b : ℝ)                         -- 3
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+
+open Real
+
+variable (a b : ℝ)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Calcular el tipo del lema exp_le_exp
 -- ----------------------------------------------------------------------
 
--- #check @exp_le_exp a b
+#check @exp_le_exp a b
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
 --    exp_le_exp : a.exp ≤ b.exp ↔ a ≤ b
@@ -21,6 +23,7 @@ variables (a b : ℝ)                         -- 3
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
 --    a ≤ b
+-- entonces
 --    exp a ≤ exp b
 -- ----------------------------------------------------------------------
 
@@ -28,16 +31,22 @@ variables (a b : ℝ)                         -- 3
 example
   (h : a ≤ b)
   : exp a ≤ exp b :=
-begin
-  rw exp_le_exp,
+by
+  rw [exp_le_exp]
+  -- ⊢ a ≤ b
   exact h
-end
 
 -- 2ª demostración
 example
   (h : a ≤ b)
   : exp a ≤ exp b :=
+by rwa [exp_le_exp]
+
+-- 3ª demostración
+example
+  (h : a ≤ b)
+  : exp a ≤ exp b :=
 exp_le_exp.mpr h
 
--- Nota: Con mpr se indica en modus pones inverso. Por ejemplo, si
+-- Nota: Con mpr se indica en modus ponens inverso. Por ejemplo, si
 -- h: A ↔ B, entonces h.mpr es B → A y h.mp es A → B

@@ -1,46 +1,51 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que 3 divide al máximo xomún divisor de 6 y 15.
+-- Ejercicio. Demostrar que 3 divide al máximo común divisor de 6 y 15.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
-import data.nat.gcd
+-- Demostración en lenguaje natural
+-- ================================
 
-open nat
+-- Se usará el siguiente lema
+--    (∀ k, m, n ∈ ℕ)[k ∣ gcd m n ↔ k ∣ m ∧ k ∣ n]
+--
+-- Por el lema,
+--    3 ∣ gcd 6 15
+-- se reduce a
+--    3 ∣ 6 ∧ 3 ∣ 15
+-- que se verifican fácilmente.
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Nat.GCD.Basic
+
+open Nat
 
 -- 1ª demostración
 -- ===============
 
 example : 3 ∣ gcd 6 15 :=
-begin
-  rw dvd_gcd_iff,
-  split; norm_num,
-end
-
--- Prueba
--- ======
-
-/-
-⊢ 3 ∣ 6.gcd 15
-  rw dvd_gcd_iff,
-⊢ 3 ∣ 6 ∧ 3 ∣ 15
-  split; norm_num,
-no goals
--/
-
--- Comentario: Se ha usado el lema
--- + dvd_gcd_iff: k | gcd m n ↔ k | m ∧ k | b
+by
+  rw [dvd_gcd_iff]
+  -- ⊢ 3 ∣ 6 ∧ 3 ∣ 15
+  constructor
+  . -- 3 ∣ 6
+    norm_num
+  . -- ⊢ 3 ∣ 15
+    norm_num
 
 -- 2ª demostración
 -- ===============
 
 example : 3 ∣ gcd 6 15 :=
-begin
-  convert dvd_refl _,
-  by norm_num,
-end
+by
+  rw [dvd_gcd_iff]
+  -- ⊢ 3 ∣ 6 ∧ 3 ∣ 15
+  constructor <;> norm_num
 
--- 3ª demostración
--- ===============
+-- Lemas usados
+-- ============
 
-example : 3 ∣ gcd 6 15 :=
-by norm_num
+-- variable (k m n : ℕ)
+-- #check (dvd_gcd_iff : k ∣ gcd m n ↔ k ∣ m ∧ k ∣ n)

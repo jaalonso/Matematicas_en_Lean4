@@ -4,9 +4,9 @@
 --    2. Declarar x, y y z como variables sobre R.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
 
-variables (x y z : ℝ)
+variable (x y z : ℝ)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que si
@@ -23,24 +23,12 @@ example
   (h1 : x ≤ y)
   (h2 : y ≤ z)
   : x ≤ z :=
-begin
-  apply le_trans,
-  { apply h1, },
-  apply h2,
-end
-
--- El desarrollo de la prueba es
---
---    x y z : ℝ,
---    h1 : x ≤ y,
---    h2 : y ≤ z
---    ⊢ x ≤ z
--- apply le_trans,
---    ⊢ x ≤ ?m_1
--- { apply h1 },
---    ⊢ y ≤ z
--- apply h2,
---    no goals
+by
+  apply le_trans
+  . -- ⊢ x ≤ ?b
+    apply h1
+  . -- ⊢ y ≤ z
+    apply h2
 
 -- 2ª demostración
 -- ===============
@@ -49,21 +37,10 @@ example
   (h1 : x ≤ y)
   (h2 : y ≤ z)
   : x ≤ z :=
-begin
-  apply le_trans h1,
-  apply h2,
-end
-
--- El desarrollo de la prueba es
---
---    x y z : ℝ,
---    h1 : x ≤ y,
---    h2 : y ≤ z
---    ⊢ x ≤ z
--- apply le_trans h1,
---    ⊢ y ≤ z
--- apply h2,
---    no goals
+by
+  apply le_trans h1
+  -- ⊢ y ≤ z
+  apply h2
 
 -- 3ª demostración
 -- ===============

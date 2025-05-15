@@ -5,104 +5,163 @@
 -- 3. Declarar a, b y c como variables sobre elementos de α.
 -- ----------------------------------------------------------------------
 
-import tactic                       -- 1
-variables {α : Type*} [preorder α]  -- 2
-variables a b c : α                 -- 3
+import Mathlib.Tactic
+variable {α : Type _} [Preorder α]
+variable (a b c : α)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Demostrar que que la relación menor es irreflexiva.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usará la siguiente propiedad de lo preórdenes
+--    (∀ a, b)[a < b ↔ a ≤ b ∧ b ≰ a]
+-- Con dicha propiedad, lo que tenemos que demostrar se transforma en
+--    ¬(a ≤ a ∧ a ≰ a)
+-- Para demostrarla, supongamos que
+--    a ≤ a ∧ a ≰ a
+-- lo que es una contradicción.
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
-example : ¬ a < a :=
-begin
-  rw lt_iff_le_not_le,
-  rintros ⟨h1, h2⟩,
-  apply h2 h1,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-_inst_1 : preorder α,
-a : α
-⊢ ¬a < a
-  >> rw lt_iff_le_not_le,
-⊢ ¬(a ≤ a ∧ ¬a ≤ a)
-  >> rintros ⟨h1, h2⟩,
-h1 : a ≤ a,
-h2 : ¬a ≤ a
-⊢ false
-  >> apply h2 h1,
-no goals
--/
-
--- Comentarios:
--- + La táctica (rintros ⟨h1, h2⟩), si el objetivo es de la forma ¬(P ∧ Q),
---   añade  las hipótesis (h1 : P) y (h2 : Q) y cambia el objetivo a false.
--- + Se ha usado el lema
---      lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a
+example : ¬a < a :=
+by
+  rw [lt_iff_le_not_le]
+  -- ⊢ ¬(a ≤ a ∧ ¬a ≤ a)
+  rintro ⟨h1, h2⟩
+  -- h1 : a ≤ a
+  -- h2 : ¬a ≤ a
+  -- ⊢ False
+  exact h2 h1
 
 -- 2ª demostración
 -- ===============
 
-example : ¬ a < a :=
-irrefl a
+example : ¬a < a :=
+  irrefl a
+
+-- Lemas usados
+-- ============
+
+-- #check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
+-- #check (irrefl a : ¬a < a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que que la relación menor es transitiva.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usará la siguiente propiedad de los preórdenes
+--    (∀ a, b)[a < b ↔ a ≤ b ∧ b ≰ a]
+-- Con dicha propiedad, lo que tenemos que demostrar se transforma en
+--    a ≤ b ∧ b ≰ a → b ≤ c ∧ c ≰ b → a ≤ c ∧ c ≰ a
+-- Para demostrarla, supongamos que
+--    a ≤ b                                                          (1)
+--    b ≰ a                                                          (2)
+--    b ≤ c                                                          (3)
+--    c ≰ b                                                          (4)
+-- y tenemos que demostrar las siguientes relaciones
+--    a ≤ c                                                          (5)
+--    c ≰ a                                                          (6)
+--
+-- La (5) se tiene aplicando la propiedad transitiva a (1) y (3).
+--
+-- Para demostrar la (6), supongamos que
+--    c ≤ a                                                          (7)
+-- entonces, junto a la (1), por la propieda transitiva se tiene
+--    c ≤ b
+-- que es una contradicción con la (4).
+
 -- 1ª demostración
 -- ===============
 
 example : a < b → b < c → a < c :=
-begin
-  simp only [lt_iff_le_not_le],
-  rintros ⟨h1, h2⟩ ⟨h3, h4⟩,
-  split,
-    apply le_trans h1 h3,
-  contrapose ! h4,
-  apply le_trans h4 h1,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-_inst_1 : preorder α,
-a b c : α
-⊢ a < b → b < c → a < c
-  >> simp only [lt_iff_le_not_le],
-⊢ a ≤ b ∧ ¬b ≤ a → b ≤ c ∧ ¬c ≤ b → a ≤ c ∧ ¬c ≤ a
-  >> rintros ⟨h1, h2⟩ ⟨h3, h4⟩,
-h1 : a ≤ b,
-h2 : ¬b ≤ a,
-h3 : b ≤ c,
-h4 : ¬c ≤ b
-⊢ a ≤ c ∧ ¬c ≤ a
-  >> split,
-| ⊢ a ≤ c
-  >>   apply le_trans h1 h3,
-⊢ ¬c ≤ a
-  >> contrapose ! h4,
-h4 : c ≤ a
-⊢ c ≤ b
-  >> apply le_trans h4 h1,
-no goals
--/
-
--- Comentario: Se ha aplicado los lemas
--- + lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a
--- + le_trans : a ≤ b → b ≤ c → a ≤ c
+by
+  simp only [lt_iff_le_not_le]
+  -- ⊢ a ≤ b ∧ ¬b ≤ a → b ≤ c ∧ ¬c ≤ b → a ≤ c ∧ ¬c ≤ a
+  rintro ⟨h1 : a ≤ b, _h2 : ¬b ≤ a⟩ ⟨h3 : b ≤ c, h4 : ¬c ≤ b⟩
+  -- ⊢ a ≤ c ∧ ¬c ≤ a
+  constructor
+  . -- ⊢ a ≤ c
+    exact le_trans h1 h3
+  . -- ⊢ ¬c ≤ a
+    contrapose! h4
+    -- h4 : c ≤ a
+    -- ⊢ c ≤ b
+    exact le_trans h4 h1
 
 -- 2ª demostración
 -- ===============
 
 example : a < b → b < c → a < c :=
-lt_trans
+by
+  simp only [lt_iff_le_not_le]
+  -- ⊢ a ≤ b ∧ ¬b ≤ a → b ≤ c ∧ ¬c ≤ b → a ≤ c ∧ ¬c ≤ a
+  rintro ⟨h1 : a ≤ b, _h2 : ¬b ≤ a⟩ ⟨h3 : b ≤ c, h4 : ¬c ≤ b⟩
+  -- ⊢ a ≤ c ∧ ¬c ≤ a
+  constructor
+  . -- ⊢ a ≤ c
+    exact le_trans h1 h3
+  . -- ⊢ ¬c ≤ a
+    rintro (h5 : c ≤ a)
+    -- ⊢ False
+    have h6 : c ≤ b := le_trans h5 h1
+    show False
+    exact h4 h6
+
+-- 3ª demostración
+-- ===============
+
+example : a < b → b < c → a < c :=
+by
+  simp only [lt_iff_le_not_le]
+  -- ⊢ a ≤ b ∧ ¬b ≤ a → b ≤ c ∧ ¬c ≤ b → a ≤ c ∧ ¬c ≤ a
+  rintro ⟨h1 : a ≤ b, _h2 : ¬b ≤ a⟩ ⟨h3 : b ≤ c, h4 : ¬c ≤ b⟩
+  -- ⊢ a ≤ c ∧ ¬c ≤ a
+  constructor
+  . -- ⊢ a ≤ c
+    exact le_trans h1 h3
+  . -- ⊢ ¬c ≤ a
+    exact fun h5 ↦ h4 (le_trans h5 h1)
+
+-- 4ª demostración
+-- ===============
+
+example : a < b → b < c → a < c :=
+by
+  simp only [lt_iff_le_not_le]
+  -- ⊢ a ≤ b ∧ ¬b ≤ a → b ≤ c ∧ ¬c ≤ b → a ≤ c ∧ ¬c ≤ a
+  rintro ⟨h1 : a ≤ b, _h2 : ¬b ≤ a⟩ ⟨h3 : b ≤ c, h4 : ¬c ≤ b⟩
+  -- ⊢ a ≤ c ∧ ¬c ≤ a
+  exact ⟨le_trans h1 h3, fun h5 ↦ h4 (le_trans h5 h1)⟩
+
+-- 5ª demostración
+-- ===============
+
+example : a < b → b < c → a < c :=
+by
+  simp only [lt_iff_le_not_le]
+  -- ⊢ a ≤ b ∧ ¬b ≤ a → b ≤ c ∧ ¬c ≤ b → a ≤ c ∧ ¬c ≤ a
+  exact fun ⟨h1, _h2⟩ ⟨h3, h4⟩ ↦ ⟨le_trans h1 h3,
+                                  fun h5 ↦ h4 (le_trans h5 h1)⟩
+
+-- 6ª demostración
+-- ===============
+
+example : a < b → b < c → a < c :=
+  lt_trans
+
+-- Lemas usados
+-- ============
+
+-- #check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
+-- #check (le_trans : a ≤ b → b ≤ c → a ≤ c)
+-- #check (lt_trans : a < b → b < c → a < c)

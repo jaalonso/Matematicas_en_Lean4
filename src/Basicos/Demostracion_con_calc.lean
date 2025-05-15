@@ -75,32 +75,18 @@ example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
 by
   rw [mul_add]
+  -- ⊢ (a + b) * a + (a + b) * b = a * a + 2 * (a * b) + b * b
   rw [add_mul]
+  -- ⊢ a * a + b * a + (a + b) * b = a * a + 2 * (a * b) + b * b
   rw [add_mul]
+  -- ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
   rw [←add_assoc]
+  -- ⊢ a * a + b * a + a * b + b * b = a * a + 2 * (a * b) + b * b
   rw [add_assoc (a * a)]
+  -- ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
   rw [mul_comm b a]
+  -- ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
   rw [←two_mul]
-
-
--- El desarrollo de la prueba es
---
---    a b : ℝ
---    ⊢ (a + b) * (a + b) = a * a + 2 * (a * b) + b * b
--- rw [mul_add]
---    ⊢ (a + b) * a + (a + b) * b = a * a + 2 * (a * b) + b * b
--- rw [add_mul]
---    ⊢ a * a + b * a + (a + b) * b = a * a + 2 * (a * b) + b * b
--- rw [add_mul]
---    ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
--- rw [←add_assoc]
---    ⊢ a * a + b * a + a * b + b * b = a * a + 2 * (a * b) + b * b
--- rw add_assoc (a * a)]
---    ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw [mul_comm b a]
---    ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw [←two_mul]
---    goals accomplished
 
 -- 6ª demostración
 -- ===============
@@ -109,21 +95,11 @@ example :
   (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
 by
   rw [mul_add, add_mul, add_mul]
+  -- ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
   rw [←add_assoc, add_assoc (a * a)]
+  -- ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
   rw [mul_comm b a, ←two_mul]
 
--- El desarrollo de la prueba es
---
---    a b : ℝ
---    ⊢ a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw [mul_add, add_mul, add_mul]
---    ⊢ a * a + b * a + (a * b + b * b) = a * a + 2 * (a * b) + b * b
--- rw [←add_assoc, add_assoc (a * a)]
---    ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
--- rw [mul_comm b a, ←two_mul]
---    goals accomplished
-
--- Comentario:
 -- Los lemas usados son:
 -- + add_assoc a b c : a + b + c = a + (b + c)
 -- + add_mul a b c   : (a + b) * c = a * c + b * c

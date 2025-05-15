@@ -3,9 +3,10 @@
 -- nombre en la hipótesis y su definición en la conclusión.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
 
 example
   (f : ℝ → ℝ)
-  (h : monotone f) :
-  ∀ {a b}, a ≤ b → f a ≤ f b := h
+  (h : Monotone f) :
+  ∀ {a b}, a ≤ b → f a ≤ f b :=
+@h

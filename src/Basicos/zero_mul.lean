@@ -44,10 +44,23 @@ by
 example : 0 * a = 0 :=
 by
   have h : 0 * a + 0 * a = 0 * a + 0 :=
-    by rw [←add_mul, add_zero, add_zero]
+    by rw [←add_mul]
+       -- ⊢ (0 + 0) * a = 0 * a + 0
+       rw [add_zero]
+       -- ⊢ 0 * a = 0 * a + 0
+       rw [add_zero]
   rw [add_left_cancel h]
 
 -- 3ª demostración
+-- ===============
+
+example : 0 * a = 0 :=
+by
+  have h : 0 * a + 0 * a = 0 * a + 0 :=
+    by rw [←add_mul, add_zero, add_zero]
+  rw [add_left_cancel h]
+
+-- 4ª demostración
 -- ===============
 
 example : 0 * a = 0 :=
@@ -58,7 +71,7 @@ by
                      _ = 0 * a + 0   := by simp
   simp
 
--- 4ª demostración
+-- 5ª demostración
 -- ===============
 
 example : 0 * a = 0 :=
@@ -66,7 +79,7 @@ by
   have : 0 * a + 0 * a = 0 * a + 0 := by simp
   simp
 
--- 5ª demostración
+-- 6ª demostración
 -- ===============
 
 example : 0 * a = 0 :=

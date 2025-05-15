@@ -1,13 +1,11 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Realizar las siguientes acciones:
--- 1. Importar la teoría Definicion_de_funciones_acotadas
--- 2. Habilitar la lógica clásica.
--- 3. Declarar f como una variable de ℝ en ℝ.
+-- Ejercicio 1. Realizar las siguientes acciones:
+-- + Importar la teoría Definicion_de_funciones_acotadas
+-- + Declarar f como una variable de ℝ en ℝ.
 -- ----------------------------------------------------------------------
 
-import .Definicion_de_funciones_acotadas   -- 1
-open_locale classical                      -- 2
-variable (f : ℝ → ℝ)                       -- 3
+import src.Logica.Definicion_de_funciones_acotadas
+variable (f : ℝ → ℝ)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que si
@@ -15,27 +13,55 @@ variable (f : ℝ → ℝ)                       -- 3
 -- entonces f está acotada superiormente.
 -- ----------------------------------------------------------------------
 
-example 
-  (h : ¬ ∀ a, ∃ x, f x > a) 
-  : fn_has_ub f :=
-begin
-  push_neg at h,
-  exact h,
-end
+-- Demostración en lenguaje natural
+-- ================================
 
--- Prueba
--- ======
+-- Tenemos que demostrar que f es acotada superiormente; es decir, que
+--    (∃a)(∀x)[f(x) ≤ a]
+-- que es exactamente la fórmula obtenida interiorizando la negación en
+-- la hipótesis.
 
-/-
-f : ℝ → ℝ,
-h : ¬∀ (a : ℝ), ∃ (x : ℝ), f x > a
-⊢ fn_has_ub f
-  >> push_neg at h,
-h : ∃ (a : ℝ), ∀ (x : ℝ), f x ≤ a
-⊢ fn_has_ub f
-  >> exact h,
-no goals
--/
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
+example
+  (h : ¬∀ a, ∃ x, f x > a)
+  : FnHasUb f :=
+by
+  unfold FnHasUb
+  -- ⊢ ∃ a, FnUb f a
+  unfold FnUb
+  -- ⊢ ∃ a, ∀ (x : ℝ), f x ≤ a
+  push_neg at h
+  -- h : ∃ a, ∀ (x : ℝ), f x ≤ a
+  exact h
+
+-- 2ª demostración
+-- ===============
+
+example
+  (h : ¬∀ a, ∃ x, f x > a)
+  : FnHasUb f :=
+by
+  unfold FnHasUb FnUb
+  -- ⊢ ∃ a, ∀ (x : ℝ), f x ≤ a
+  push_neg at h
+  -- h : ∃ a, ∀ (x : ℝ), f x ≤ a
+  exact h
+
+-- 3ª demostración
+-- ===============
+
+example
+  (h : ¬∀ a, ∃ x, f x > a)
+  : FnHasUb f :=
+by
+  push_neg at h
+  -- h : ∃ a, ∀ (x : ℝ), f x ≤ a
+  exact h
 
 -- Comentario. La táctica (push_neg at h) interioriza las negaciones de
 -- la hipótesis h.
@@ -45,32 +71,15 @@ no goals
 -- cada a existe un x tal que f(x) > a.
 -- ----------------------------------------------------------------------
 
-example 
-  (h : ¬ fn_has_ub f) 
+example
+  (h : ¬FnHasUb f)
   : ∀ a, ∃ x, f x > a :=
-begin
-  simp only [fn_has_ub, fn_ub] at h,
-  push_neg at h,
-  exact h,
-end
-
--- Prueba
--- ======
-
-/-
-f : ℝ → ℝ,
-h : ¬fn_has_ub f
-⊢ ∀ (a : ℝ), ∃ (x : ℝ), f x > a
-  >> simp only [fn_has_ub, fn_ub] at h,
-h : ¬∃ (a : ℝ), ∀ (x : ℝ), f x ≤ a
-⊢ ∀ (a : ℝ), ∃ (x : ℝ), f x > a
-  >> push_neg at h,
-h : ∀ (a : ℝ), ∃ (x : ℝ), a < f x
-⊢ ∀ (a : ℝ), ∃ (x : ℝ), f x > a
-  >> exact h,
-no goals
--/
+by
+  simp only [FnHasUb, FnUb] at h
+  -- h : ¬∃ a, ∀ (x : ℝ), f x ≤ a
+  push_neg at h
+  -- ⊢ ∀ (a : ℝ), ∃ x, f x > a
+  exact h
 
 -- Comentario: La táctica (simp only [h₁, ..., hₙ] at h) simplifica la
--- hipótesis h usando sólo los lemas h₁, ..., hₙ. (Ver 
--- https://bit.ly/38O60EV)
+-- hipótesis h usando sólo los lemas h₁, ..., hₙ.

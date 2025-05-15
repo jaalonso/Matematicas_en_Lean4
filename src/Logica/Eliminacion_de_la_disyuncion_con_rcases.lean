@@ -1,52 +1,74 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Sea x un número real. Demostrar que si 
+-- Ejercicio. Sea x un número real. Demostrar que si
 --    x ≠ 0
 -- entonces
 --    x < 0 ∨ x > 0
  -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-example 
-  {x : ℝ} 
-  (h : x ≠ 0) 
+-- Usando el siguiente lema
+--    (∀ x y ∈ ℝ)[x < y ∨ x = y ∨ y < x]
+-- se demuestra distinguiendo tres casos.
+--
+-- Caso 1: Supongamos que x < 0. Entonces, se verifica la disyunción ya
+-- que se verifica su primera parte.
+--
+-- Caso 2: Supongamos que x = 0. Entonces, se tiene una contradicción
+-- con la hipótesis.
+--
+-- Caso 3: Supongamos que x > 0. Entonces, se verifica la disyunción ya
+-- que se verifica su segunda parte.
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+variable {x : ℝ}
+
+-- 1ª demostración
+-- ===============
+
+example
+  (h : x ≠ 0)
   : x < 0 ∨ x > 0 :=
-begin
-  rcases lt_trichotomy x 0 with xlt | xeq | xgt,
-  { left, 
-    exact xlt },
-  { contradiction },
-  { right, 
-    exact xgt },
-end
+by
+  rcases lt_trichotomy x 0 with hx1 | hx2 | hx3
+  . -- hx1 : x < 0
+    left
+    -- ⊢ x < 0
+    exact hx1
+  . -- hx2 : x = 0
+    contradiction
+  . -- hx3 : 0 < x
+    right
+    -- ⊢ x > 0
+    exact hx3
 
--- Prueba
--- ======
+-- 2ª demostración
+-- ===============
 
-/-
-x : ℝ,
-h : x ≠ 0
-⊢ x < 0 ∨ x > 0
-  >> rcases lt_trichotomy x 0 with xlt | xeq | xgt,
-| | xlt : x < 0
-| | ⊢ x < 0 ∨ x > 0
-| |   >> { left,
-| | ⊢ x < 0 
-| |   >>  exact xlt },
-| h : x ≠ 0,
-| xeq : x = 0
-| ⊢ x < 0 ∨ x > 0
-  >> { contradiction },
-h : x ≠ 0,
-xgt : 0 < x
-⊢ x < 0 ∨ x > 0
-  >> { right, 
-⊢ x > 0
-  >>  exact xgt },
-no goals
--/
+example
+  (h : x ≠ 0)
+  : x < 0 ∨ x > 0 :=
+Ne.lt_or_lt h
+
+-- 3ª demostración
+-- ===============
+
+example
+  (h : x ≠ 0)
+  : x < 0 ∨ x > 0 :=
+by aesop
 
 -- Comentarios:
 -- 1. La táctica (rcases h with h1 | h2 | h3) si el objetivo es (P ∨ Q ∨ R)
 --    crea tres casos añadiéndole al primero la hipótesis (h1 : P), al
---    segundo (h2 : Q) y al tercero (h3 : R). 
+--    segundo (h2 : Q) y al tercero (h3 : R).
+
+-- Lemas usados
+-- ============
+
+-- variable (y : ℝ)
+-- #check (lt_trichotomy x y : x < y ∨ x = y ∨ y < x)

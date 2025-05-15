@@ -47,10 +47,14 @@ example
   : c = 2 * a * d :=
 by
   rw [h2] at h1
+  -- h1 : c = d * a + a * d
   clear h2
   rw [mul_comm d a] at h1
+  -- h1 : c = a * d + a * d
   rw [← two_mul (a*d)] at h1
+  -- h1 : c = 2 * (a * d)
   rw [← mul_assoc 2 a d] at h1
+  -- h1 : c = 2 * a * d
   exact h1
 
 -- Comentarios
@@ -59,36 +63,6 @@ by
 -- 2. La táctica (exact p) tiene éxito si el tipo de p se unifica con el
 --    objetivo.
 -- 3. La táctica (clear h) borra la hipótesis h.
-
--- El desarrollo de la prueba es
---
---    a b c d : ℝ,
---    h1 : c = d * a + b,
---    h2 : b = a * d
---    ⊢ c = 2 * a * d
--- rw [h2] at h1
---    a b c d : ℝ,
---    h2 : b = a * d,
---    h1 : c = d * a + a * d
---    ⊢ c = 2 * a * d
--- clear h2
---    a b c d : ℝ,
---    h1 : c = d * a + a * d
---    ⊢ c = 2 * a * d
--- rw [mul_comm d a] at h1
---    a b c d : ℝ,
---    h1 : c = a * d + a * d
---    ⊢ c = 2 * a * d
--- rw [← two_mul (a*d)] at h1
---    a b c d : ℝ,
---    h1 : c = 2 * (a * d)
---    ⊢ c = 2 * a * d
--- rewrite [← mul_assoc 2 a d] at h1
---    a b c d : ℝ,
---    h1 : c = 2 * a * d
---    ⊢ c = 2 * a * d
--- exact h1
---    goals accomplished
 
 -- 3ª demostración
 -- ===============
@@ -108,21 +82,10 @@ example
   : c = 2 * a * d :=
 by
   rw [h1]
+  -- ⊢ d * a + b = 2 * a * d
   rw [h2]
+  -- ⊢ d * a + a * d = 2 * a * d
   ring
-
--- El desarrollo de la prueba es
---
---    a b c d : ℝ,
---    h1 : c = d * a + b,
---    h2 : b = a * d
---    ⊢ c = 2 * a * d
--- rw [h1]
---    ⊢ d * a + b = 2 * a * d
--- rw [h2]
---    ⊢ d * a + a * d = 2 * a * d
--- ring,
---    goals accomplished
 
 -- 5ª demostración
 -- ===============
@@ -133,6 +96,7 @@ example
   : c = 2 * a * d :=
 by
   rw [h1, h2]
+  -- ⊢ d * a + a * d = 2 * a * d
   ring
 
 -- 6ª demostración

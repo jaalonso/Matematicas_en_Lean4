@@ -2,87 +2,101 @@
 -- Ejercicio. Importar la librería de tácticas
 -- ----------------------------------------------------------------------
 
-import tactic
+import Mathlib.Tactic
+variable (P : Prop)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
---    ¬ ¬ P → P
+--    ¬¬P → P
 -- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Supongamos que
+--    ¬¬P                                                            (1)
+--
+-- Por el principio del tercio excluso, se tiene
+--    P ∨ ¬P
+-- lo que da lugar a dos casos.
+--
+-- En el primer caso, se supone P que es lo que hay que demostrar.
+--
+-- En el primer caso, se supone ¬P que es una contradicción con (1).
+
+-- Demostraciones con Lean4
+-- ========================
 
 -- 1ª demostración
 -- ===============
 
-example (P : Prop) : ¬ ¬ P → P :=
-begin
-  intro h,
-  cases classical.em P,
-  { assumption },
-  { contradiction },
-end
-
--- Prueba
--- ======
-
-/-
-P : Prop
-⊢ ¬¬P → P
-  >> intro h,
-h : ¬¬P
-⊢ P
-  >> cases classical.em P,
-| h : ¬¬P
-| ⊢ P
-|   >> { assumption },
-h_1 : ¬P
-⊢ P
-  >> { contradiction },
-no goals
--/
+example : ¬¬P → P :=
+by
+  intro h1
+  -- h1 : ¬¬P
+  -- ⊢ P
+  have h2 : P ∨ ¬ P := em P
+  rcases h2 with h3 | h4
+  . -- h3 : P
+    exact h3
+  . -- h4 : ¬P
+    exfalso
+    -- ⊢ False
+    exact h1 h4
 
 -- 2ª demostración
 -- ===============
 
-open classical
-
-example (P : Prop) : ¬ ¬ P → P :=
-begin
-  intro h,
-  cases classical.em P,
-  { assumption },
-  { contradiction },
-end
+example : ¬¬P → P :=
+by
+  intro h1
+  -- h1 : ¬¬P
+  -- ⊢ P
+  rcases em P with h2 | h3
+  . -- h2 : P
+    exact h2
+  . -- h3 : ¬P
+    exact absurd h3 h1
 
 -- 3ª demostración
 -- ===============
 
-open_locale classical
+example : ¬¬P → P :=
+by
+  intro h1
+  -- h1 : ¬¬P
+  -- ⊢ P
+  cases em P
+  . -- h2 : P
+    assumption
+  . -- h3 : ¬P
+    contradiction
 
-example (P : Prop) : ¬ ¬ P → P :=
-begin
-  intro h,
-  by_cases h' : P,
-  { assumption },
-  { contradiction },
-end
+-- 4ª demostración
+-- ===============
 
--- Prueba
--- ======
+example : ¬¬P → P :=
+by
+  intro h
+  by_cases P
+  . assumption
+  . contradiction
 
-/-
-P : Prop
-⊢ ¬¬P → P
-  >> intro h,
-h : ¬¬P
-⊢ P
-  >> by_cases h' : P,
-| 2 goals
-| P : Prop,
-| h : ¬¬P,
-| h' : P
-| ⊢ P
-|   >> { assumption },
-h' : ¬P
-⊢ P
-  >> { contradiction },
-no goals
--/
+-- 4ª demostración
+-- ===============
+
+example : ¬¬P → P :=
+by
+  intro h1
+  -- h1 : ¬¬P
+  -- ⊢ P
+  by_contra h
+  -- h : ¬P
+  -- ⊢ False
+  exact h1 h
+
+-- 5ª demostración
+-- ===============
+
+example : ¬¬P → P :=
+by tauto

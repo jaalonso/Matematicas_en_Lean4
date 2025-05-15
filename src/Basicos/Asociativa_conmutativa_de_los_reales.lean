@@ -43,18 +43,8 @@ calc
 
 example (a b c : ℝ) : (a * b) * c = b * (a * c) := by
   rw [mul_comm a b]
+  -- ⊢ b * a * c = b * (a * c)
   rw [mul_assoc b a c]
-
--- El desarrollo de la prueba es:
---
---    inicio
---       a b c : ℝ
---       ⊢ (a * b) * c = b * (a * c)
---    rw [mul_comm a b]
---       a b c : ℝ
---       ⊢ (a * b) * c = b * (a * c)
---    rw [mul_assoc b a c]
---       goals accomplished
 
 -- 3ª demostración
 -- ===============

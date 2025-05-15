@@ -53,21 +53,10 @@ calc
 example : (a + b) + -b = a :=
 by
   rw [add_assoc]
+  -- ⊢ a + (b + -b) = a
   rw [add_right_neg]
+  -- ⊢ a + 0 = a
   rw [add_zero]
-
--- El desarrollo de la prueba es
---
---    R : Type ?u.930
---    inst : Ring R
---    a b : R
---    ⊢ a + b + -b = a
--- rw [add_assoc]
---    ⊢ a + (b + -b) = a
--- rw [add_right_neg]
---    ⊢ a + 0 = a
--- rw [add_zero]
---    goals accomplished
 
 -- 3ª demostración
 -- ===============

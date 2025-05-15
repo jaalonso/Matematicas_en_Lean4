@@ -1,4 +1,4 @@
-import import data.real.basic                                               -- 1
+import Mathlib.Data.Real.Basic                                               -- 1
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Declarar x como variable implícita sobre los reales.
@@ -19,29 +19,14 @@ variable {x : ℝ}
 example
   (h : ∃a, x < a)
   : ∃b, x < b * 2 :=
-begin
-  cases h with a hxa,
-  use a / 2,
-  calc x   < a         : hxa
-       ... = a / 2 * 2 : (div_mul_cancel a two_ne_zero).symm,
-end
-
--- Prueba
--- ======
-
-/-
-x : ℝ,
-h : ∃ (a : ℝ), x < a
-⊢ ∃ (b : ℝ), x < b * 2
-  >> cases h with a hxa,
-x a : ℝ,
-hxa : x < a
-⊢ ∃ (b : ℝ), x < b * 2
-  >> use a / 2,
-⊢ x < a / 2 * 2
-  >> calc x   < a         : hxa
-  >>      ... = a / 2 * 2 : (div_mul_cancel a two_ne_zero).symm,
--/
+by
+  rcases h with ⟨a, hxa⟩
+  -- a : ℝ
+  -- hxa : x < a
+  use a / 2
+  -- ⊢ x < a / 2 * 2
+  calc x < a         := hxa
+       _ = a / 2 * 2 := (div_mul_cancel a two_ne_zero).symm
 
 -- Comentario: Se han usado los lemas
 -- + div_mul_cancel a : b ≠ 0 → a / b * b = a
@@ -53,32 +38,10 @@ hxa : x < a
 example
   (h : ∃a, x < a)
   : ∃b, x < b * 2 :=
-begin
-  cases h with a hxa,
-  use a / 2,
-  linarith,
-end
-
--- Prueba
--- ======
-
-/-
-x : ℝ,
-h : ∃ (a : ℝ), x < a
-⊢ ∃ (b : ℝ), x < b * 2
-  >> cases h with a hxa,
-hxa : x < a
-⊢ ∃ (b : ℝ), x < b * 2
-  >> use a / 2,
-⊢ x < a / 2 * 2
-  >> linarith,
-no goals
--/
-
--- 3ª demostración
--- ===============
-
-example
-  (h : ∃a, x < a)
-  : ∃b, x < b * 2 :=
-let ⟨a, hxa⟩ := h in ⟨a/2, by linarith⟩
+by
+  rcases h with ⟨a, hxa⟩
+  -- a : ℝ
+  -- hxa : x < a
+  use a / 2
+  -- ⊢ x < a / 2 * 2
+  linarith

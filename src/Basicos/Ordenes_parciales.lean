@@ -5,9 +5,9 @@
 --    3. x, y y z como variables sobre α.
 -- ----------------------------------------------------------------------
 
-import order.basic                        -- 1
-variables {α : Type*} [partial_order α]   -- 2
-variables x y z : α                       -- 3
+import Mathlib.Order.Basic                -- 1
+variable {α : Type _} [PartialOrder α]    -- 2
+variable (x y z : α)                      -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Calcular los tipos de las siguientes expresiones
@@ -16,13 +16,15 @@ variables x y z : α                       -- 3
 --    @le_trans α _ x y z
 -- ----------------------------------------------------------------------
 
--- #check x ≤ y
--- #check le_refl x
--- #check @le_trans α _ x y z
+#check x ≤ y
+#check le_refl x
+#check @le_trans α _ x y z
+#check @le_antisymm α _ x y
 
 -- Conentario: Al colocar el cursor sobre check se obtiene
 --    x ≤ y : Prop
 --    le_refl x : x ≤ x)
 --    le_trans : x ≤ y → y ≤ z → x ≤ z)
+--    le_antisymm : x ≤ y → y ≤ x → x = y
 
 -- Nota: Las letras griegas se escriben con \a, \b, ...

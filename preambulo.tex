@@ -6,13 +6,28 @@
 
 % Configuración para XeLaTeX
 \usepackage{tocloft}
-\setlength{\cftbeforechapskip}{2ex}
-\setlength{\cftbeforesecskip}{0.5ex}
-\setlength{\cftchapnumwidth}{2em}
-\setlength{\cftsecnumwidth}{2em}
-\setlength{\cftsubsecnumwidth}{4em}
-\setlength{\cftsubsecindent}{4em}
-\cftsetindents{chapter}{0em}{\cftchapnumwidth}
+
+% Espaciado vertical antes de cada entrada en el índice
+\setlength{\cftbeforechapskip}{2ex}     % Espacio antes de cada capítulo
+\setlength{\cftbeforesecskip}{0.5ex}    % Menor espacio antes de secciones
+\setlength{\cftbeforesubsecskip}{0.3ex} % Aún menor espacio antes de subsecciones
+\setlength{\cftbeforesubsubsecskip}{0.2ex} % Mínimo espacio antes de subsubsecciones
+
+% Anchura del número de cada nivel
+\setlength{\cftchapnumwidth}{1.5em}     % Capítulo: 1–5 → suficiente con 2em
+\setlength{\cftsecnumwidth}{2.5em}      % Sección: x.y (hasta 5.9) → 3em
+\setlength{\cftsubsecnumwidth}{4em}     % Subsección: x.y.zz (hasta 5.9.19) → 5em
+\setlength{\cftsubsubsecnumwidth}{5em}  % Subsubsección: x.y.zz.a
+
+% Sangrías personalizadas para alinear sin espacio extra
+\cftsetindents{section}{\cftchapnumwidth}{\cftsecnumwidth}
+\cftsetindents{subsection}{\dimexpr \cftchapnumwidth + \cftsecnumwidth \relax}{\cftsubsecnumwidth}
+\cftsetindents{subsubsection}{\dimexpr \cftchapnumwidth + \cftsecnumwidth + \cftsubsecnumwidth \relax}{\cftsubsubsecnumwidth}
+
+% OPCIONAL: Si aún hay espacio adicional, puedes reducir el espacio interno de tocloft:
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}      % Asegura puntos continuos
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftsubsecdotsep}}% Mismo estilo para subsecciones
+\renewcommand{\cftsubsubsecleader}{\cftdotfill{\cftsubsubsecdotsep}} % Y para subsubsecciones
 
 \usepackage{fontspec}
 \usepackage{xltxtra}
@@ -58,7 +73,7 @@
   pdfstartview=FitH,%
   bookmarks=false]{hyperref}
 
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{4}
 
 % No indenta los item

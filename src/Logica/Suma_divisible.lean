@@ -3,9 +3,24 @@
 -- es de b + c.
 -- ----------------------------------------------------------------------
 
-import tactic
+-- Demostración en lenguaje natural
+-- ================================
 
-variables {a b c : ℕ}
+-- Puesto que a divide a b y a c, existen d y e tales que
+--    b = ad                                                         (1)
+--    c = ae                                                         (2)
+-- Por tanto,
+--    b + c = ad + c     [por (1)]
+--          = ad + ae    [por (2)]
+--          = a(d + e)   [por la distributiva]
+-- Por consiguiente, a divide a b + c.
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Tactic
+
+variable {a b c : ℕ}
 
 -- 1ª demostración
 -- ===============
@@ -14,17 +29,20 @@ example
   (divab : a ∣ b)
   (divac : a ∣ c)
   : a ∣ (b + c) :=
-begin
-  rcases divab with ⟨d, beq : b = a * d⟩,
-  rcases divac with ⟨e, ceq: c = a * e⟩,
-  have h1 : b + c = a * (d + e),
+by
+  rcases divab with ⟨d, beq⟩
+  -- d : ℕ
+  -- beq : b = a * d
+  rcases divac with ⟨e, ceq⟩
+  -- e : ℕ
+  -- ceq : c = a * e
+  have h1 : b + c = a * (d + e) :=
     calc b + c
-         = (a * d) + c       : congr_arg (+ c) beq
-     ... = (a * d) + (a * e) : congr_arg ((+) (a * d)) ceq
-     ... = a * (d + e)       : by rw ← mul_add,
-  show a ∣ (b + c),
-    by exact dvd.intro (d + e) (eq.symm h1),
-end
+         = (a * d) + c       := congrArg (. + c) beq
+       _ = (a * d) + (a * e) := congrArg ((a * d) + .) ceq
+       _ = a * (d + e)       := by rw [← mul_add]
+  show a ∣ (b + c)
+  exact Dvd.intro (d + e) h1.symm
 
 -- 2ª demostración
 -- ===============
@@ -33,13 +51,16 @@ example
   (divab : a ∣ b)
   (divac : a ∣ c)
   : a ∣ (b + c) :=
-begin
-  rcases divab with ⟨d, beq : b = a * d⟩,
-  rcases divac with ⟨e, ceq: c = a * e⟩,
-  have h1 : b + c = a * (d + e), by linarith,
-  show a ∣ (b + c),
-    by exact dvd.intro (d + e) (eq.symm h1),
-end
+by
+  rcases divab with ⟨d, beq⟩
+  -- d : ℕ
+  -- beq : b = a * d
+  rcases divac with ⟨e, ceq⟩
+  -- e : ℕ
+  -- ceq : c = a * e
+  have h1 : b + c = a * (d + e) := by linarith
+  show a ∣ (b + c)
+  exact Dvd.intro (d + e) h1.symm
 
 -- 3ª demostración
 -- ===============
@@ -48,12 +69,15 @@ example
   (divab : a ∣ b)
   (divac : a ∣ c)
   : a ∣ (b + c) :=
-begin
-  rcases divab with ⟨d, beq : b = a * d⟩,
-  rcases divac with ⟨e, ceq: c = a * e⟩,
-  show a ∣ (b + c),
-    by exact dvd.intro (d + e) (by linarith),
-end
+by
+  rcases divab with ⟨d, beq⟩
+  -- d : ℕ
+  -- beq : b = a * d
+  rcases divac with ⟨e, ceq⟩
+  -- e : ℕ
+  -- ceq : c = a * e
+  show a ∣ (b + c)
+  exact Dvd.intro (d + e) (by linarith)
 
 -- 4ª demostración
 -- ===============
@@ -62,38 +86,18 @@ example
   (divab : a ∣ b)
   (divac : a ∣ c)
   : a ∣ (b + c) :=
-begin
-  cases divab with d beq,
-  cases divac with e ceq,
-  rw [ceq, beq],
-  use (d + e),
+by
+  obtain ⟨d, beq⟩ := divab
+  -- d : ℕ
+  -- beq : b = a * d
+  obtain ⟨e, ceq⟩ := divac
+  -- e : ℕ
+  -- ceq : c = a * e
+  rw [ceq, beq]
+  -- ⊢ a ∣ a * d + a * e
+  use (d + e)
+  -- ⊢ a * d + a * e = a * (d + e)
   ring
-end
-
--- Su desarrollo es
---
--- a b c : ℕ,
--- divab : a ∣ b,
--- divac : a ∣ c
--- ⊢ a ∣ b + c
---    >> cases divab with d beq,
--- a b c : ℕ,
--- divac : a ∣ c,
--- d : ℕ,
--- beq : b = a * d
--- ⊢ a ∣ b + c
---    >> cases divac with e ceq,
--- a b c d : ℕ,
--- beq : b = a * d,
--- e : ℕ,
--- ceq : c = a * e
--- ⊢ a ∣ b + c
---    >> rw [ceq, beq],
--- ⊢ a ∣ a * d + a * e
---    >> use (d + e),
--- ⊢ a * d + a * e = a * (d + e)
---    >> ring,
--- no goals
 
 -- 5ª demostración
 -- ===============
@@ -102,27 +106,27 @@ example
   (divab : a ∣ b)
   (divac : a ∣ c)
   : a ∣ (b + c) :=
-begin
-  rcases divab with ⟨d, rfl⟩,
-  rcases divac with ⟨e, rfl⟩,
-  use (d + e),
-  ring,
-end
+by
+  rcases divab with ⟨d, rfl⟩
+  -- ⊢ a ∣ a * d + c
+  rcases divac with ⟨e, rfl⟩
+  -- ⊢ a ∣ a * d + a * e
+  use (d + e)
+  -- ⊢ a * d + a * e = a * (d + e)
+  ring
 
--- Su desarrollo es
---
--- a b c : ℕ,
--- divab : a ∣ b,
--- divac : a ∣ c
--- ⊢ a ∣ b + c
---    >> rcases divab with ⟨d, rfl⟩,
--- a c : ℕ,
--- divac : a ∣ c,
--- d : ℕ
--- ⊢ a ∣ a * d + c
---    >> rcases divac with ⟨e, rfl⟩,
--- ⊢ a ∣ a * d + a * e
---    >> use (d + e),
--- ⊢ a * d + a * e = a * (d + e)
---    >> ring
--- no goals
+-- 6ª demostración
+-- ===============
+
+example
+  (divab : a ∣ b)
+  (divac : a ∣ c)
+  : a ∣ (b + c) :=
+dvd_add divab divac
+
+-- Lemas usados
+-- ============
+
+-- #check (Dvd.intro c : a * c = b → a ∣ b)
+-- #check (dvd_add : a ∣ b →  a ∣ c → a ∣ (b + c))
+-- #check (mul_add a b c : a * (b + c) = a * b + a * c)

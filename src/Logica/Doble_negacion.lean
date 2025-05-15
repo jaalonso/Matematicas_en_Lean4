@@ -1,109 +1,126 @@
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Realizar las siguientes acciones:
--- 1. Importar la librería de tácticas.
--- 2. Habilitar la lógica clásica.
--- 3. Declarar Q como una variable proposicional. 
+-- + Importar la librería de tácticas.
+-- + Declarar P como una variable proposicional.
 -- ----------------------------------------------------------------------
 
-import tactic           -- 1
-open_locale classical   -- 2
-variable (Q : Prop)     -- 3
+import Mathlib.Tactic
+variable (P : Prop)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que si
---     ¬ ¬ Q
--- entonces 
---    Q
+--     ¬¬P
+-- entonces
+--    P
 -- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por reducción al absurdo. Supongamos ¬P. Entonces, tenemos una
+-- contradicción con la hipótesis (¬¬P).
+
+-- Demostraciones con Lean4
+-- ========================
 
 -- 1ª demostración
 -- ===============
 
-example 
-  (h : ¬ ¬ Q) 
-  : Q :=
-begin 
-  by_contradiction h1,
-  exact (h h1),
-end
-
--- Prueba
--- ======
-
-/-
-Q : Prop,
-h : ¬¬Q
-⊢ Q
-  >> by_contradiction h1,
-h1 : ¬Q
-⊢ false
-  >> exact (h h1),
-no goals
--/
+example
+  (h : ¬¬P)
+  : P :=
+by
+  by_contra h1
+  -- h1 : ¬P
+  -- ⊢ False
+  exact (h h1)
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (h : ¬ ¬ Q) 
-  : Q :=
-not_not.mp h
+example
+  (h : ¬¬P)
+  : P :=
+by_contra (fun h1 ↦ h h1)
 
--- 2ª demostración
+-- 3ª demostración
 -- ===============
 
-example 
-  (h : ¬ ¬ Q) 
-  : Q :=
+example
+  (h : ¬¬P)
+  : P :=
+-- not_not.mp h
+of_not_not h
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h : ¬¬P)
+  : P :=
 by tauto
 
 -- Comentario: La táctica tauto demuestra las tautologís
 -- proposionales.
 
+-- Lemas usados
+-- ============
+
+-- #check (of_not_not : ¬¬P → P)
+
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
---    Q
--- entonces 
---    ¬ ¬ Q
+--    P
+-- entonces
+--    ¬¬P
 -- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Supongamos ¬P. Entonces, tenemos una contradicción con la hipótesis
+-- (P).
+
+-- Demostraciones con Lean4
+-- ========================
 
 -- 1ª demostración
 -- ===============
 
-example 
-  (h : Q) 
-  : ¬ ¬ Q :=
-begin
-  intro h1,
-  exact (h1 h),
-end
-
--- Prueba
--- ======
-
-/-
-Q : Prop,
-h : Q
-⊢ ¬¬Q
-  >> intro h1,
-h1 : ¬Q
-⊢ false
-  >> exact (h1 h)
-no goals
--/
+example
+  (h : P)
+  : ¬¬P :=
+by
+  intro h1
+  -- h1 : ¬P
+  -- ⊢ False
+  exact (h1 h)
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (h : Q) 
-  : ¬ ¬ Q :=
-not_not.mpr h
+example
+  (h : P)
+  : ¬¬P :=
+fun h1 ↦ h1 h
 
 -- 3ª demostración
 -- ===============
 
-example 
-  (h : Q) 
-  : ¬ ¬ Q :=
+example
+  (h : P)
+  : ¬¬P :=
+not_not_intro h
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h : P)
+  : ¬ ¬ P :=
 by tauto
+
+-- Lemas usados
+-- ============
+
+-- #check (not_not_intro : P → ¬¬P)

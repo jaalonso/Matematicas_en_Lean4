@@ -6,14 +6,56 @@
 --    2 + a + exp b ≤ 3 * a + exp d
 -- ----------------------------------------------------------------------
 
-import analysis.special_functions.log.basic
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
-open real
+open Real
 
-variables a b d : ℝ
+variable (a b d : ℝ)
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- De la primera hipótesis (1 ≤ a), multiplicando por 2, se obtiene
+--    2 ≤ 2a
+-- y, sumando a ambos lados, se tiene
+-- (1)       2 + a ≤ 3a
+-- De la hipótesis 2 (b ≤ d) y de la monotonía de la función exponencial
+-- se tiene
+-- (2)       e^b ≤ e^d
+-- Finalmente, de (1) y (2) se tiene
+--           2 + a + e^b ≤ 3a + e^d
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
 example
-  (h  : 1 ≤ a)
-  (h' : b ≤ d)
+  (h1 : 1 ≤ a)
+  (h2 : b ≤ d)
   : 2 + a + exp b ≤ 3 * a + exp d :=
-by linarith [exp_le_exp.mpr h']
+by
+  have h3 : 2 + a ≤ 3 * a := calc
+    2 + a = 2 * 1 + a := by linarith only []
+        _ ≤ 2 * a + a := by linarith only [h1]
+        _ ≤ 3 * a     := by linarith only []
+  have h4 : exp b ≤ exp d := by
+    linarith only [exp_le_exp.mpr h2]
+  show 2 + a + exp b ≤ 3 * a + exp d
+  exact add_le_add h3 h4
+
+-- 2ª demostración
+example
+  (h1 : 1 ≤ a)
+  (h2 : b ≤ d)
+  : 2 + a + exp b ≤ 3 * a + exp d :=
+calc
+  2 + a + exp b
+    ≤ 3 * a + exp b := by linarith only [h1]
+  _ ≤ 3 * a + exp d := by linarith only [exp_le_exp.mpr h2]
+
+-- 3ª demostración
+example
+  (h1 : 1 ≤ a)
+  (h2 : b ≤ d)
+  : 2 + a + exp b ≤ 3 * a + exp d :=
+by linarith [exp_le_exp.mpr h2]

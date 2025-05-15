@@ -5,99 +5,176 @@
 -- 3. Declarar a y c como variables sobre ℝ.
 -- ----------------------------------------------------------------------
 
-import .Definicion_de_funciones_acotadas -- 1
+import src.Logica.Definicion_de_funciones_acotadas
 
-variables {f : ℝ → ℝ}                    -- 2
-variables {a c : ℝ}                      -- 3
+variable {f : ℝ → ℝ}
+variable {a c : ℝ}
 
 -- ---------------------------------------------------------------------
--- Ejercicio 2. Demostrar que si a es una cota superior de f y c no es
--- negativo, entonces c * a es una cota superior de c * f.
+-- Ejercicio 2. Demostrar que si a es una cota superior de f y c ≥ 0,
+-- entonces c * a es una cota superior de c * f.
 -- ----------------------------------------------------------------------
 
-lemma fn_ub_mul
-  (hfa : fn_ub f a)
+-- Demostración en lenguaj natural
+-- ===============================
+
+-- Se usará el lema
+--    {b ≤ c, 0 ≤ a} ⊢ ab ≤ ac                                      (L1)
+--
+-- Tenemos que demostrar que
+--    (∀ y ∈ ℝ) cf(y) ≤ ca.
+-- Sea y ∈ R. Puesto que a es una cota de f, se tiene que
+--    f(y) ≤ a
+-- que, junto con c ≥ 0, por el lema L1 nos da
+--    cf(y) ≤ ca
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
+example
+  (hfa : FnUb f a)
   (h : c ≥ 0)
-  : fn_ub (λ x, c * f x) (c * a) :=
-λ x, mul_le_mul_of_nonneg_left (hfa x) h
+  : FnUb (fun x ↦ c * f x) (c * a) :=
+by
+  intro y
+  -- y : ℝ
+  -- ⊢ (fun x => c * f x) y ≤ c * a
+  have ha : f y ≤ a := hfa y
+  calc (fun x => c * f x) y
+       = c * f y := by rfl
+     _ ≤ c * a   := mul_le_mul_of_nonneg_left ha h
+
+-- 2ª demostración
+-- ===============
+
+example
+  (hfa : FnUb f a)
+  (h : c ≥ 0)
+  : FnUb (fun x ↦ c * f x) (c * a) :=
+by
+  intro y
+  -- y : ℝ
+  -- ⊢ (fun x => c * f x) y ≤ c * a
+  calc (fun x => c * f x) y
+       = c * f y := by rfl
+     _ ≤ c * a   := mul_le_mul_of_nonneg_left (hfa y) h
+
+-- 3ª demostración
+-- ===============
+
+example
+  (hfa : FnUb f a)
+  (h : c ≥ 0)
+  : FnUb (fun x ↦ c * f x) (c * a) :=
+by
+  intro y
+  -- y : ℝ
+  -- ⊢ (fun x => c * f x) y ≤ c * a
+  exact mul_le_mul_of_nonneg_left (hfa y) h
+
+-- 4ª demostración
+-- ===============
+
+lemma FnUb_mul
+  (hfa : FnUb f a)
+  (h : c ≥ 0)
+  : FnUb (fun x ↦ c * f x) (c * a) :=
+fun y ↦ mul_le_mul_of_nonneg_left (hfa y) h
+
+-- Lemas usados
+-- ============
+
+-- variable (c : ℝ)
+-- #check (mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si c ≥ 0 y f está acotada superiormente,
 -- entonces c * f también lo está.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Usaremos el siguiente lema:
+--    FnUb_mul : FnUb f a → c ≥ 0 → FnUb (fun x ↦ c * f x) (c * a)
+--
+-- Puesto que f está acotada superiormente, tiene una cota superior. Sea
+-- a una de dichas cotas. Entonces, por el lema FnUb_mul, ca es una cota
+-- superior de cf. Por consiguiente, cf está acotada superiormente.
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
 example
-  (ubf : fn_has_ub f)
-  (h : c ≥ 0)
-  : fn_has_ub (λ x, c * f x) :=
-begin
-  cases ubf with a ha,
-  have h1 : fn_ub (λ x, c * f x) (c * a) := fn_ub_mul ha h,
-  have h2 : ∃ z, ∀ x, (λ x, c * f x) x ≤ z,
-    by exact Exists.intro (c * a) h1,
-  show fn_has_ub (λ x, c * f x),
-    by exact h2,
-end
+  (hf : FnHasUb f)
+  (hc : c ≥ 0)
+  : FnHasUb (fun x ↦ c * f x) :=
+by
+  rcases hf with ⟨a, ha⟩
+  -- a : ℝ
+  -- ha : FnUb f a
+  have h1 : FnUb (fun x ↦ c * f x) (c * a) :=
+    FnUb_mul ha hc
+  have h2 : ∃ z, ∀ x, (fun x ↦ c * f x) x ≤ z :=
+    Exists.intro (c * a) h1
+  show FnHasUb (fun x ↦ c * f x)
+  exact h2
 
 -- 2ª demostración
 -- ===============
 
 example
-  (ubf : fn_has_ub f)
-  (h : c ≥ 0)
-  : fn_has_ub (λ x, c * f x) :=
-begin
-  cases ubf with a ha,
-  use c * a,
-  apply fn_ub_mul ha h,
-end
-
--- Su desarrollo es
---
--- f : ℝ → ℝ,
--- c : ℝ,
--- ubf : fn_has_ub f,
--- h : c ≥ 0
--- ⊢ fn_has_ub (λ (x : ℝ), c * f x)
---    >> cases ubf with a ha,
--- a : ℝ,
--- ha : fn_ub f a
--- ⊢ fn_has_ub (λ (x : ℝ), c * f x)
---    >> use c * a,
--- ⊢ fn_ub (λ (x : ℝ), c * f x) (c * a)
---    >> apply fn_ub_mul ha h
--- no goals
+  (hf : FnHasUb f)
+  (hc : c ≥ 0)
+  : FnHasUb (fun x ↦ c * f x) :=
+by
+  rcases hf with ⟨a, ha⟩
+  -- a : ℝ
+  -- ha : FnUb f a
+  use c * a
+  -- ⊢ FnUb (fun x => c * f x) (c * a)
+  apply FnUb_mul ha hc
 
 -- 3ª demostración
 -- ===============
 
 example
-  (ubf : fn_has_ub f)
-  (h : c ≥ 0)
-  : fn_has_ub (λ x, c * f x) :=
-begin
-  rcases ubf with ⟨a, ha⟩,
-  exact ⟨c * a, fn_ub_mul ha h⟩,
-end
+  (hf : FnHasUb f)
+  (hc : c ≥ 0)
+  : FnHasUb (fun x ↦ c * f x) :=
+by
+  rcases hf with ⟨a, ha⟩
+  -- a : ℝ
+  -- ha : FnUb f a
+  exact ⟨c * a, FnUb_mul ha hc⟩
 
 -- 4ª demostración
 -- ===============
 
 example
-  (h : c ≥ 0)
-  : fn_has_ub f → fn_has_ub (λ x, c * f x) :=
-begin
-  rintro ⟨a, ha⟩,
-  exact ⟨c * a, fn_ub_mul ha h⟩,
-end
+  (hc : c ≥ 0)
+  : FnHasUb f → FnHasUb (fun x ↦ c * f x) :=
+by
+  rintro ⟨a, ha⟩
+  -- a : ℝ
+  -- ha : FnUb f a
+  exact ⟨c * a, FnUb_mul ha hc⟩
 
 -- 5ª demostración
 -- ===============
 
 example
-  (h : c ≥ 0)
-  : fn_has_ub f → fn_has_ub (λ x, c * f x) :=
-λ ⟨a, ha⟩, ⟨c * a, fn_ub_mul ha h⟩
+  (hc : c ≥ 0)
+  : FnHasUb f → FnHasUb (fun x ↦ c * f x) :=
+fun ⟨a, ha⟩ ↦ ⟨c * a, FnUb_mul ha hc⟩
+
+-- Lemas usados
+-- ============
+
+-- #check (FnUb_mul : FnUb f a → c ≥ 0 → FnUb (fun x ↦ c * f x) (c * a))

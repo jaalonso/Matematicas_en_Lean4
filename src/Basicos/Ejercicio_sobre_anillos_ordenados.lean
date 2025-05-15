@@ -5,53 +5,112 @@
 --    3. Declarar a, b y c como variables sobre R.
 -- ----------------------------------------------------------------------
 
-import algebra.order.ring                -- 1
-variables {R : Type*} [ordered_ring R]   -- 2
-variables a b c: R                       -- 3
+import Mathlib.Algebra.Order.Ring.Defs        -- 1
+variable {R : Type _} [StrictOrderedRing R]   -- 2
+variable (a b c : R)                          -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que
 --    a ≤ b → 0 ≤ b - a
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usarán los siguientes lemas:
+--    sub_self         : a - a = 0
+--    sub_le_sub_right : a ≤ b → ∀ (c : R), a - c ≤ b - c
+--
+-- Supongamos que
+--    a ≤ b                                                          (1)
+-- La demostración se tiene por la siguiente cadena de desigualdades:
+--    0 = a - a    [por sub_self]
+--      ≤ b - a    [por (1) y sub_le_sub_right]
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
 example : a ≤ b → 0 ≤ b - a :=
-begin
-  intro h,
+by
+  intro h
+  -- h : a ≤ b
+  -- ⊢ 0 ≤ b - a
   calc
-    0   = a - a : (sub_self a).symm
-    ... ≤ b - a : sub_le_sub_right h a
-end
+    0 = a - a := (sub_self a).symm
+    _ ≤ b - a := sub_le_sub_right h a
+
+-- 2ª demostración
+example : a ≤ b → 0 ≤ b - a :=
+sub_nonneg.mpr
+
+-- 3ª demostración
+example : a ≤ b → 0 ≤ b - a :=
+by simp
+
+-- Lemas usados
+-- ============
+
+-- #check (sub_le_sub_right : a ≤ b → ∀ (c : R), a - c ≤ b - c)
+-- #check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)
+-- #check (sub_self a : a - a = 0)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que
 --    0 ≤ b - a → a ≤ b
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usarán los siguientes lemas:
+--    zero_add a : 0 + a = a
+--    add_le_add_right : b ≤ c → ∀ (a : R),  b + a ≤ c + a
+--    sub_add_cancel a b : a - b + b = -a
+--
+-- Supongamos que
+--    0 ≤ b - a                                                      (1)
+-- La demostración se tiene por la siguiente cadena de desigualdades:
+--    a = 0 + a          [por zero_add]
+--      ≤ (b - a) + a    [por (1) y add_le_add_right]
+--      = b              [por sub_add_cancel]
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
 example : 0 ≤ b - a → a ≤ b :=
-begin
-  intro h,
+by
+  intro h
+  -- h : 0 ≤ b - a
+  -- ⊢ a ≤ b
   calc
-    a   = 0 + a       : (zero_add a).symm
-    ... ≤ (b - a) + a : add_le_add_right h a
-    ... = b           : sub_add_cancel b a
-end
+    a = 0 + a       := (zero_add a).symm
+    _ ≤ (b - a) + a := add_le_add_right h a
+    _ = b           := sub_add_cancel b a
 
 -- 2ª demostración
 -- ===============
 
 example : 0 ≤ b - a → a ≤ b :=
--- by library_search
+-- by apply?
 sub_nonneg.mp
 
 -- 3ª demostración
 -- ===============
 
 example : 0 ≤ b - a → a ≤ b :=
--- by hint
 by simp
+
+-- Lemas usados
+-- ============
+
+-- #check (zero_add a : 0 + a = a)
+-- #check (add_le_add_right : b ≤ c → ∀ (a : R),  b + a ≤ c + a)
+-- #check (sub_add_cancel a b : a - b + b = a)
+-- #check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que
@@ -61,6 +120,30 @@ by simp
 --    a * c ≤ b * c
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usarán los siguientes lemas:
+--    mul_le_mul_of_nonneg_right : a ≤ b → 0 ≤ c → a * c ≤ b * c)
+--    mul_nonneg                 : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)
+--    sub_mul a b c              : (a - b) * c = a * c - b * c)
+--    sub_nonneg                 : 0 ≤ a - b ↔ b ≤ a)
+--
+-- Supongamos que
+--    a ≤ b                                                          (1)
+--    0 ≤ c
+-- De (1), por sub_nonneg, se tiene
+--    0 ≤ b - a
+-- y con (2), por mul_nonneg, se tiene
+--    0 ≤ (b - a) * c
+-- que, por sub_mul, da
+--    0 ≤ b * c - a * c
+-- y, aplicándole sub_nonneg, se tiene
+--    a * c ≤ b * c
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
@@ -68,52 +151,73 @@ example
   (h1 : a ≤ b)
   (h2 : 0 ≤ c)
   : a * c ≤ b * c :=
-begin
+by
   have h3 : 0 ≤ b - a :=
-    sub_nonneg.mpr h1,
-  have h4 : 0 ≤ (b - a) * c :=
-    mul_nonneg h3 h2,
-  have h5 : (b - a) * c = b * c - a * c :=
-    sub_mul b a c,
-  have h6 : 0 ≤ b * c - a * c :=
-    eq.trans_ge h5 h4,
-  show a * c ≤ b * c,
-    by exact sub_nonneg.mp h6,
-end
+    sub_nonneg.mpr h1
+  have h4 : 0 ≤ b * c - a * c := calc
+    0 ≤ (b - a) * c   := mul_nonneg h3 h2
+    _ = b * c - a * c := sub_mul b a c
+  show a * c ≤ b * c
+  exact sub_nonneg.mp h4
 
 -- 2ª demostración
 -- ===============
 
-open_locale classical
-
 example
   (h1 : a ≤ b)
   (h2 : 0 ≤ c)
   : a * c ≤ b * c :=
-begin
-  by_cases h3 : b ≤ a,
-  { have h3a : a = b :=
-      le_antisymm h1 h3,
-    show a * c ≤ b * c,
-      by rw h3a },
-  { by_cases h4 : c = 0,
-    { calc a * c = a * 0 : by rw h4
-             ... = 0     : by rw mul_zero
-             ... ≤ 0     : le_refl 0
-             ... = b * 0 : by rw mul_zero
-             ... = b * c : by {congr ; rw h4}},
-    { apply le_of_lt,
-      apply mul_lt_mul_of_pos_right,
-      { show a < b,
-          by exact lt_of_le_not_le h1 h3 },
-      { show 0 < c,
-          by exact lt_of_le_of_ne h2 (ne.symm h4) }}},
-end
+by
+  have h3 : 0 ≤ b - a := sub_nonneg.mpr h1
+  have h4 : 0 ≤ (b - a) * c := mul_nonneg h3 h2
+  rw [sub_mul] at h4
+  -- h4 : 0 ≤ b * c - a * c
+  exact sub_nonneg.mp h4
 
 -- 3ª demostración
+-- ===============
+
 example
   (h1 : a ≤ b)
   (h2 : 0 ≤ c)
   : a * c ≤ b * c :=
--- by library_search
+by
+  apply sub_nonneg.mp
+  -- ⊢ 0 ≤ b * c - a * c
+  rw [← sub_mul]
+  -- ⊢ 0 ≤ (b - a) * c
+  apply mul_nonneg
+  . -- ⊢ 0 ≤ b - a
+    exact sub_nonneg.mpr h1
+  . -- ⊢ 0 ≤ c
+    exact h2
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h1 : a ≤ b)
+  (h2 : 0 ≤ c)
+  : a * c ≤ b * c :=
+by
+  apply sub_nonneg.mp
+  -- ⊢ 0 ≤ b * c - a * c
+  rw [← sub_mul]
+  -- ⊢ 0 ≤ (b - a) * c
+  apply mul_nonneg (sub_nonneg.mpr h1) h2
+
+-- 5ª demostración
+example
+  (h1 : a ≤ b)
+  (h2 : 0 ≤ c)
+  : a * c ≤ b * c :=
+-- by apply?
 mul_le_mul_of_nonneg_right h1 h2
+
+-- Lemas usados
+-- ============
+
+-- #check (mul_le_mul_of_nonneg_right : a ≤ b → 0 ≤ c → a * c ≤ b * c)
+-- #check (mul_nonneg : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)
+-- #check (sub_mul a b c : (a - b) * c = a * c - b * c)
+-- #check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)

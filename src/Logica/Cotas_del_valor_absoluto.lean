@@ -5,117 +5,177 @@
 -- 3. Iniciar el espacio de nombre my_abs.
 -- ----------------------------------------------------------------------
 
-import data.real.basic   -- 1
-variables {x y z : ℝ}    -- 2
-namespace my_abs         -- 3
+import Mathlib.Data.Real.Basic
+variable {x y z : ℝ}
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que
---    x < abs y ↔ x < y ∨ x < -y
+--    x < |y| ↔ x < y ∨ x < -y
 -- ----------------------------------------------------------------------
 
 -- 1ª demostración
 -- ===============
 
-theorem lt_abs : x < abs y ↔ x < y ∨ x < -y :=
-begin
-  unfold abs,
-  exact lt_max_iff,
-end
-
--- Prueba
--- ======
-
-/-
-x y : ℝ
-⊢ x < abs y ↔ x < y ∨ x < -y
-  >> unfold abs,
-⊢ x < max y (-y) ↔ x < y ∨ x < -y
-  >> exact lt_max_iff,
-no goals
--/
-
--- Comentarios:
--- 1. La táctica (unfold e) despliega la definición de e.
--- 2. La definición de abs
---    + abs (a : α) : α := max a (-a)
--- 3. Se ha usado el lema
---    + lt_max_iff : x < max y z ↔ x < y ∨ x < z
-
--- Comprobación
--- #check (@lt_max_iff ℝ _ x y z)
+example : x < |y| ↔ x < y ∨ x < -y := by
+  rcases le_or_gt 0 y with h | h
+  · -- h : 0 ≤ y
+    rw [abs_of_nonneg h]
+    -- ⊢ x < y ↔ x < y ∨ x < -y
+    constructor
+    · -- ⊢ x < y → x < y ∨ x < -y
+      intro h'
+      -- h' : x < y
+      -- ⊢ x < y ∨ x < -y
+      left
+      -- ⊢ x < y
+      exact h'
+    . -- ⊢ x < y ∨ x < -y → x < y
+      intro h'
+      -- h' : x < y ∨ x < -y
+      -- ⊢ x < y
+      rcases h' with h' | h'
+      · -- h' : x < y
+        exact h'
+      . -- h' : x < -y
+        linarith
+  . -- h : 0 > y
+    rw [abs_of_neg h]
+    -- ⊢ x < -y ↔ x < y ∨ x < -y
+    constructor
+    · -- ⊢ x < -y → x < y ∨ x < -y
+      intro h'
+      -- h' : x < -y
+      -- ⊢ x < y ∨ x < -y
+      right
+      -- ⊢ x < -y
+      exact h'
+    . -- ⊢ x < y ∨ x < -y → x < -y
+      intro h'
+      -- h' : x < y ∨ x < -y
+      -- ⊢ x < -y
+      rcases h' with h' | h'
+      · -- h' : x < y
+        linarith
+      . -- h' : x < -y
+        exact h'
 
 -- 2ª demostración
 -- ===============
 
-example : x < abs y ↔ x < y ∨ x < -y :=
-lt_max_iff
+example : x < |y| ↔ x < y ∨ x < -y :=
+by
+  rw [abs_eq_max_neg]
+  -- ⊢ x < max y (-y) ↔ x < y ∨ x < -y
+  exact lt_max_iff
+
+-- 3ª demostración
+-- ===============
+
+example : x < |y| ↔ x < y ∨ x < -y :=
+  lt_max_iff
+
+-- 4ª demostración
+-- ===============
+
+example : x < |y| ↔ x < y ∨ x < -y :=
+  lt_abs
+
+-- Lemas usados
+-- ============
+
+--  lt_max_iff : x < max y z ↔ x < y ∨ x < z
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que
---    abs x < y ↔ - y < x ∧ x < y
+--    |x| < y ↔ - y < x ∧ x < y
 -- ----------------------------------------------------------------------
 
-theorem abs_lt : abs x < y ↔ -y < x ∧ x < y :=
-begin
-  unfold abs,
-  split,
-    { intro h1,
-      rw max_lt_iff at h1,
-      cases h1 with h2 h3,
-      split,
-        { exact neg_lt.mp h3 },
-        { exact h2 }},
-    { intro h4,
-      apply max_lt_iff.mpr,
-      cases h4 with h5 h6,
-      split,
-       { exact h6 },
-       { exact neg_lt.mp h5 }},
-end
+-- 1ª demostración
+-- ===============
 
--- Prueba
--- ======
+example : |x| < y ↔ -y < x ∧ x < y := by
+  rcases le_or_gt 0 x with h | h
+  · -- h : 0 ≤ x
+    rw [abs_of_nonneg h]
+    -- ⊢ x < y ↔ -y < x ∧ x < y
+    constructor
+    · -- ⊢ x < y → -y < x ∧ x < y
+      intro h'
+      -- h' : x < y
+      -- ⊢ -y < x ∧ x < y
+      constructor
+      · -- ⊢ -y < x
+        linarith
+      . -- ⊢ x < y
+        exact h'
+    . -- ⊢ -y < x ∧ x < y → x < y
+      intro h'
+      -- h' : -y < x ∧ x < y
+      -- ⊢ x < y
+      rcases h' with ⟨-, h2⟩
+      -- h2 : x < y
+      exact h2
+  . -- h : 0 > x
+    rw [abs_of_neg h]
+    -- ⊢ -x < y ↔ -y < x ∧ x < y
+    constructor
+    · -- ⊢ -x < y → -y < x ∧ x < y
+      intro h'
+      -- h' : -x < y
+      -- ⊢ -y < x ∧ x < y
+      constructor
+      · -- ⊢ -y < x
+        linarith
+      . -- ⊢ x < y
+        linarith
+    . -- ⊢ -y < x ∧ x < y → -x < y
+      intro h'
+      -- h' : -y < x ∧ x < y
+      -- ⊢ -x < y
+      linarith
 
-/-
-x y : ℝ
-⊢ abs x < y ↔ -y < x ∧ x < y
-  unfold abs,
-⊢ max x (-x) < y ↔ -y < x ∧ x < y
-  >> split,
-| ⊢ max x (-x) < y → -y < x ∧ x < y
-|   >>   { intro h1,
-| h1 : max x (-x) < y
-| ⊢ -y < x ∧ x < y
-|   >>     rw max_lt_iff at h1,
-| h1 : x < y ∧ -x < y
-| ⊢ -y < x ∧ x < y
-|   >>     cases h1 with h2 h3,
-| h2 : x < y,
-| h3 : -x < y
-| ⊢ -y < x ∧ x < y
-|   >>     split,
-| | ⊢ -y < x
-|   >>       { exact neg_lt.mp h3 },
-| ⊢ x < y
-|   >>       { exact h2 }},
-⊢ -y < x ∧ x < y → max x (-x) < y
-  >>   { intro h4,
-h4 : -y < x ∧ x < y
-⊢ max x (-x) < y
-  >>     apply max_lt_iff.mpr,
-⊢ x < y ∧ -x < y
-  >>     cases h4 with h5 h6,
-h5 : -y < x,
-h6 : x < y
-⊢ x < y ∧ -x < y
-  >>     split,
-| ⊢ x < y
-  >>      { exact h6 },
-⊢ -x < y
-  >>      { exact neg_lt.mp h5 }},
-no goals
--/
+-- 2ª demostración
+-- ===============
+
+example : |x| < y ↔ -y < x ∧ x < y :=
+by
+  rw [abs_eq_max_neg]
+  -- ⊢ max x (-x) < y ↔ -y < x ∧ x < y
+  constructor
+  . -- ⊢ max x (-x) < y → -y < x ∧ x < y
+    intro h1
+    -- h1 : max x (-x) < y
+    -- ⊢ -y < x ∧ x < y
+    rw [max_lt_iff] at h1
+    -- h1 : x < y ∧ -x < y
+    rcases h1 with ⟨h2, h3⟩
+    -- h2 : x < y
+    -- h3 : -x < y
+    constructor
+    . -- ⊢ -y < x
+      exact neg_lt.mp h3
+    . -- ⊢ x < y
+      exact h2
+  . -- ⊢ -y < x ∧ x < y → max x (-x) < y
+    intro h4
+    -- h4 : -y < x ∧ x < y
+    -- ⊢ max x (-x) < y
+    apply max_lt_iff.mpr
+    -- ⊢ x < y ∧ -x < y
+    rcases h4 with ⟨h5, h6⟩
+    -- h5 : -y < x
+    -- h6 : x < y
+    constructor
+    . -- ⊢ x < y
+      exact h6
+    . -- ⊢ -x < y
+      exact neg_lt.mp h5
+
+-- 2ª demostración
+-- ===============
+
+example : |x| < y ↔ -y < x ∧ x < y :=
+  abs_lt
 
 -- Comentarios: Se han usado los siguientes lemas:
 -- + max_lt_iff : max x y < z ↔ x < z ∧ y < z
@@ -124,5 +184,3 @@ no goals
 -- Comprobación:
 -- #check (@max_lt_iff ℝ _ x y z)
 -- #check (@neg_lt ℝ _ x y)
-
-end my_abs

@@ -5,50 +5,64 @@
 --    a < a * a
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usarán los siguientes lemas
+--    L1: 0 < 1
+--    L2: (∀ a ∈ ℝ[1·a = a]
+--    L3: (∀ a, b, c ∈ ℝ)[0 < a → (ba < ca ↔ b < c)]
+--
+-- En primer lugar, tenemos que
+--    0 < a                                                          (1)
+-- ya que
+--    0 < 1    [por L1]
+--      < a    [por la hipótesis]
+-- Entonces,
+--    a = 1·a   [por L2]
+--      < a·a   [por L3, (1) y la hipótesis]
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+variable {a : ℝ}
+
+-- 1ª demostración
+-- ===============
 
 example
-  {a : ℝ}
   (h : 1 < a)
   : a < a * a :=
-begin
-  convert (mul_lt_mul_right _).2 h,
-  { rw [one_mul] },
-  { exact lt_trans zero_lt_one h },
-end
+by
+  have h1 : 0 < a := calc
+    0 < 1 := zero_lt_one
+    _ < a := h
+  show a < a * a
+  calc a = 1 * a := (one_mul a).symm
+       _ < a * a := (mul_lt_mul_right h1).mpr h
 
--- Prueba
--- ======
+-- Comentarios: La táctica (convert e) genera nuevos subojetivos cuya
+-- conclusiones son las diferencias entre el tipo de e y la conclusión.
 
-/-
-a : ℝ,
-h : 1 < a
-⊢ a < a * a
-  >> convert (mul_lt_mul_right _).2 h,
-| 2 goals
-| a : ℝ,
-| h : 1 < a
-| ⊢ a = 1 * a
-|   >> { rw [one_mul] },
-a : ℝ,
-h : 1 < a
-⊢ 0 < a
-  >> { exact lt_trans zero_lt_one h },
-no goals
--/
+-- 2ª demostración
+-- ===============
 
--- Comentarios:
--- 1. La táctica (convert e) genera nuevos subojetivos cuya conclusiones
---    son las diferencias entre el tipo de ge y la conclusión.
--- 2. Se han usado los siguientes lemas:
---    + mul_lt_mul_right : 0 < c → (a * c < b * c ↔ a < b)
---    + one_mul a : 1 * a = a
---    + lt_trans : a < b → b < c → a < c
---    + zero_lt_one : 0 < 1
+example
+  (h : 1 < a)
+  : a < a * a :=
+by
+  convert (mul_lt_mul_right _).mpr h
+  . -- ⊢ a = 1 * a
+    rw [one_mul]
+  . -- ⊢ 0 < a
+    exact lt_trans zero_lt_one h
 
--- Comprobación:
-variables (a b c : ℝ)
--- #check @mul_lt_mul_right _ _ a b c
--- #check @one_mul _ _ a
--- #check @lt_trans _ _ a b c
--- #check @zero_lt_one _ _
+-- Lemas usados
+-- ============
+
+-- variables (a b c : ℝ)
+-- #check (mul_lt_mul_right : 0 < a → (b * a < c * a ↔ b < c))
+-- #check (one_mul a : 1 * a = a)
+-- #check (lt_trans : a < b → b < c → a < c)
+-- #check (zero_lt_one : 0 < 1)

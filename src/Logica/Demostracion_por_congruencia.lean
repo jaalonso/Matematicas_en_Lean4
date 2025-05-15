@@ -1,50 +1,38 @@
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
---    abs a = abs (a - b + b)
+--    |a| = |a - b + b|
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
+variable (a b : ℝ)
 
 -- 1ª demostración
 -- ===============
 
-example 
-  (a b : ℝ) 
-  : abs a = abs (a - b + b) :=
-begin 
-  congr, 
-  ring,
-end
+example
+  : |a| = |a - b + b| :=
+by
+  congr
+  -- a = a - b + b
+  ring
 
--- Prueba
--- ======
-
-/-
-a b : ℝ
-⊢ abs a = abs (a - b + b)
-  >> congr, 
-⊢ a = a - b + b
-  >> ring,
-no goals
--/
-
--- Comentario: La táctica cong sustituye una conclusión de la forma 
+-- Comentario: La táctica cong sustituye una conclusión de la forma
 -- A = B por las igualdades de sus subtérminos que no no iguales por
--- definición. Por ejemplo, sustituye la conclusión (x * f y = g w * f z)  
+-- definición. Por ejemplo, sustituye la conclusión (x * f y = g w * f z)
 -- por las conclusiones (x = g w) y (y = z).
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (a b : ℝ) 
-  : abs a = abs (a - b + b) :=
-by { congr, ring }
+example
+  (a b : ℝ)
+  : |a| = |a - b + b| :=
+by { congr ; ring }
 
 -- 3ª demostración
 -- ===============
 
-example 
-  (a b : ℝ) 
-  : abs a = abs (a - b + b) :=
-by ring
+example
+  (a b : ℝ)
+  : |a| = |a - b + b| :=
+by ring_nf

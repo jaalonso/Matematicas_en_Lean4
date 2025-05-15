@@ -89,52 +89,21 @@ example
   : b = c :=
 by
   have h1 : -a + (a + b) = -a + (a + c) :=
-    congrArg (HAdd.hAdd (-a)) h
+    congrArg (-a + .) h
   clear h
   rw [← add_assoc] at h1
+  -- h1 : (-a + a) + b = -a + (a + c)
   rw [add_left_neg] at h1
+  -- h1 : 0 + b = -a + (a + c)
   rw [zero_add] at h1
+  -- h1 : b = -a + (a + c)
   rw [← add_assoc] at h1
+  -- h1 : b = (-a + a) + c
   rw [add_left_neg] at h1
+  -- h1 : b = 0 + c
   rw [zero_add] at h1
+  -- h1 : b = c
   exact h1
-
--- El desarrollo de la prueba es
---
---    R : Type ?u.3961
---    inst : Ring R
---    a b c : R,
---    h : a + b = a + c
---    ⊢ b = c
--- have h1 : -a + (a + b) = -a + (a + c)
---    |    ⊢ -a + (a + b) = -a + (a + c) :=
---    |          congrArg (HAdd.hAdd (-a)) h
---    h : a + b = a + c,
---    h1 : -a + (a + b) = -a + (a + c)
---    ⊢ b = c
--- clear h
---    h1 : -a + (a + b) = -a + (a + c)
---    ⊢ b = c
--- rw [← add_assoc at h1]
---    h1 : -a + a + b = -a + (a + c)
---    ⊢ b = c
--- rw [add_left_neg at h1]
---    h1 : 0 + b = -a + (a + c)
---    ⊢ b = c
--- rw [zero_add at h1]
---    h1 : b = -a + (a + c)
---    ⊢ b = c
--- rw [← add_assoc at h1]
---    h1 : b = -a + a + c
---    ⊢ b = c
--- rw [add_left_neg at h1]
---    h1 : b = 0 + c
---    ⊢ b = c
--- rw [zero_add at h1]
---    h1 : b = c
---    ⊢ b = c
--- exact h1
---    goals accomplished
 
 -- 3ª demostración
 -- ===============
@@ -158,7 +127,9 @@ example
   : b = c :=
 by
   rw [← neg_add_cancel_left a b]
+  -- ⊢ -a + (a + b) = c
   rw [h]
+  -- ⊢ -a + (a + c) = c
   rw [neg_add_cancel_left]
 
 -- 5ª demostración
@@ -240,7 +211,9 @@ example
   : a = c :=
 by
   rw [← neg_add_cancel_right a b]
+  -- ⊢ (a + b) + -b = c
   rw [h]
+  -- ⊢ (c + b) + -b = c
   rw [neg_add_cancel_right]
 
 -- 4ª demostración con Lean4

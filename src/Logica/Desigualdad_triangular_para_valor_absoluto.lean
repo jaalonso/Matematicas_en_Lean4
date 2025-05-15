@@ -5,353 +5,271 @@
 -- 3. Crear el espacio de nombres my_abs.
 -- ----------------------------------------------------------------------
 
-import data.real.basic    -- 1
-variables {x y a b : ℝ}   -- 2
-namespace my_abs          -- 3
+import Mathlib.Data.Real.Basic
+variable {x y a b : ℝ}
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que
---    x ≤ abs x
+--    x ≤ |x|
 -- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usarán los siguientes lemas
+--    (∀ x ∈ ℝ)[0 ≤ x → |x| = x]                                     (L1)
+--    (∀ x, y ∈ ℝ)[x < y → x ≤ y]                                    (L2)
+--    (∀ x ∈ ℝ)[x ≤ 0 → x ≤ -x]                                      (L3)
+--    (∀ x ∈ ℝ)[x < 0 → |x| = -x]                                    (L4)
+--
+-- Se demostrará por casos según x ≥ 0:
+--
+-- Primer caso: Supongamos que x ≥ 0. Entonces,
+--    x ≤ x
+--      = |x|    [por L1]
+--
+-- Segundo caso: Supongamos que x < 0. Entonces, por el L2, se tiene
+--    x ≤ 0                                                          (1)
+-- Por tanto,
+--    x ≤ -x     [por L3 y (1)]
+--      = |x|    [por L4]
+
+-- Demostraciones con Lean4
+-- ========================
 
 -- 1ª demostración
 -- ===============
 
-example : x ≤ abs x :=
-begin
-  cases (le_or_gt 0 x) with h1 h2,
-  { rw abs_of_nonneg h1 },
-  { rw abs_of_neg h2,
-    apply left.self_le_neg,
-    apply le_of_lt h2 },
-end
-
--- Prueba
--- ======
-
-/-
-x : ℝ
-⊢ x ≤ abs x
-  >> cases (le_or_gt 0 x) with h1 h2,
-| h1 : 0 ≤ x
-| ⊢ x ≤ abs x
-  >> { rw abs_of_nonneg h1 },
-h2 : 0 > x
-⊢ x ≤ abs x
-  >> { rw abs_of_neg h2,
-⊢ x ≤ -x
-  >>   apply self_le_neg,
-⊢ x ≤ 0
-  >>   apply le_of_lt h2 },
-no goals
--/
-
--- Comentario: Se han usado los siguientes lemas
--- + le_or_gt x y : x ≤ y ∨ x > y
--- + abs_of_nonneg : 0 ≤ x → abs x = x
--- + abs_of_neg : x < 0 → abs x = -x
--- + self_le_neg : x ≤ 0 → x ≤ -x
--- + le_of_lt : x < y → x ≤ y
-
--- Comprobación
--- #check (@le_or_gt ℝ _ x y)
--- #check (@abs_of_nonneg ℝ _ x)
--- #check (@abs_of_neg ℝ _ x)
--- #check (@self_le_neg ℝ _ x)
--- #check (@le_of_lt ℝ _ x y)
+example : x ≤ |x| :=
+by
+  rcases le_or_gt 0 x with h1 | h2
+  . -- h1 : 0 ≤ x
+    show x ≤ |x|
+    calc x ≤ x   := le_refl x
+         _ = |x| := (abs_of_nonneg h1).symm
+  . -- h2 : 0 > x
+    have h3 : x ≤ 0 := le_of_lt h2
+    show x ≤ |x|
+    calc x ≤ -x  := le_neg_self_iff.mpr h3
+         _ = |x| := (abs_of_neg h2).symm
 
 -- 2ª demostración
 -- ===============
 
-example : x ≤ abs x :=
-begin
-  unfold abs,
-  exact le_max_left x (-x),
-end
-
--- Comentarios:
--- 1. La táctica (unfold e) despliega la definición de e.
--- 2. La definición de abs
---    + abs (a : α) : α := max a (-a)
--- 3. Se ha usado el lema
---    + le_max_left x y : x ≤ max x y
-
--- Comprobación
--- #check (@le_max_left ℝ _ x y)
--- #print abs
+example : x ≤ |x| :=
+by
+  rcases le_or_gt 0 x with h1 | h2
+  . -- h1 : 0 ≤ x
+    rw [abs_of_nonneg h1]
+  . -- h2 : 0 > x
+    rw [abs_of_neg h2]
+    -- ⊢ x ≤ -x
+    apply Left.self_le_neg
+    -- ⊢ x ≤ 0
+    exact le_of_lt h2
 
 -- 3ª demostración
 -- ===============
 
-example : x ≤ abs x :=
-le_max_left x (-x)
+example : x ≤ |x| :=
+by
+  rcases (le_or_gt 0 x) with h1 | h2
+  . -- h1 : 0 ≤ x
+    rw [abs_of_nonneg h1]
+  . -- h1 : 0 ≤ x
+    rw [abs_of_neg h2]
+    linarith
+
+-- 4ª demostración
+-- ===============
+
+example : x ≤ |x| :=
+  le_abs_self x
+
+-- Lemas usados
+-- ============
+
+-- #check (Left.self_le_neg : x ≤ 0 → x ≤ -x)
+-- #check (abs_of_neg : x < 0 → |x| = -x)
+-- #check (abs_of_nonneg : 0 ≤ x → |x| = x)
+-- #check (le_abs_self x : x ≤ |x|)
+-- #check (le_neg_self_iff : x ≤ -x ↔ x ≤ 0)
+-- #check (le_of_lt : x < y → x ≤ y)
+-- #check (le_or_gt x y : x ≤ y ∨ x > y)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que
---    -x ≤ abs x
+--    -x ≤ |x|
 -- ----------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Se usarán los siguientes lemas
+--    (∀ x ∈ ℝ)[0 ≤ x → -x ≤ x]                                      (L1)
+--    (∀ x ∈ ℝ)[0 ≤ x → |x| = x]                                     (L2)
+--    (∀ x ∈ ℝ)[x ≤ x]                                               (L3)
+--    (∀ x ∈ ℝ)[x < 0) → |x| = -x]                                   (L4)
+--
+-- Se demostrará por casos según x ≥ 0:
+--
+-- Primer caso: Supongamos que x ≥ 0. Entonces,
+--    -x ≤ x      [por L1]
+--       = |x|    [por L2]
+--
+-- Segundo caso: Supongamos que x < 0. Entonces,
+--    -x ≤ -x     [por L3]
+--     _ = |x|    [por L4]
+
+-- Demostraciones con Lean4
+-- ========================
 
 -- 1ª demostración
 -- ===============
 
-theorem neg_le_abs_self : -x ≤ abs x :=
-begin
-  cases (le_or_gt 0 x) with h1 h2,
-  { rw abs_of_nonneg h1,
-    apply neg_le_self h1 },
-  { rw abs_of_neg h2 },
-end
-
--- Prueba
--- ======
-
-/-
-x : ℝ
-⊢ -x ≤ abs x
-  >> cases (le_or_gt 0 x) with h1 h2,
-| h1 : 0 ≤ x
-| ⊢ -x ≤ abs x
-|   >> { rw abs_of_nonneg h1,
-| ⊢ -x ≤ x
-|   >>   apply neg_le_self h1 },
-h2 : 0 > x
-⊢ -x ≤ abs x
-  >> { rw abs_of_neg h2 },
-no goals
--/
-
--- Comentario: Los lemas utilizados son
--- + le_or_gt x y : x ≤ y ∨ x > y
--- + abs_of_nonneg : 0 ≤ x → abs x = x
--- + neg_le_self : 0 ≤ x → -x ≤ x
--- + abs_of_neg : x < 0 → abs x = -x
-
--- Comprobación
--- #check (@le_or_gt ℝ _ x y)
--- #check (@abs_of_nonneg ℝ _ x)
--- #check (@neg_le_self ℝ _ x)
--- #check (@abs_of_neg ℝ _ x)
+example : -x ≤ |x| :=
+by
+  rcases (le_or_gt 0 x) with h1 | h2
+  . -- h1 : 0 ≤ x
+    show -x ≤ |x|
+    calc -x ≤ x   := by exact neg_le_self h1
+          _ = |x| := (abs_of_nonneg h1).symm
+  . -- h2 : 0 > x
+    show -x ≤ |x|
+    calc -x ≤ -x  := by exact le_refl (-x)
+          _ = |x| := (abs_of_neg h2).symm
 
 -- 2ª demostración
 -- ===============
 
-example : -x ≤ abs x :=
-begin
-  unfold abs,
-  exact le_max_right x (-x),
-end
-
--- Comentarios:
--- 1. La táctica (unfold e) despliega la definición de e.
--- 2. La definición de abs
---    + abs (a : α) : α := max a (-a)
--- 3. Se ha usado el lema
---    + le_max_right x y : y ≤ max x y
-
--- Comprobación:
--- #check (@le_max_right ℝ _ x y)
+example : -x ≤ |x| :=
+by
+  rcases (le_or_gt 0 x) with h1 | h2
+  . -- h1 : 0 ≤ x
+    rw [abs_of_nonneg h1]
+    -- ⊢ -x ≤ x
+    exact neg_le_self h1
+  . -- h2 : 0 > x
+    rw [abs_of_neg h2]
 
 -- 3ª demostración
 -- ===============
 
-example : -x ≤ abs x :=
-le_max_right x (-x)
+example : -x ≤ |x| :=
+by
+  rcases (le_or_gt 0 x) with h1 | h2
+  . -- h1 : 0 ≤ x
+    rw [abs_of_nonneg h1]
+    -- ⊢ -x ≤ x
+    linarith
+  . -- h2 : 0 > x
+    rw [abs_of_neg h2]
+
+-- 4ª demostración
+-- ===============
+
+example : -x ≤ |x| :=
+  neg_le_abs_self x
+
+-- Lemas usados
+-- ============
+
+-- #check (abs_of_neg : x < 0 → |x| = -x)
+-- #check (abs_of_nonneg : 0 ≤ x → |x| = x)
+-- #check (le_or_gt x y : x ≤ y ∨ x > y)
+-- #check (le_refl x : x ≤ x)
+-- #check (neg_le_abs_self x : -x ≤ |x|)
+-- #check (neg_le_self : 0 ≤ x → -x ≤ x)
 
 -- ---------------------------------------------------------------------
--- Ejercicio 4. Demostrar que si
---    0 ≤ a + b
---    0 ≤ a
--- entonces
---    abs (a + b) ≤ abs a + abs b
+-- Ejercicio 4. Demostrar que
+--    |x + y| ≤ |x| + |y|
 -- ----------------------------------------------------------------------
 
-open_locale classical
+-- Demostración en lenguaje natural
+-- ================================
 
-lemma aux1
-  (h1 : 0 ≤ a + b)
-  (h2 : 0 ≤ a)
-  : abs (a + b) ≤ abs a + abs b :=
-begin
-  by_cases h3 : 0 ≤ b,
-  show abs (a + b) ≤ abs a + abs b,
-    calc
-      abs (a + b) ≤ abs (a + b)   : by apply le_refl
-              ... = a + b         : by rw (abs_of_nonneg h1)
-              ... = abs a + b     : by rw (abs_of_nonneg h2)
-              ... = abs a + abs b : by rw (abs_of_nonneg h3),
-  have h4 : b ≤ 0,
-    from le_of_lt (lt_of_not_ge h3),
-  show abs (a + b) ≤ abs a + abs b,
-    calc
-      abs (a + b) = a + b         : by rw (abs_of_nonneg h1)
-              ... = abs a + b     : by rw (abs_of_nonneg h2)
-              ... ≤ abs a + 0     : add_le_add_left h4 _
-              ... ≤ abs a + -b    : add_le_add_left (neg_nonneg_of_nonpos h4) _
-              ... = abs a + abs b : by rw (abs_of_nonpos h4),
-end
+-- Se usarán los siguientes lemas
+--     (∀ x ∈ ℝ)[0 ≤ x → |x| = x)                          (L1)
+--     (∀ a, b, c, d ∈ ℝ)[a ≤ b ∧ c ≤ d → a + c ≤ b + d    (L2)
+--     (∀ x ∈ ℝ)[x ≤ |x|]                                  (L3)
+--     (∀ x ∈ ℝ)[x < 0 → |x| = -x]                         (L4)
+--     (∀ x, y ∈ ℝ)[-(x + y) = -x + -y]                    (L5)
+--     (∀ x ∈ ℝ)[-x ≤ |x|]                                 (L6)
+--
+-- Se demostrará por casos según x + y ≥ 0:
+--
+-- Primer caso: Supongamos que x + y ≥ 0. Entonces,
+--    |x + y| = x + y        [por L1]
+--          _ ≤ |x| + |y|    [por L2 y L3]
+--
+-- Segundo caso: Supongamos que x + y < 0. Entonces,
+--    |x + y| = -(x + y)     [por L4]
+--            = -x + -y      [por L5]
+--            ≤ |x| + |y|    [por L2 y L6]
 
--- Prueba
--- ======
+-- Demostraciones con Lean4
+-- ========================
 
-/-
-a b : ℝ,
-h1 : 0 ≤ a + b,
-h2 : 0 ≤ a
-⊢ abs (a + b) ≤ abs a + abs b
-  >> by_cases h3 : 0 ≤ b,
-| h3 : 0 ≤ b
-| ⊢ abs (a + b) ≤ abs a + abs b
-|   >> show abs (a + b) ≤ abs a + abs b, calc
-|   >>   abs (a + b) ≤ abs (a + b)   : by apply le_refl
-|   >>           ... = a + b         : by rw (abs_of_nonneg h1)
-|   >>           ... = abs a + b     : by rw (abs_of_nonneg h2)
-|   >>           ... = abs a + abs b : by rw (abs_of_nonneg h3),
-h3 : ¬0 ≤ b
-⊢ abs (a + b) ≤ abs a + abs b
-  >> have h4 : b ≤ 0,
-  >>   from le_of_lt (lt_of_not_ge h3),
-h4 : b ≤ 0
-⊢ abs (a + b) ≤ abs a + abs b
-  >> show abs (a + b) ≤ abs a + abs b, calc
-  >>   abs (a + b) = a + b         : by rw (abs_of_nonneg h1)
-  >>           ... = abs a + b     : by rw (abs_of_nonneg h2)
-  >>           ... ≤ abs a + 0     : add_le_add_left h4 _
-  >>           ... ≤ abs a + -b    : add_le_add_left (neg_nonneg_of_nonpos h4)
-  >>           ... = abs a + abs b : by rw (abs_of_nonpos h4),
--/
+-- 1ª demostración
+-- ===============
 
--- Comentarios:
--- 1. La táctica (by_cases h : p) aplica el principio de tercio excluso
---    sobre p; es decir, considera dos casos: en el primero le añade la
---    hipótesis (h : p) y en el segundo, (h : ¬p).
--- 2. Para aplicar la táctica by_cases hay que habilitar la lógica
---    clásica.
--- 3. Se han usado los siguientes lemas
---    + le_refl x : x ≤ x
---    + abs_of_nonneg : 0 ≤ x → abs x = x
---    + le_of_lt : x < y → x ≤ y
---    + lt_of_not_ge : ¬x ≥ y → x < y
---    + add_le_add_left : x ≤ y → ∀ (c : ℝ), c + x ≤ c + y
---    + neg_nonneg_of_nonpos : x ≤ 0 → 0 ≤ -x
---    + abs_of_nonpos : x ≤ 0 → abs x = -x
+example : |x + y| ≤ |x| + |y| := by
+  rcases le_or_gt 0 (x + y) with h1 | h2
+  · -- h1 : 0 ≤ x + y
+    show |x + y| ≤ |x| + |y|
+    calc |x + y| = x + y     := by exact abs_of_nonneg h1
+               _ ≤ |x| + |y| := add_le_add (le_abs_self x) (le_abs_self y)
+  . -- h2 : 0 > x + y
+    show |x + y| ≤ |x| + |y|
+    calc |x + y| = -(x + y)  := by exact abs_of_neg h2
+               _ = -x + -y   := by exact neg_add x y
+               _ ≤ |x| + |y| := add_le_add (neg_le_abs_self x) (neg_le_abs_self y)
 
--- Comprobación:
--- #check (@le_refl ℝ _ x)
--- #check (@abs_of_nonneg ℝ _ x)
--- #check (@le_of_lt ℝ _ x y)
--- #check (@lt_of_not_ge ℝ _ x y)
--- #check (@add_le_add_left ℝ _ x y)
--- #check (@neg_nonneg_of_nonpos ℝ _ x)
--- #check (@abs_of_nonpos ℝ _ x)
+-- 2ª demostración
+-- ===============
 
--- ---------------------------------------------------------------------
--- Ejercicio 5. Demostrar que si
---    0 ≤ a + b
--- entonces
---    abs (a + b) ≤ abs a + abs b
--- ----------------------------------------------------------------------
+example : |x + y| ≤ |x| + |y| := by
+  rcases le_or_gt 0 (x + y) with h1 | h2
+  · -- h1 : 0 ≤ x + y
+    rw [abs_of_nonneg h1]
+    -- ⊢ x + y ≤ |x| + |y|
+    exact add_le_add (le_abs_self x) (le_abs_self y)
+  . -- h2 : 0 > x + y
+    rw [abs_of_neg h2]
+    -- ⊢ -(x + y) ≤ |x| + |y|
+    calc -(x + y) = -x + -y    := by exact neg_add x y
+                _ ≤ |x| + |y|  := add_le_add (neg_le_abs_self x) (neg_le_abs_self y)
 
-lemma aux2
-  (h1 : 0 ≤ a + b)
-  : abs (a + b) ≤ abs a + abs b :=
-begin
-  by_cases h2 : 0 ≤ a,
-    exact @aux1 a b h1 h2,
-  rw add_comm at h1,
-  have h3 : 0 ≤ b,
-    linarith,
-  rw add_comm,
-  rw add_comm (abs a),
-  exact @aux1 b a h1 h3,
-end
+-- 2ª demostración
+-- ===============
 
--- ---------------------------------------------------------------------
--- Ejercicio 6. Demostrar que
---    abs (x + y) ≤ abs x + abs y
--- ----------------------------------------------------------------------
+example : |x + y| ≤ |x| + |y| := by
+  rcases le_or_gt 0 (x + y) with h1 | h2
+  · -- h1 : 0 ≤ x + y
+    rw [abs_of_nonneg h1]
+    -- ⊢ x + y ≤ |x| + |y|
+    linarith [le_abs_self x, le_abs_self y]
+  . -- h2 : 0 > x + y
+    rw [abs_of_neg h2]
+    -- ⊢ -(x + y) ≤ |x| + |y|
+    linarith [neg_le_abs_self x, neg_le_abs_self y]
 
-theorem abs_add : abs (x + y) ≤ abs x + abs y :=
-begin
-  by_cases h2 : 0 ≤ x + y,
-    { exact @aux2 x y h2 },
-  have h3 : x + y ≤ 0,
-    by exact le_of_not_ge h2,
-  have h4: -x + -y = -(x + y),
-    by rw neg_add,
-  have h5 : 0 ≤ -(x + y),
-    from neg_nonneg_of_nonpos h3,
-  have h6 : 0 ≤ -x + -y,
-    { rw [← h4] at h5,
-      exact h5 },
-  calc
-     abs (x + y) = abs (-x + -y)       : by rw [← abs_neg, neg_add]
-             ... ≤ abs (-x) + abs (-y) : aux2 h6
-             ... = abs x + abs y       : by rw [abs_neg, abs_neg],
-end
+-- 3ª demostración
+-- ===============
 
--- Prueba
--- ======
+example : |x + y| ≤ |x| + |y| :=
+  abs_add x y
 
-/-
-x y : ℝ
-⊢ abs (x + y) ≤ abs x + abs y
-  >> by_cases h2 : 0 ≤ x + y,
-| h2 : 0 ≤ x + y
-| ⊢ abs (x + y) ≤ abs x + abs y
-|   >>   { exact @aux2 x y h2 },
-h2 : ¬0 ≤ x + y
-⊢ abs (x + y) ≤ abs x + abs y
-  >> have h3 : x + y ≤ 0,
-  >>   by exact le_of_not_ge h2,
-x y : ℝ,
-h2 : ¬0 ≤ x + y,
-h3 : x + y ≤ 0
-⊢ abs (x + y) ≤ abs x + abs y
-  >> have h4: -x + -y = -(x + y),
-  >>   by rw neg_add,
-x y : ℝ,
-h2 : ¬0 ≤ x + y,
-h3 : x + y ≤ 0,
-h4 : -x + -y = -(x + y)
-⊢ abs (x + y) ≤ abs x + abs y
-  >> have h5 : 0 ≤ -(x + y),
-  >>   from neg_nonneg_of_nonpos h3,
-x y : ℝ,
-h2 : ¬0 ≤ x + y,
-h3 : x + y ≤ 0,
-h4 : -x + -y = -(x + y),
-h5 : 0 ≤ -(x + y)
-⊢ abs (x + y) ≤ abs x + abs y
-  >> have h6 : 0 ≤ -x + -y,
-  >>   { rw [← h4] at h5,
-x y : ℝ,
-h2 : ¬0 ≤ x + y,
-h3 : x + y ≤ 0,
-h4 : -x + -y = -(x + y),
-h5 : 0 ≤ -x + -y
-⊢ 0 ≤ -x + -y
-  >>     exact h5 },
-x y : ℝ,
-h2 : ¬0 ≤ x + y,
-h3 : x + y ≤ 0,
-h4 : -x + -y = -(x + y),
-h5 : 0 ≤ -(x + y),
-h6 : 0 ≤ -x + -y
-⊢ abs (x + y) ≤ abs x + abs y
-  >> calc
-  >>    abs (x + y) = abs (-x + -y)       : by rw [← abs_neg, neg_add]
-  >>            ... ≤ abs (-x) + abs (-y) : aux2 h6
-  >>            ... = abs x + abs y       : by rw [abs_neg, abs_neg],
--/
+-- Lemas usados
+-- ============
 
--- Comentario: Se han usado los lemas
--- + le_of_not_ge : ¬x ≥ y → x ≤ y
--- + neg_add x y : -(x + y) = -x + -y
--- + neg_nonneg_of_nonpos : x ≤ 0 → 0 ≤ -x
-
--- Comprobación:
--- #check (@le_of_not_ge ℝ _ x y)
--- #check (@neg_add ℝ _ x y)
--- #check (@neg_nonneg_of_nonpos ℝ _ x)
-
-end my_abs
+-- variable (c d : ℝ)
+-- #check (abs_add x y : |x + y| ≤ |x| + |y|)
+-- #check (abs_of_neg : x < 0 → |x| = -x)
+-- #check (abs_of_nonneg : 0 ≤ x → |x| = x)
+-- #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
+-- #check (le_abs_self a : a ≤ |a|)
+-- #check (le_or_gt x y : x ≤ y ∨ x > y)
+-- #check (neg_add x y : -(x + y) = -x + -y)
+-- #check (neg_le_abs_self x : -x ≤ |x|)

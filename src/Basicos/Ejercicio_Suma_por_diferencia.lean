@@ -99,39 +99,23 @@ by ring
 example : (a + b) * (a - b) = a^2 - b^2 :=
 by
   rw [sub_eq_add_neg]
+  -- ⊢ (a + b) * (a + -b) = a ^ 2 - b ^ 2
   rw [aux]
+  -- ⊢ a * a + a * -b + b * a + b * -b = a ^ 2 - b ^ 2
   rw [mul_neg]
+  -- ⊢ a * a + -(a * b) + b * a + b * -b = a ^ 2 - b ^ 2
   rw [add_assoc (a * a)]
+  -- ⊢ a * a + (-(a * b) + b * a) + b * -b = a ^ 2 - b ^ 2
   rw [mul_comm b a]
+  -- ⊢ a * a + (-(a * b) + a * b) + b * -b = a ^ 2 - b ^ 2
   rw [neg_add_self]
+  -- ⊢ a * a + 0 + b * -b = a ^ 2 - b ^ 2
   rw [add_zero]
+  -- ⊢ a * a + b * -b = a ^ 2 - b ^ 2
   rw [← pow_two]
+  -- ⊢ a ^ 2 + b * -b = a ^ 2 - b ^ 2
   rw [mul_neg]
+  -- ⊢ a ^ 2 + -(b * b) = a ^ 2 - b ^ 2
   rw [← pow_two]
+  -- ⊢ a ^ 2 + -b ^ 2 = a ^ 2 - b ^ 2
   rw [← sub_eq_add_neg]
-
-
--- El desarrollo de la demostración es
---    ⊢ (a + b) * (a - b) = a ^ 2 - b ^ 2
--- rw [sub_eq_add_neg]
---    ⊢ (a + b) * (a + -b) = a ^ 2 - b ^ 2
--- rw aux]
---    ⊢ a * a + a * -b + b * a + b * -b = a ^ 2 - b ^ 2
--- rw [mul_neg_eq_neg_mul_symm]
---    ⊢ a * a + -(a * b) + b * a + b * -b = a ^ 2 - b ^ 2
--- rw [add_assoc (a * a)]
---    ⊢ a * a + (-(a * b) + b * a) + b * -b = a ^ 2 - b ^ 2
--- rw [mul_comm b a]
---    ⊢ a * a + (-(a * b) + a * b) + b * -b = a ^ 2 - b ^ 2
--- rw [neg_add_self]
---    ⊢ a * a + 0 + b * -b = a ^ 2 - b ^ 2
--- rw [add_zero]
---    ⊢ a * a + b * -b = a ^ 2 - b ^ 2
--- rw [← pow_two]
---    ⊢ a ^ 2 + b * -b = a ^ 2 - b ^ 2
--- rw [mul_neg_eq_neg_mul_symm]
---    ⊢ a ^ 2 + -(b * b) = a ^ 2 - b ^ 2
--- rw [← pow_two]
---    ⊢ a ^ 2 + -b ^ 2 = a ^ 2 - b ^ 2
--- rw [← sub_eq_add_neg]
---    goals accomplished

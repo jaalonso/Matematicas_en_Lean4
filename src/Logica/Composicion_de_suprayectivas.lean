@@ -1,56 +1,109 @@
 -- ---------------------------------------------------------------------
--- Ejercicio . Demostrar que la composición de funciones suprayectivas
+-- Ejercicio. Demostrar que la composición de funciones suprayectivas
 -- es suprayectiva.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
 
-import tactic
+-- Supongamos que f : A → B y g : B → C son suprayectivas. Tenemos que
+-- demostrar que
+--     (∀z ∈ C)(∃x ∈ A)[g(f(x)) = z]
+-- Sea z ∈ C. Por ser g suprayectiva, existe un y ∈ B tal que
+--     g(y) = z                                                      (1)
+-- Por ser f suprayectiva, existe un x ∈ A tal que
+--     f(x) = y                                                      (2)
+-- Por tanto,
+--     g(f(x)) = g(y)   [por (2)]
+--             = z      [por (1)]
 
-open function
+-- Demostraciones con lean4
+-- ========================
 
-variables {α : Type*} {β : Type*} {γ : Type*}
-variables {f : α → β} {g : β → γ} 
+import Mathlib.Tactic
 
-example 
-  (surjg : surjective g) 
-  (surjf : surjective f) 
-  : surjective (λ x, g (f x)) :=
-begin
-  intro x,
-  cases surjg x with y hy,
-  cases surjf y with z hz,
-  use z,
-  change g (f z) = x,
-  rw hz,
-  exact hy,
-end
+open Function
 
--- La prueba es
--- 
--- α : Type u_1,
--- β : Type u_2,
--- γ : Type u_3,
--- f : α → β,
--- g : β → γ,
--- surjg : surjective g,
--- surjf : surjective f
--- ⊢ surjective (λ (x : α), g (f x))
---    >> intro x,
--- x : γ
--- ⊢ ∃ (a : α), (λ (x : α), g (f x)) a = x
---    >> cases surjg x with y hy,
--- y : β,
--- hy : g y = x
--- ⊢ ∃ (a : α), (λ (x : α), g (f x)) a = x
---    >> cases surjf y with z hz,
--- z : α,
--- hz : f z = y
--- ⊢ ∃ (a : α), (λ (x : α), g (f x)) a = x
---    >> use z,
--- ⊢ (λ (x : α), g (f x)) z = x
---    >> change g (f z) = x,
--- ⊢ g (f z) = x
---    >> rw hz,
--- ⊢ g y = x
---    >> exact hy
--- no goals
+variable {α : Type _} {β : Type _} {γ : Type _}
+variable {f : α → β} {g : β → γ}
+
+-- 1ª demostración
+-- ===============
+
+example
+  (hg : Surjective g)
+  (hf : Surjective f)
+  : Surjective (g ∘ f) :=
+by
+  intro z
+  -- z : γ
+  -- ⊢ ∃ a, (g ∘ f) a = z
+  rcases hg z with ⟨y, hy⟩
+  -- y : β
+  -- hy : g y = z
+  rcases hf y with ⟨x, hx⟩
+  -- x : α
+  -- hx : f x = y
+  use x
+  -- ⊢ (g ∘ f) x = z
+  dsimp
+  -- ⊢ g (f x) = z
+  rw [hx]
+  -- ⊢ g y = z
+  exact hy
+
+-- 2ª demostración
+-- ===============
+
+example
+  (hg : Surjective g)
+  (hf : Surjective f)
+  : Surjective (g ∘ f) :=
+by
+  intro z
+  -- z : γ
+  -- ⊢ ∃ a, (g ∘ f) a = z
+  rcases hg z with ⟨y, hy⟩
+  -- y : β
+  -- hy : g y = z
+  rcases hf y with ⟨x, hx⟩
+  -- x : α
+  -- hx : f x = y
+  use x
+  -- ⊢ (g ∘ f) x = z
+  dsimp
+  -- ⊢ g (f x) = z
+  rw [hx, hy]
+
+-- 3ª demostración
+-- ===============
+
+example
+  (hg : Surjective g)
+  (hf : Surjective f)
+  : Surjective (g ∘ f) :=
+by
+  intro z
+  -- z : γ
+  -- ⊢ ∃ a, (g ∘ f) a = z
+  rcases hg z with ⟨y, hy⟩
+  -- y : β
+  -- hy : g y = z
+  rcases hf y with ⟨x, hx⟩
+  -- x : α
+  -- hx : f x = y
+  exact ⟨x, by dsimp ; rw [hx, hy]⟩
+
+-- 4ª demostración
+-- ===============
+
+example
+  (hg : Surjective g)
+  (hf : Surjective f)
+  : Surjective (g ∘ f) :=
+Surjective.comp hg hf
+
+-- Lemas usados
+-- ============
+
+-- #check (Surjective.comp : Surjective g → Surjective f → Surjective (g ∘ f))

@@ -75,10 +75,11 @@ example
   (h : a + b = 0)
   : -a = b :=
 by
-  have h1 : -a + (a + b) = -a + 0 := congrArg (HAdd.hAdd (-a)) h
+  have h1 : -a + (a + b) = -a + 0 := congrArg (-a + .) h
   have h2 : -a + (a + b) = b := neg_add_cancel_left a b
   have h3 : -a + 0 = -a := add_zero (-a)
   rw [h2, h3] at h1
+  -- h1 : b = -a
   exact h1.symm
 
 -- ---------------------------------------------------------------------
@@ -161,40 +162,73 @@ by
 --    -0 = 0
 -- ----------------------------------------------------------------------
 
+-- Demostraciones en lenguaje natural (LN)
+-- =======================================
+
+-- 1ª demostración en LN
+-- =====================
+
+-- Por la suma con cero se tiene
+--    0 + 0 = 0
+-- Aplicándole la propiedad
+--    ∀ a b ∈ R, a + b = 0 → -a = b
+-- se obtiene
+--    -0 = 0
+
+-- 2ª demostración en LN
+-- =====================
+
+-- Puesto que
+--    ∀ a b ∈ R, a + b = 0 → -a = b
+-- basta demostrar que
+--    0 + 0 = 0
+-- que es cierta por la suma con cero.
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración (basada en la 1ª en LN)
+example : (-0 : R) = 0 :=
+by
+  have h1 : (0 : R) + 0 = 0 := add_zero 0
+  show (-0 : R) = 0
+  exact neg_eq_of_add_eq_zero h1
+
+-- 2ª demostración (basada en la 2ª en LN)
 theorem neg_zero : (-0 : R) = 0 :=
 by
   apply neg_eq_of_add_eq_zero
+  -- ⊢ 0 + 0 = 0
   rw [add_zero]
-
--- El desarrollo de la prueba es
---
---    R : Type u_1
---    inst : Ring R
---    ⊢ -0 = 0
--- apply neg_eq_of_add_eq_zero
---    ⊢ 0 + 0 = 0
--- rw [add_zero]
---    goals accomplished
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6. Demostrar que
 --     -(-a) = a
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Es consecuencia de las siguiente propiedades demostradas en
+-- ejercicios anteriores:
+--    ∀ a b ∈ R, a + b = 0 → -a = b
+--    ∀ a ∈ R, -a + a = 0
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+example : -(-a) = a :=
+by
+  have h1 : -a + a = 0 := add_left_neg a
+  show -(-a) = a
+  exact neg_eq_of_add_eq_zero h1
+
+-- 2ª demostración
 theorem neg_neg : -(-a) = a :=
 by
   apply neg_eq_of_add_eq_zero
+  -- ⊢ -a + a = 0
   rw [add_left_neg]
-
--- El desarrollo de la prueba es
---
---    R : Type u_1
---    inst : Ring R
---    a : R
---    ⊢ - -a = a
--- apply neg_eq_of_add_eq_zero
---    ⊢ -a + a = 0
--- rw [add_left_neg]
---    goals accomplished
 
 end MyRing

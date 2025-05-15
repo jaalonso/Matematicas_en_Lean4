@@ -5,49 +5,69 @@
 -- 3. Declarar a y b como variables sobre α.
 -- ----------------------------------------------------------------------
 
-import tactic
+import Mathlib.Tactic
 
-variables {α : Type*} [partial_order α]                            -- 1
-variables s : set α                                                -- 2
-variables a b : α                                                  -- 3
+variable {α : Type _} [PartialOrder α] -- 1
+variable (s : Set α)                   -- 2
+variable (a b : α)                     -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Definir la función
---    set_ub : set α → α → Prop
--- tal que (set_ub s a) afirma que a es una cota superior de s.
+--    SetUb : set α → α → Prop
+-- tal que (SetUb s a) afirma que a es una cota superior de s.
 -- ----------------------------------------------------------------------
 
-def set_ub (s : set α) (a : α) := ∀ {x}, x ∈ s → x ≤ a
+def SetUb (s : Set α) (a : α) :=
+  ∀ {x}, x ∈ s → x ≤ a
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si a es una cota superior de s y a ≤ b,
 -- entonces b es una cota superior de s.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Tenemos que demostrar que
+--    (∀ x) [x ∈ s → x ≤ b]
+-- Sea x tal que x ∈ s. Entonces,
+--    x ≤ a   [porque a es una cota superior de s]
+--      ≤ b
+-- Por tanto, x ≤ b.
+
 -- 1ª demostración
 -- ===============
 
 example
-  (h1 : set_ub s a)
+  (h1 : SetUb s a)
   (h2 : a ≤ b)
-  : set_ub s b :=
-begin
-  intro x,
-  assume xs : x ∈ s,
-  have h3 : x ≤ a := h1 xs,
-  show x ≤ b,
-    by exact le_trans h3 h2,
-end
+  : SetUb s b :=
+by
+  intro x xs
+  -- x : α
+  -- xs : x ∈ s
+  -- ⊢ x ≤ b
+  have h3 : x ≤ a := h1 xs
+  show x ≤ b
+  exact le_trans h3 h2
 
 -- 2ª demostración
 -- ===============
 
 example
-  (h1 : set_ub s a)
+  (h1 : SetUb s a)
   (h2 : a ≤ b)
-  : set_ub s b :=
-begin
-  intros x xs,
-  calc x ≤ a : h1 xs
-     ... ≤ b : h2
-end
+  : SetUb s b :=
+by
+  intro x xs
+  -- x : α
+  -- xs : x ∈ s
+  -- ⊢ x ≤ b
+  calc x ≤ a := h1 xs
+       _ ≤ b := h2
+
+-- Lemas usados
+-- ============
+
+-- variable (c : α)
+-- #check (le_trans : a ≤ b → b ≤ c → a ≤ c)

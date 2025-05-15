@@ -3,99 +3,86 @@
 --     x ⊓ y = y ⊓ x
 -- ----------------------------------------------------------------------
 
-import order.lattice
+-- Demostración en lenguaje natural
+-- ================================
 
-variables {α : Type*} [lattice α]
-variables x y z : α
+-- Es consecuencia del siguiente lema auxiliar
+--    (∀ a, b)[a ⊓ b ≤ b ⊓ a]                                         (1)
+-- En efecto, sustituyendo en (1) a por x y b por y, se tiene
+--    x ⊓ y ≤ y ⊓ x                                                   (2)
+-- y sustituyendo en (1) a por y y b por x, se tiene
+--    y ⊓ x ≤ x ⊓ y                                                   (3)
+-- Finalmente, aplicando la propiedad antisimétrica de la divisibilidad
+-- a (2) y (3), se tiene
+--    x ⊓ y = y ⊓ x
+--
+-- Para demostrar (1), por la definición del ínfimo, basta demostrar
+-- las siguientes relaciones
+--    y ⊓ x ≤ x
+--    y ⊓ x ≤ y
+-- y ambas se tienen por la definición del ínfimo.
 
--- 1ª demostración
--- ===============
+-- Demostraciones con Lean4
+-- ========================
 
-lemma aux1 : x ⊓ y ≤ y ⊓ x :=
-begin
-  have h1 : x ⊓ y ≤ y,
-    by exact inf_le_right,
-  have h2 : x ⊓ y ≤ x,
-    by exact inf_le_left,
-  show x ⊓ y ≤ y ⊓ x,
-    by exact le_inf h1 h2,
-end
+import Mathlib.Order.Lattice
+variable {α : Type _} [Lattice α]
+variable (x y z : α)
 
-example : x ⊓ y = y ⊓ x :=
-begin
-  have h1 : x ⊓ y ≤ y ⊓ x,
-    by exact aux1 x y,
-  have h2 : y ⊓ x ≤ x ⊓ y,
-    by exact aux1 y x,
-  show x ⊓ y = y ⊓ x,
-    by exact le_antisymm h1 h2,
-end
+-- 1ª demostración del lema auxiliar
+lemma aux : x ⊓ y ≤ y ⊓ x :=
+by
+  have h1 : x ⊓ y ≤ y :=
+    inf_le_right
+  have h2 : x ⊓ y ≤ x :=
+    inf_le_left
+  show x ⊓ y ≤ y ⊓ x
+  exact le_inf h1 h2
 
--- 2ª demostración
--- ===============
+-- 2ª demostración del lema auxiliar
+example : x ⊓ y ≤ y ⊓ x :=
+by
+  apply le_inf
+  . -- ⊢ x ⊓ y ≤ y
+    apply inf_le_right
+  . -- ⊢ x ⊓ y ≤ x
+    apply inf_le_left
 
-lemma aux2 : x ⊓ y ≤ y ⊓ x :=
+-- 3ª demostración del lema auxiliar
+example : x ⊓ y ≤ y ⊓ x :=
 le_inf inf_le_right inf_le_left
 
+-- 1ª demostración
 example : x ⊓ y = y ⊓ x :=
-le_antisymm (aux2 x y) (aux2 y x)
+by
+  have h1 : x ⊓ y ≤ y ⊓ x :=
+    aux x y
+  have h2 : y ⊓ x ≤ x ⊓ y :=
+    aux y x
+  show x ⊓ y = y ⊓ x
+  exact le_antisymm h1 h2
+
+-- 2ª demostración
+example : x ⊓ y = y ⊓ x :=
+by
+  apply le_antisymm
+  . -- ⊢ x ⊓ y ≤ y ⊓ x
+    apply aux
+  . -- ⊢ y ⊓ x ≤ x ⊓ y
+    apply aux
 
 -- 3ª demostración
--- ===============
-
-lemma aux3 : x ⊓ y ≤ y ⊓ x :=
-begin
-  apply le_inf,
-  apply inf_le_right,
-  apply inf_le_left,
-end
-
--- Su desarrollo es
---
--- ⊢ x ⊓ y ≤ y ⊓ x
---    apply le_inf,
--- ⊢ x ⊓ y ≤ y
--- |   apply inf_le_right,
--- ⊢ x ⊓ y ≤ y
--- |   apply inf_le_left,
--- no goals
-
 example : x ⊓ y = y ⊓ x :=
-begin
-  apply le_antisymm,
-  apply aux3,
-  apply aux3,
-end
-
--- Su desarrollo es
---
--- ⊢ x ⊓ y = y ⊓ x
---    apply le_antisymm,
--- ⊢ x ⊓ y ≤ y ⊓ x
--- |   apply aux,
--- ⊢ y ⊓ x ≤ x ⊓ y
--- |   apply aux,
--- no goals
+le_antisymm (aux x y) (aux y x)
 
 -- 4ª demostración
--- ===============
-
 example : x ⊓ y = y ⊓ x :=
-by apply le_antisymm; simp
+by apply le_antisymm; simp ; simp
 
 -- 5ª demostración
--- ===============
-
 example : x ⊓ y = y ⊓ x :=
--- by library_search
+-- by apply?
 inf_comm
-
--- 6ª demostración
--- ===============
-
-example : x ⊓ y = y ⊓ x :=
--- by hint
-by finish
 
 -- Lemas usados
 -- ============

@@ -3,9 +3,10 @@
 --     abs_add
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
 
--- #check abs_add
+#check abs_add
 
--- Comentario: Colando el cursor sobre check se obtiene
---    abs_add : ∀ (a b : ?M_1), abs (a + b) ≤ abs a + abs b
+-- Comentario: Colocando el cursor sobre check se obtiene
+--    abs_add.{u_1} {α : Type u_1} [inst : LinearOrderedAddCommGroup α]
+--      (a b : α) : |a + b| ≤ |a| + |b|

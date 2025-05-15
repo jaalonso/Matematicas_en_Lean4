@@ -5,9 +5,9 @@
 --    3. x, y y z como variables sobre α.
 -- ----------------------------------------------------------------------
 
-import order.lattice                -- 1
-variables {α : Type*} [lattice α]   -- 2
-variables x y z : α                 -- 3
+import Mathlib.Order.Lattice       -- 1
+variable {α : Type _} [Lattice α]  -- 2
+variable (x y z : α)               -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Calcular el tipo de las siguientes expresiones
@@ -22,22 +22,21 @@ variables x y z : α                 -- 3
 --    @sup_le α _ x y z
 -- ----------------------------------------------------------------------
 
--- #check x ⊓ y
--- #check @inf_le_left α _ x y
--- #check @inf_le_right α _ x y
--- #check @le_inf α _ z x y
---
--- #check x ⊔ y
--- #check @le_sup_left α _ x y
--- #check @le_sup_right α _ x y
--- #check @sup_le α _ x y z
+#check (x ⊓ y : α)
+#check (inf_le_left : x ⊓ y ≤ x)
+#check (inf_le_right : x ⊓ y ≤ y)
+#check (le_inf : z ≤ x → z ≤ y → z ≤ x ⊓ y)
+#check (x ⊔ y : α)
+#check (le_sup_left : x ≤ x ⊔ y)
+#check (le_sup_right : y ≤ x ⊔ y)
+#check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)
 
 -- Comentarios:
 -- 1. Para ver cómo se escribe un símbolo, se coloca el cursor sobre el
 --    símbolo y se presiona C-c C-k
 -- 2. El ínfimo ⊓ se escribe con \glb de "greatest lower bound"
 -- 3. El supremo ⊔ se escribe con \lub de "least upper bound"
--- 4. En mathlib se unsa inf o sup para los nombres sobre ínfimo o supremo.
+-- 4. En mathlib se usa inf o sup para los nombres sobre ínfimo o supremo.
 -- 5. Al colocar el cursor sobre check se obtiene
 --       x ⊓ y : α
 --       inf_le_left : x ⊓ y ≤ x

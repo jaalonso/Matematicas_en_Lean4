@@ -5,9 +5,9 @@
 --    3. x, y y z como variables sobre α.
 -- ----------------------------------------------------------------------
 
-import order.lattice                        -- 1
-variables {α : Type*} [distrib_lattice α]   -- 2
-variables x y z : α                         -- 3
+import Mathlib.Order.Lattice               -- 1
+variable {α : Type _} [DistribLattice α]   -- 2
+variable (x y z : α)                       -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Calcular el tipo de las siguientes expresiones
@@ -17,10 +17,10 @@ variables x y z : α                         -- 3
 --    @sup_inf_right α _ x y z
 -- ----------------------------------------------------------------------
 
--- #check @inf_sup_left α _ x y z
--- #check @inf_sup_right α _ x y z
--- #check @sup_inf_left α _ x y z
--- #check @sup_inf_right α _ x y z
+#check @inf_sup_left α _ x y z
+#check @inf_sup_right α _ x y z
+#check @sup_inf_left α _ x y z
+#check @sup_inf_right α _ x y z
 
 -- Comentario: Al situar el cursor sobre check se obtiene
 --    inf_sup_left  : x ⊓ (y ⊔ z) = (x ⊓ y) ⊔ (x ⊓ z)

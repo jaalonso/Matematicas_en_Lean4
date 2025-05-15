@@ -3,64 +3,75 @@
 -- entonces c * f es monótona.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-variables (f : ℝ → ℝ)
-variable  {c : ℝ}
+-- Se usará el Lema
+--    mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c
+--
+-- Tenemos que demostrar que
+--    (∀ a, b ∈ ℝ) [a ≤ b → (cf)(a) ≤ (cf)(b)]
+-- Sean a, b ∈ ℝ tales que a ≤ b. Puesto que f es monótona, se tiene
+--    f(a) ≤ f(b).
+-- y, junto con la hipótesis de que c es no negativo, usando el lema
+-- mul_le_mul_of_nonneg_left, se tiene que
+--    cf(a) ≤ cf(b)
+-- que es lo que había que demostrar.
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+
+variable (f : ℝ → ℝ)
+variable {c : ℝ}
 
 -- 1ª demostración
 -- ===============
 
 example
-  (mf : monotone f)
+  (mf : Monotone f)
   (nnc : 0 ≤ c)
-  : monotone (λ x, c * f x) :=
-begin
-  have h1 : ∀ a b, a ≤ b → (λ x, c * f x) a ≤ (λ x, c * f x) b,
-    { intros a b hab,
-      have h2 : f a ≤ f b := mf hab,
-      have h3 : c * f a ≤ c * f b := mul_le_mul_of_nonneg_left h2 nnc,
-      show (λ x, c * f x) a ≤ (λ x, c * f x) b,
-        by exact h3, },
-  show monotone (λ x, c * f x),
-    by exact h1,
-end
+  : Monotone (fun x ↦ c * f x) :=
+by
+  have h1 : ∀ a b, a ≤ b → (fun x ↦ c * f x) a ≤ (fun x ↦ c * f x) b := by
+    intros a b hab
+    -- a b : ℝ
+    -- hab : a ≤ b
+    -- ⊢ (fun x => c * f x) a ≤ (fun x => c * f x) b
+    have h2 : f a ≤ f b := mf hab
+    show (fun x ↦ c * f x) a ≤ (fun x ↦ c * f x) b
+    exact mul_le_mul_of_nonneg_left h2 nnc
+  show Monotone (fun x ↦ c * f x)
+  exact h1
 
 -- 2ª demostración
 -- ===============
 
 example
-  (mf : monotone f)
+  (mf : Monotone f)
   (nnc : 0 ≤ c)
-  : monotone (λ x, c * f x) :=
-begin
-  intros a b hab,
-  apply mul_le_mul_of_nonneg_left,
-  apply mf hab,
-  apply nnc
-end
-
--- Su desarrollo es
---
--- f : ℝ → ℝ,
--- c : ℝ,
--- mf : monotone f,
--- nnc : 0 ≤ c
--- ⊢ monotone (λ (x : ℝ), c * f x)
---    >> intros a b hab,
--- a b : ℝ,
--- hab : a ≤ b
--- ⊢ (λ (x : ℝ), c * f x) a ≤ (λ (x : ℝ), c * f x) b
---    >> apply mul_le_mul_of_nonneg_left,
--- | ⊢ f a ≤ f b
--- |    >> apply mf hab,
--- | ⊢ 0 ≤ c
--- |    >> apply nnc
--- no goals
+  : Monotone (fun x ↦ c * f x) :=
+by
+  intros a b hab
+    -- a b : ℝ
+    -- hab : a ≤ b
+    -- ⊢ (fun x => c * f x) a ≤ (fun x => c * f x) b
+  apply mul_le_mul_of_nonneg_left
+  . -- ⊢ f a ≤ f b
+    apply mf hab
+  . -- ⊢ 0 ≤ c
+    apply nnc
 
 -- 3ª demostración
 -- ===============
 
-example (mf : monotone f) (nnc : 0 ≤ c) :
-  monotone (λ x, c * f x) :=
-λ a b hab, mul_le_mul_of_nonneg_left (mf hab) nnc
+example (mf : Monotone f) (nnc : 0 ≤ c) :
+  Monotone (fun x ↦ c * f x) :=
+λ _ _ hab ↦ mul_le_mul_of_nonneg_left (mf hab) nnc
+
+-- Lemas usados
+-- ============
+
+-- variable (a b : ℝ)
+-- #check (mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c)

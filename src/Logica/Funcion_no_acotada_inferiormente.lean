@@ -1,51 +1,64 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que si f es una función de ℝ en ℝ tal que 
+-- Ejercicio. Demostrar que si f es una función de ℝ en ℝ tal que
 -- para cada a, existe un x tal que f x < a, entonces f no tiene cota
--- inferior.  
+-- inferior.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-def fn_ub (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
-def fn_lb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, a ≤ f x
+-- Supongamos que f tiene cota inferior. Sea b una de dichas cotas
+-- inferiores. Por la hipótesis, existe un x tal que f(x) < b. Además,
+-- como b es una cota inferior de f, b ≤ f(x) que contradice la
+-- desigualdad anterior.
 
-def fn_has_ub (f : ℝ → ℝ) := ∃ a, fn_ub f a
-def fn_has_lb (f : ℝ → ℝ) := ∃ a, fn_lb f a
+-- Demostraciones con Lean4
+-- ========================
 
-variable f : ℝ → ℝ
+import Mathlib.Data.Real.Basic
 
-example 
-  (h : ∀ a, ∃ x, f x < a) 
-  : ¬ fn_has_lb f :=
-begin
-  intros fnlb,
-  cases fnlb with a fnlba,
-  cases h a with x hx,
-  have : a ≤ f x,
-    from fnlba x,
-  linarith,
-end
+def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop :=
+  ∀ x, a ≤ f x
 
--- Prueba
--- ------
+def FnHasLb (f : ℝ → ℝ) : Prop :=
+  ∃ a, FnLb f a
 
--- f : ℝ → ℝ,
--- h : ∀ (a : ℝ), ∃ (x : ℝ), f x < a
--- ⊢ ¬fn_has_lb f
---    >> intros fnlb,
--- fnlb : fn_has_lb f
--- ⊢ false
---    >> cases fnlb with a fnlba,
--- a : ℝ,
--- fnlba : fn_lb f a
--- ⊢ false
---    >> cases h a with x hx,
--- x : ℝ,
--- hx : f x < a
--- ⊢ false
---    >> have : a ≤ f x,
---    >>   from fnlba x,
--- this : a ≤ f x
--- ⊢ false
---    >> linarith,
--- no goals
+variable (f : ℝ → ℝ)
+
+-- 1ª demostración
+-- ===============
+
+example
+  (h : ∀ a, ∃ x, f x < a)
+  : ¬ FnHasLb f :=
+by
+  intros hf
+  -- hf : FnHasLb f
+  -- ⊢ False
+  obtain ⟨b, hb⟩ := hf
+  -- b : ℝ
+  -- hb : FnLb f b
+  obtain ⟨x, hx⟩ := h b
+  -- x : ℝ
+  -- hx : f x < b
+  have : b ≤ f x := hb x
+  linarith
+
+-- 2ª demostración
+-- ===============
+
+example
+  (h : ∀ a, ∃ x, f x < a)
+  : ¬ FnHasLb f :=
+by
+  intros hf
+  -- hf : FnHasLb f
+  -- ⊢ False
+  rcases hf with ⟨b, hb⟩
+  -- b : ℝ
+  -- hb : FnLb f b
+  rcases h b with ⟨x, hx⟩
+  -- x : ℝ
+  -- hx : f x < b
+  have : b ≤ f x := hb x
+  linarith

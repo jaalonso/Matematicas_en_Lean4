@@ -6,13 +6,13 @@
 --    lcm_zero_left
 -- ----------------------------------------------------------------------
 
-import data.nat.gcd
+import Mathlib.Data.Real.Basic
 
-open nat
+open Nat
 
-variables n : ℕ
+variable (n : ℕ)
 
--- #check (gcd_zero_right n : gcd n 0 = n)
--- #check (gcd_zero_left n  : gcd 0 n = n)
--- #check (lcm_zero_right n : lcm n 0 = 0)
--- #check (lcm_zero_left n  : lcm 0 n = 0)
+#check (gcd_zero_right n : gcd n 0 = n)
+#check (gcd_zero_left n  : gcd 0 n = n)
+#check (lcm_zero_right n : lcm n 0 = 0)
+#check (lcm_zero_left n  : lcm 0 n = 0)

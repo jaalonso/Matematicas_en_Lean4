@@ -5,9 +5,9 @@
 -- 3. Declarar x, y y z como variables sobre X.
 -- ----------------------------------------------------------------------
 
-import topology.metric_space.basic       -- 1
-variables {X : Type*} [metric_space X]   -- 2
-variables x y z : X                      -- 3
+import Mathlib.Topology.MetricSpace.Basic
+variable {X : Type _} [MetricSpace X]
+variable (x y z : X)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Calcular el tipo de las siguientes expresiones
@@ -16,11 +16,6 @@ variables x y z : X                      -- 3
 --    dist_triangle x y z
 -- ----------------------------------------------------------------------
 
--- #check dist_self x
--- #check dist_comm x y
--- #check dist_triangle x y z
-
--- Comentario: Al colocar el cursor sobre check se obtiene
---    dist_self x : dist x x = 0
---    dist_comm x y : dist x y = dist y x
---    dist_triangle x y z : dist x z ≤ dist x y + dist y z
+#check (dist_self x : dist x x = 0)
+#check (dist_comm x y : dist x y = dist y x)
+#check (dist_triangle x y z : dist x z ≤ dist x y + dist y z)

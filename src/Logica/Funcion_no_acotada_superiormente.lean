@@ -1,50 +1,43 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que si f es una función de ℝ en ℝ tal que 
+-- Ejercicio. Demostrar que si f es una función de ℝ en ℝ tal que
 -- para cada a, existe un x tal que f x > a, entonces f no tiene cota
--- superior.  
+-- superior.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-def fn_ub (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
+-- Supongamos que f tiene cota superior. Sea b una de dichas cotas
+-- superiores. Por la hipótesis, existe un x tal que f(x) > b. Además,
+-- como b es una cota superior de f, f(x) ≤ b que contradice la
+-- desigualdad anterior.
 
-def fn_has_ub (f : ℝ → ℝ) := ∃ a, fn_ub f a
+-- Demostraciones con Lean4
+-- ========================
 
-variable f : ℝ → ℝ
+import Mathlib.Data.Real.Basic
 
-lemma no_has_ub 
-  (h : ∀ a, ∃ x, f x > a) 
-  : ¬ fn_has_ub f :=
-begin
-  intros fnub,
-  cases fnub with a fnuba,
-  cases h a with x hx,
-  have : f x ≤ a,
-    from fnuba x,
-  linarith,
-end
+def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
 
--- Prueba
--- ------
+def FnHasUb (f : ℝ → ℝ) := ∃ a, FnUb f a
 
--- f : ℝ → ℝ,
--- h : ∀ (a : ℝ), ∃ (x : ℝ), f x > a
--- ⊢ ¬fn_has_ub f
---    >> intros fnub,
--- fnub : fn_has_ub f
--- ⊢ false
---    >> cases fnub with a fnuba,
--- a : ℝ,
--- fnuba : fn_ub f a
--- ⊢ false
---    >> cases h a with x hx,
--- x : ℝ,
--- hx : f x > a
--- ⊢ false
---    >> have : f x ≤ a,
---    >>   from fnuba x,
--- this : f x ≤ a
--- ⊢ false
---    >> linarith,
--- no goals
+variable (f : ℝ → ℝ)
 
+-- 1ª demostración
+-- ===============
+
+theorem sinCotaSup
+  (h : ∀ a, ∃ x, f x > a)
+  : ¬ FnHasUb f :=
+by
+  intros hf
+  -- hf : FnHasUb f
+  -- ⊢ False
+  rcases hf with ⟨b, hb⟩
+  -- b : ℝ
+  -- hb : FnUb f b
+  rcases h b with ⟨x, hx⟩
+  -- x : ℝ
+  -- hx : f x > b
+  have : f x ≤ b := hb x
+  linarith

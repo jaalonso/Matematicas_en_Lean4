@@ -55,4 +55,5 @@ example
   : c = 2 * a * d :=
 by
   rw [h1, h2]
+  -- ⊢ d * a + a * d = 2 * a * d
   ring

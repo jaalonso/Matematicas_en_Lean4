@@ -1,36 +1,31 @@
 -- ---------------------------------------------------------------------
--- Ejercicio . Demostrar que si f es una función suprayectiva de ℝ en ℝ,
--- entonces existe un x tal que (f x)^2 = 4.
+-- Ejercicio. Demostrar que si f es una función suprayectiva de ℝ en ℝ,
+-- entonces existe un x tal que (f x)^2 = 9.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-open function
+-- Al ser f suprayectiva, existe un y tal que f(y) = 3. Por tanto,
+-- f(y)² = 9.
 
-example 
-  {f : ℝ → ℝ} 
-  (h : surjective f) 
-  : ∃ x, (f x)^2 = 4 :=
-begin
-  cases h 2 with x hx,
-  use x,
-  rw hx,
-  norm_num,
-end
+-- Demostración con Lean9
+-- ======================
 
--- La prueba es
--- 
--- f : ℝ → ℝ,
--- h : surjective f
--- ⊢ ∃ (x : ℝ), f x ^ 2 = 4
---    >> cases h 2 with x hx,
--- x : ℝ,
--- hx : f x = 2
--- ⊢ ∃ (x : ℝ), f x ^ 2 = 4
---    >> use x,
--- ⊢ f x ^ 2 = 4
---    >> rw hx,
--- ⊢ 2 ^ 2 = 4
---    >> norm_num,
--- no goals
+import Mathlib.Data.Real.Basic
 
+open Function
+
+example
+  {f : ℝ → ℝ}
+  (h : Surjective f)
+  : ∃ x, (f x)^2 = 9 :=
+by
+  rcases h 3 with ⟨y, hy⟩
+  -- y : ℝ
+  -- hy : f y = 3
+  use y
+  -- ⊢ (f y) ^ 2 = 9
+  rw [hy]
+  -- ⊢ 3 ^ 2 = 9
+  norm_num

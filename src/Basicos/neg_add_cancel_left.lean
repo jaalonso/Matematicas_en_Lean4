@@ -45,20 +45,12 @@ calc -a + (a + b) = (-a + a) + b := by rw [← add_assoc]
 theorem neg_add_cancel_left
   (a b : R)
   : -a + (a + b) = b :=
-by rw [←add_assoc, add_left_neg, zero_add]
-
--- El desarrollo de la prueba es
---
---    R : Type u_1,
---    _inst_1 : ring R,
---    a b : R
---    ⊢ -a + (a + b) = b
--- rw ← add_assoc,
---    ⊢ -a + a + b = b
--- rw add_left_neg,
---    ⊢ 0 + b = b
--- rw zero_add,
---    no goals
+by
+  rw [←add_assoc]
+  -- ⊢ (-a + a) + b = b
+  rw [add_left_neg]
+  -- ⊢ 0 + b = b
+  rw [zero_add]
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6. Cerrar el espacio de nombre MyRing.

@@ -2,26 +2,26 @@
 -- Ejercicio 1. Importar la librería de los números reales.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Enunciar, usando variables implícitas, el lema ej: "para
 -- todos los números reales x, y, ε si
 --    0 < ε
 --    ε ≤ 1
---    abs x < ε
---    abs y < ε
+--    |x| < ε
+--    |y| < ε
 -- entonces
---    abs (x * y) < ε
+--    |x * y| < ε
 -- ----------------------------------------------------------------------
 
 lemma ej :
   ∀ {x y ε : ℝ},
   0 < ε →
   ε ≤ 1 →
-  abs x < ε →
-  abs y < ε →
-  abs (x * y) < ε :=
+  |x| < ε →
+  |y| < ε →
+  |x * y| < ε :=
 sorry
 
 -- ---------------------------------------------------------------------
@@ -37,13 +37,10 @@ sorry
 
 section
 
-variables a b δ : ℝ
-variables (h₀ : 0 < δ) (h₁ : δ ≤ 1)
-variables (ha : abs a < δ) (hb : abs b < δ)
+variable (a b δ : ℝ)
+variable (h₀ : 0 < δ) (h₁ : δ ≤ 1)
+variable (ha : abs a < δ) (hb : abs b < δ)
 
--- #check ej h₀ h₁ ha hb
-
--- Comentario: Al colocar el cursor sobre check se obtiene
---    ej h₀ h₁ ha hb : abs (a * b) < δ
+#check (ej h₀ h₁ ha hb : |a * b| < δ)
 
 end

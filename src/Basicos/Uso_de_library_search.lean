@@ -3,17 +3,16 @@
 --    0 ≤ a^2
 -- ----------------------------------------------------------------------
 
-import data.real.basic
-import tactic
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 example (a : ℝ) : 0 ≤ a^2 :=
-begin
-  -- library_search,
-  exact pow_two_nonneg a,
-end
+by
+  -- apply?
+  exact sq_nonneg a
 
 -- Notas:
--- + Nota 1: Al colocar el cursor sobre library_search (después de descomentar
+-- + Nota 1: Al colocar el cursor sobre apply? (después de descomentar
 --   la línea) escribe el mensaje
---      Try this: exact pow_two_nonneg a
--- + Nota 2: Para usar library_search hay que importar tactic.
+--      Try this: exact sq_nonneg a
+-- + Nota 2: Para usar apply? hay que importar Mathlib.Tactic.

@@ -52,10 +52,23 @@ by
 example : a * 0 = 0 :=
 by
   have h : a * 0 + a * 0 = a * 0 + 0 :=
-    by rw [← mul_add, add_zero, add_zero]
+    by rw [← mul_add]
+       -- ⊢ a * (0 + 0) = a * 0 + 0
+       rw [add_zero]
+       -- ⊢ a * 0 = a * 0 + 0
+       rw [add_zero]
   rw [add_left_cancel h]
 
 -- 4ª demostración
+-- ===============
+
+example : a * 0 = 0 :=
+by
+  have h : a * 0 + a * 0 = a * 0 + 0 :=
+    by rw [← mul_add, add_zero, add_zero]
+  rw [add_left_cancel h]
+
+-- 5ª demostración
 -- ===============
 
 example : a * 0 = 0 :=

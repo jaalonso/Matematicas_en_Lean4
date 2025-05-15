@@ -3,107 +3,78 @@
 --    gcd m n = gcd n m
 -- ----------------------------------------------------------------------
 
-import data.nat.gcd
+-- Demostración en lenguaje natural
+-- ================================
 
-open nat
+-- Es consecuencia del siguiente lema auxiliar
+--    (∀ x, y ∈ ℕ)[gcd(x,y) ∣ gcd(y,x)]                               (1)
+-- En efecto, sustituyendo en (1) x por m e y por n, se tiene
+--    gcd(m, n) ∣ gcd(n, m)                                           (2)
+-- y sustituyendo en (1) x por n e y por m, se tiene
+--    gcd(n, m) ∣ gcd(m, n)                                           (3)
+-- Finalmente, aplicando la propiedad antisimétrica de la divisibilidad
+-- a (2) y (3), se tiene
+--    gcd(m, n) = gcd(n, m)
+--
+-- Para demostrar (1), por la definición del máximo común divisor, basta
+-- demostrar las siguientes relaciones
+--    gcd m n ∣ n
+--    gcd m n ∣ m
+-- y ambas se tienen por la definición del máximo común divisor.
 
-variables k m n : ℕ
+-- Demostraciones con Lean4
+-- ========================
 
--- 1ª demostración
--- ===============
+import Mathlib.Data.Real.Basic
+variable (k m n : ℕ)
 
-example : gcd m n = gcd n m :=
-begin
-  have h1 : gcd m n ∣ gcd n m,
-    { have h1a : gcd m n ∣ n,
-        by exact gcd_dvd_right m n,
-      have h1b : gcd m n ∣ m,
-        by exact gcd_dvd_left m n,
-      show gcd m n ∣ gcd n m,
-        by exact dvd_gcd h1a h1b, },
-  have h2 : gcd n m ∣ gcd m n,
-    { have h2a : gcd n m ∣ m,
-        by exact gcd_dvd_right n m,
-      have h2b : gcd n m ∣ n,
-        by exact gcd_dvd_left n m,
-      show gcd n m ∣ gcd m n,
-        by exact dvd_gcd h2a h2b, },
-  show gcd m n = gcd n m,
-    by exact dvd_antisymm h1 h2,
-end
+open Nat
 
--- 2ª demostración
--- ===============
-
-example : gcd m n = gcd n m :=
-begin
-  apply dvd_antisymm,
-  { apply dvd_gcd,
-    { exact gcd_dvd_right m n, },
-    { exact gcd_dvd_left m n, }},
-  { apply dvd_gcd,
-    { exact gcd_dvd_right n m, },
-    { exact gcd_dvd_left n m, }},
-end
-
--- 3ª demostración
--- ===============
-
-example : gcd m n = gcd n m :=
-begin
-  apply dvd_antisymm,
-  { apply dvd_gcd (gcd_dvd_right m n) (gcd_dvd_left m n)},
-  { apply dvd_gcd (gcd_dvd_right n m) (gcd_dvd_left n m)},
-end
-
--- 4ª demostración
--- ===============
-
-example : gcd m n = gcd n m :=
-dvd_antisymm
-  (dvd_gcd (gcd_dvd_right m n) (gcd_dvd_left m n))
-  (dvd_gcd (gcd_dvd_right n m) (gcd_dvd_left n m))
-
--- 5ª demostración
--- ===============
-
+-- 1ª demostración del lema auxiliar
 lemma aux : gcd m n ∣ gcd n m :=
-begin
-  have h1 : gcd m n ∣ n,
-    by exact gcd_dvd_right m n,
-  have h2 : gcd m n ∣ m,
-    by exact gcd_dvd_left m n,
-  show gcd m n ∣ gcd n m,
-    by exact dvd_gcd h1 h2,
-end
+by
+  have h1 : gcd m n ∣ n :=
+    gcd_dvd_right m n
+  have h2 : gcd m n ∣ m :=
+    gcd_dvd_left m n
+  show gcd m n ∣ gcd n m
+  exact dvd_gcd h1 h2
 
-example : gcd m n = gcd n m :=
-begin
-  apply dvd_antisymm,
-  { exact aux m n, },
-  { exact aux n m, },
-end
-
--- 6ª demostración
--- ===============
-
-lemma aux2 : gcd m n ∣ gcd n m :=
+-- 2ª demostración del lema auxiliar
+example : gcd m n ∣ gcd n m :=
 dvd_gcd (gcd_dvd_right m n) (gcd_dvd_left m n)
 
+-- 1ª demostración
 example : gcd m n = gcd n m :=
-dvd_antisymm (aux2 m n) (aux2 n m)
+by
+  have h1 : gcd m n ∣ gcd n m := aux m n
+  have h2 : gcd n m ∣ gcd m n := aux n m
+  show gcd m n = gcd n m
+  exact _root_.dvd_antisymm h1 h2
 
--- 7ª demostración
--- ===============
-
+-- 2ª demostración
 example : gcd m n = gcd n m :=
--- by library_search
+by
+  apply _root_.dvd_antisymm
+  . -- ⊢ gcd m n ∣ gcd n m
+    exact aux m n
+  . -- ⊢ gcd n m ∣ gcd m n
+    exact aux n m
+
+-- 3ª demostración
+example : gcd m n = gcd n m :=
+_root_.dvd_antisymm (aux m n) (aux n m)
+
+-- 4ª demostración
+example : gcd m n = gcd n m :=
+-- by apply?
 gcd_comm m n
 
 -- Lemas usados
 -- ============
 
--- #check (dvd_antisymm : m ∣ n → n ∣ m → m = n)
+-- #check (_root_.dvd_antisymm : m ∣ n → n ∣ m → m = n)
 -- #check (dvd_gcd : k ∣ m → k ∣ n → k ∣ gcd m n)
--- #check (gcd_dvd_left : ∀ (m n : ℕ), gcd m n ∣ m)
--- #check (gcd_dvd_right : ∀ (m n : ℕ), gcd m n ∣ n)
+-- #check (gcd_comm m n : gcd m n = gcd n m)
+-- #check (gcd_dvd_left  m n: gcd m n ∣ m)
+-- #check (gcd_dvd_right m n : gcd m n ∣ n)

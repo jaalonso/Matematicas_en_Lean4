@@ -39,22 +39,10 @@ example
   : (c * b) * a = b * (a * c) :=
 by
   rw [mul_comm c b]
+  -- ⊢ (b * c) * a = b * (a * c)
   rw [mul_assoc]
+  -- ⊢ b * (c * a) = b * (a * c)
   rw [mul_comm c a]
-
--- Desarrollo de la prueba:
--- -----------------------
-
---    a b c : ℝ
---    ⊢ (c * b) * a = b * (a * c)
--- rw [mul_comm c b]
---    a b c : ℝ
---    ⊢ (b * c) * a = b * (a * c)
--- rw [mul_assoc]
---    a b c : ℝ
---    ⊢ b * (c * a) = b * (a * c)
--- rw [mul_comm c a]
---    goals accomplished
 
 -- 3ª demostración
 -- ===============

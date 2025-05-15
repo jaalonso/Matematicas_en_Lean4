@@ -1,81 +1,76 @@
 -- ---------------------------------------------------------------------
 -- Ejercicio. Sea x un número real tal que para todo número positivo ε,
--- x ≤ ε Demostrar que x ≤ 0.
+-- x ≤ ε. Demostrar que x ≤ 0.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
 
-import data.real.basic
+-- Basta demostrar que x ≯ 0. Para ello, supongamos que x > 0 y vamos a
+-- demostrar que
+--    ¬(∀ε)[ε > 0 → x ≤ ε]                                       (1)
+-- que es una contradicción con la hipótesis. Interiorizando la
+-- negación, (1) es equivalente a
+--    (∃ε)[ε > 0 ∧ ε < x]                                        (2)
+-- Para demostrar (2) se puede elegir ε = x/2 ya que, como x > 0, se
+-- tiene
+--    0 < x/2 < x.
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+
+variable (x : ℝ)
 
 -- 1ª demostración
 -- ===============
 
-example 
-  (x : ℝ) 
-  (h : ∀ ε > 0, x ≤ ε) 
+example
+  (h : ∀ ε > 0, x ≤ ε)
   : x ≤ 0 :=
-begin
-  apply le_of_not_gt,
-  intro hx0,
-  specialize h (x/2),
-  have h1 : x ≤ x / 2,
-    { apply h,
-      apply half_pos hx0},
-  have : x / 2 < x,
-    { apply half_lt_self hx0 },
-  linarith,
-end
-
--- Prueba
--- ======
-
--- x : ℝ,
--- h : ∀ (ε : ℝ), ε > 0 → x ≤ ε
--- ⊢ x ≤ 0
---    >> apply le_of_not_gt,
--- ⊢ ¬x > 0
---    >> intro hx0,
--- hx0 : x > 0
--- ⊢ false
---    >> specialize h (x/2),
--- h : x / 2 > 0 → x ≤ x / 2
--- ⊢ false
---    >> have h1 : x ≤ x / 2,
---    >>   { apply h,
--- ⊢ x / 2 > 0
---    >>     apply half_pos hx0},
--- h1 : x ≤ x / 2
--- ⊢ false
---    >> have : x / 2 < x,
---    >>   { apply half_lt_self hx0 },
--- this : x / 2 < x
--- ⊢ false
---    >> linarith,
--- no goals
+by
+  apply le_of_not_gt
+  -- ⊢ ¬x > 0
+  intro hx0
+  -- hx0 : x > 0
+  -- ⊢ False
+  apply absurd h
+  -- ⊢ ¬∀ (ε : ℝ), ε > 0 → x ≤ ε
+  push_neg
+  -- ⊢ ∃ ε, ε > 0 ∧ ε < x
+  use x /2
+  -- ⊢ x / 2 > 0 ∧ x / 2 < x
+  constructor
+  . -- ⊢ x / 2 > 0
+    exact half_pos hx0
+  . -- ⊢ x / 2 < x
+    exact half_lt_self hx0
 
 -- 2ª demostración
 -- ===============
 
-example 
-  (x : ℝ) 
-  (h : ∀ ε > 0, x ≤ ε) 
+example
+  (x : ℝ)
+  (h : ∀ ε > 0, x ≤ ε)
   : x ≤ 0 :=
-begin
-  contrapose! h,
-  use x / 2,
-  split; linarith,
-end
+by
+  contrapose! h
+  -- ⊢ ∃ ε, ε > 0 ∧ ε < x
+  use x / 2
+  -- ⊢ x / 2 > 0 ∧ x / 2 < x
+  constructor
+  . -- ⊢ x / 2 > 0
+    exact half_pos h
+  . -- ⊢ x / 2 < x
+    exact half_lt_self h
 
--- Prueba
--- ======
+-- Lemas usados
+-- ============
 
--- x : ℝ,
--- h : ∀ (ε : ℝ), ε > 0 → x ≤ ε
--- ⊢ x ≤ 0
---    >> contrapose! h,
--- h : 0 < x
--- ⊢ ∃ (ε : ℝ), ε > 0 ∧ ε < x
---    >> use x / 2,
--- ⊢ x / 2 > 0 ∧ x / 2 < x
---    >> split; linarith
--- no goals
-
+-- variable (a b : ℝ)
+-- variable (p q : Prop)
+-- #check (le_of_not_gt : ¬a > b → a ≤ b)
+-- #check (half_lt_self : 0 < a → a / 2 < a)
+-- #check (half_pos : 0 < a → 0 < a / 2)
+-- #check (absurd : p → ¬p → q)

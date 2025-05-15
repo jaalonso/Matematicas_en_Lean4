@@ -10,9 +10,9 @@
 -- ----------------------------------------------------------------------
 
 
-import data.real.basic
+import Mathlib.Data.Real.Basic
 
-variables a b c d e : ℝ
+variable (a b c d e : ℝ)
 
 -- 1ª demostración
 -- ===============
@@ -23,29 +23,14 @@ example
   (h₂ : c ≤ d)
   (h₃ : d < e) :
   a < e :=
-begin
-  apply lt_of_le_of_lt h₀,
-  apply lt_trans h₁,
-  apply lt_of_le_of_lt h₂,
-  exact h₃,
-end
-
--- El desarrollo de la prueba es
---
---    a b c d e : ℝ,
---    h₀ : a ≤ b,
---    h₁ : b < c,
---    h₂ : c ≤ d,
---    h₃ : d < e
---    ⊢ a < e
--- apply lt_of_le_of_lt h₀,
---    ⊢ b < e
--- apply lt_trans h₁,
---    ⊢ c < e
--- apply lt_of_le_of_lt h₂,
---    ⊢ d < e
--- exact h₃,
---    no goals
+by
+  apply lt_of_le_of_lt h₀
+  -- ⊢ b < e
+  apply lt_trans h₁
+  -- ⊢ c < e
+  apply lt_of_le_of_lt h₂
+  -- ⊢ d < e
+  exact h₃
 
 -- 2ª demostración
 -- ===============
@@ -57,10 +42,10 @@ example
   (h₃ : d < e) :
   a < e :=
 calc
-  a ≤ b   : h₀
-  ... < c : h₁
-  ... ≤ d : h₂
-  ... < e : h₃
+  a ≤ b := h₀
+  _ < c := h₁
+  _ ≤ d := h₂
+  _ < e := h₃
 
 -- 3ª demostración
 -- ===============
@@ -71,4 +56,4 @@ example
   (h₂ : c ≤ d)
   (h₃ : d < e) :
   a < e :=
-by finish
+by linarith

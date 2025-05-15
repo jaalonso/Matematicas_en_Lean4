@@ -5,10 +5,9 @@
 -- 3. Declarar a y b como variables sobre ℝ.
 -- ----------------------------------------------------------------------
 
-import .Definicion_de_funciones_acotadas -- 1
-
-variables {f g : ℝ → ℝ}                  -- 2
-variables {a b : ℝ}                      -- 3
+import src.Logica.Definicion_de_funciones_acotadas
+variable {f g : ℝ → ℝ}
+variable {a b : ℝ}
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que si a es una cota inferior de f y b lo es
@@ -18,132 +17,126 @@ variables {a b : ℝ}                      -- 3
 -- 1ª demostración
 -- ===============
 
-lemma fn_lb_add
-  (hfa : fn_lb f a)
-  (hgb : fn_lb g b)
-  : fn_lb (f + g) (a + b) :=
-begin
-  intro x,
-  change a + b ≤ f x + g x,
-  apply add_le_add,
-  apply hfa,
-  apply hgb
-end
-
--- Su desarrollo es
---
--- f g : ℝ → ℝ,
--- a b : ℝ,
--- hfa : fn_lb f a,
--- hgb : fn_lb g b
--- ⊢ fn_lb (λ (x : ℝ), f x + g x) (a + b)
---    >> intro x,
--- x : ℝ
--- ⊢ a + b ≤ (λ (x : ℝ), f x + g x) x
---    >> change a + b ≤ f x + g x,
--- ⊢ a + b ≤ f x + g x
---    >> apply add_le_add,
--- | ⊢ a ≤ f x
--- |    >> apply hfa,
--- | ⊢ b ≤ g x
--- |    >> apply hgb
--- no goals
+lemma FnLb_add
+  (hfa : FnLb f a)
+  (hgb : FnLb g b)
+  : FnLb (f + g) (a + b) :=
+by
+  intro x
+  -- x : ℝ
+  -- ⊢ a + b ≤ (f + g) x
+  change a + b ≤ f x + g x
+  -- ⊢ a + b ≤ f x + g x
+  apply add_le_add
+  . -- ⊢ a ≤ f x
+    apply hfa
+  . -- ⊢ b ≤ g x
+    apply hgb
 
 -- 2ª demostración
 -- ===============
 
 example
-  (hfa : fn_lb f a)
-  (hgb : fn_lb g b)
-  : fn_lb (f + g) (a + b) :=
-λ x, add_le_add (hfa x) (hgb x)
+  (hfa : FnLb f a)
+  (hgb : FnLb g b)
+  : FnLb (f + g) (a + b) :=
+fun x ↦ add_le_add (hfa x) (hgb x)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que la suma de dos funciones acotadas
 -- inferiormente también lo está.
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Usaremos el siguiente lema:
+--    FnLb_add: FnLb f a → FnLb g b → FnLb (f + g) (a + b)
+--
+-- Puesto que f está acotada inferiormente, tiene una cota inferior. Sea
+-- a una de dichas cotas. Análogamentte, puesto que g está acotada
+-- inferiormente, tiene una cota inferior. Sea b una de dichas
+-- cotas. Por el lema FnLb_add, a+b es una cota inferior de f+g. Por
+-- consiguiente, f+g está acotada inferiormente.
+
+-- Demostraciones con Lean4
+-- ========================
+
 -- 1ª demostración
 -- ===============
 
 example
-  (lbf : fn_has_lb f)
-  (lbg : fn_has_lb g)
-  : fn_has_lb (f + g) :=
-begin
-  cases lbf with a ha,
-  cases lbg with b hb,
-  have h1 : fn_lb (f + g) (a + b) := fn_lb_add ha hb,
+  (lbf : FnHasLb f)
+  (lbg : FnHasLb g)
+  : FnHasLb (f + g) :=
+by
+  rcases lbf with ⟨a, ha⟩
+  -- a : ℝ
+  -- ha : FnLb f a
+  rcases lbg with ⟨b, hb⟩
+  -- b : ℝ
+  -- hb : FnLb g b
+  have h1 : FnLb (f + g) (a + b) := FnLb_add ha hb
   have h2 : ∃ z, ∀ x, z ≤ (f + g) x :=
-    by exact Exists.intro (a + b) h1,
-  show fn_has_lb (f + g),
-    by exact h2,
-end
+    Exists.intro (a + b) h1
+  show FnHasLb (f + g)
+  exact h2
 
 -- 2ª demostración
 -- ===============
 
 example
-  (lbf : fn_has_lb f)
-  (lbg : fn_has_lb g)
-  : fn_has_lb (f + g) :=
-begin
-  cases lbf with a lbfa,
-  cases lbg with b lbgb,
-  use a + b,
-  apply fn_lb_add lbfa lbgb,
-end
-
--- Su desarrollo es
---
--- f g : ℝ → ℝ,
--- lbf : fn_has_lb f,
--- lbg : fn_has_lb g
--- ⊢ fn_has_lb (λ (x : ℝ), f x + g x)
---    >> cases lbf with a lbfa,
--- f g : ℝ → ℝ,
--- lbg : fn_has_lb g,
--- a : ℝ,
--- lbfa : fn_lb f a
--- ⊢ fn_has_lb (λ (x : ℝ), f x + g x)
---    >> cases lbg with b lbgb,
--- f g : ℝ → ℝ,
--- a : ℝ,
--- lbfa : fn_lb f a,
--- b : ℝ,
--- lbgb : fn_lb g b
--- ⊢ fn_has_lb (λ (x : ℝ), f x + g x)
---    >> use a + b,
--- ⊢ fn_lb (λ (x : ℝ), f x + g x) (a + b)
---    >> apply fn_lb_add lbfa lbgb
--- no goals
+  (lbf : FnHasLb f)
+  (lbg : FnHasLb g)
+  : FnHasLb (f + g) :=
+by
+  rcases lbf with ⟨a, lbfa⟩
+  -- a : ℝ
+  -- lbfa : FnLb f a
+  rcases lbg with ⟨b, lbgb⟩
+  -- b : ℝ
+  -- lbgb : FnLb g b
+  use a + b
+  -- ⊢ FnLb (f + g) (a + b)
+  apply FnLb_add lbfa lbgb
 
 -- 3ª demostración
 -- ===============
 
 example
-  (lbf : fn_has_lb f)
-  (lbg : fn_has_lb g)
-  : fn_has_lb (f + g) :=
-begin
-  rcases lbf with ⟨a, lbfa⟩,
-  rcases lbg with ⟨b, lbfb⟩,
-  exact ⟨a + b, fn_lb_add lbfa lbfb⟩,
-end
+  (lbf : FnHasLb f)
+  (lbg : FnHasLb g)
+  : FnHasLb (f + g) :=
+by
+  rcases lbf with ⟨a, lbfa⟩
+  -- a : ℝ
+  -- lbfa : FnLb f a
+  rcases lbg with ⟨b, lbfb⟩
+  -- b : ℝ
+  -- lbfb : FnLb g b
+  exact ⟨a + b, FnLb_add lbfa lbfb⟩
 
 -- 4ª demostración
 -- ===============
 
 example :
-  fn_has_lb f → fn_has_lb g → fn_has_lb (f + g) :=
-begin
-  rintros ⟨a, lbfa⟩ ⟨b, lbfb⟩,
-  exact ⟨a + b, fn_lb_add lbfa lbfb⟩,
-end
+  FnHasLb f → FnHasLb g → FnHasLb (f + g) :=
+by
+  rintro ⟨a, lbfa⟩ ⟨b, lbfb⟩
+  -- a : ℝ
+  -- lbfa : FnLb f a
+  -- b : ℝ
+  -- lbfb : FnLb g b
+  exact ⟨a + b, FnLb_add lbfa lbfb⟩
 
 -- 5ª demostración
 -- ===============
 
 example :
-  fn_has_lb f → fn_has_lb g → fn_has_lb (f + g) :=
-λ ⟨a, lbfa⟩ ⟨b, lbfb⟩, ⟨a + b, fn_lb_add lbfa lbfb⟩
+  FnHasLb f → FnHasLb g → FnHasLb (f + g) :=
+fun ⟨a, lbfa⟩ ⟨b, lbfb⟩ ↦ ⟨a + b, FnLb_add lbfa lbfb⟩
+
+-- Lemas usados
+-- ============
+
+-- #check (FnLb_add : FnLb f a → FnLb g b → FnLb (f + g) (a + b))

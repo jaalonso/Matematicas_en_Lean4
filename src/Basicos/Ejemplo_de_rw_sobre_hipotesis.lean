@@ -48,38 +48,15 @@ example
   : a * (b * e) = c * (d * f) :=
 by
   rw [h2]
+  -- ⊢ a * (b * f) = c * (d * f)
   rw [←mul_assoc]
+  -- ⊢ (a * b) * f = c * (d * f)
   rw [h1]
+  -- ⊢ (c * d) * f = c * (d * f)
   rw [mul_assoc]
 
 -- Comentario: La táctica (rw h2) reescribe el objetivo con la igualdad
 -- de la nipótesis h2.
-
--- Desarrollo de la prueba
--- -----------------------
-
--- inicio
---    a b c d e f : ℝ,
---    h1 : a * b = c * d,
---    h2 : e = f
---    ⊢ a * (b * e) = c * (d * f)
--- rw [h2]
---    S
---    ⊢ a * (b * f) = c * (d * f)
--- rw [←mul_assoc]
---    S
---    ⊢ (a * b) * f = c * (d * f)
--- rw [h1]
---    S
---    ⊢ (c * d) * f = c * (d * f)
--- rw [mul_assoc]
---    goals accomplished
---
--- En el desarrollo anterior, S es el conjunto de las hipótesis; es
--- decir,
---    S = {a b c d e f : ℝ,
---         h1 : a * b = c * d,
---         h2 : e = f}
 
 -- 3ª demostración
 -- ===============

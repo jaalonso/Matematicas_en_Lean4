@@ -43,24 +43,7 @@ example
   : ((a * b) * c) * d = ((a * e) * f) * d :=
 by
   rw [mul_assoc a]
+  -- ⊢ (a * (b * c)) * d = ((a * e) * f) * d
   rw [h]
+  -- ⊢ (a * (e * f)) * d = ((a * e) * f) * d
   rw [←mul_assoc a]
-
--- El desarrollo de la prueba es
---
--- inicio
---    a b c d e f : ℝ,
---    h : b * c = e * f
---    ⊢ (a * (b * c)) * d = ((a * e) * f) * d
--- rw [mul_assoc a]
---    S
---    ⊢ a * (b * c) * d = a * e * f * d
--- rw [h]
---    S
---    ⊢ a * (e * f) * d = a * e * f * d
--- rw [←mul_assoc a]
---    goals accomplished
---
--- En el desarrollo anterior, S es el conjunto de hipótesis; es decir,
---    S = {a b c d e f : ℝ,
---         h : b * c = e * f}

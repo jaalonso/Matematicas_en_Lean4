@@ -3,94 +3,72 @@
 --    min a b = min b a
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-variables a b : ℝ
+-- Es consecuencia de la siguiente propiedad
+--    min(a, b) ≤ min(b, a)                                          (1)
+-- En efecto, intercambiando las variables en (1) se obtiene
+--    min(b, a) ≤ min(a, b)                                          (2)
+-- Finalmente de (1) y (2) se obtiene
+--    min(b, a) = min(a, b)
+--
+-- Para demostrar (1), se observa que
+--    min(a, b) ≤ b
+--    min(a, b) ≤ a
+-- y, por tanto,
+--    min(a, b) ≤ min(b, a)
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Real.Basic
+
+variable (a b : ℝ)
+
+-- Lema auxiliar
+-- =============
+
+-- 1ª demostración del lema auxiliar
+-- =================================
+
+example : min a b ≤ min b a :=
+by
+  have h1 : min a b ≤ b := min_le_right a b
+  have h2 : min a b ≤ a := min_le_left a b
+  show min a b ≤ min b a
+  exact le_min h1 h2
+
+-- 2ª demostración del lema auxiliar
+-- =================================
+
+example : min a b ≤ min b a :=
+by
+  apply le_min
+  . -- ⊢ min a b ≤ b
+    apply min_le_right
+  . -- ⊢ min a b ≤ a
+    apply min_le_left
+
+-- 3ª demostración del lema auxiliar
+-- =================================
+
+lemma aux : min a b ≤ min b a :=
+by exact le_min (min_le_right a b) (min_le_left a b)
 
 -- 1ª demostración
 -- ===============
 
 example : min a b = min b a :=
-begin
-  apply le_antisymm,
-  { show min a b ≤ min b a,
-    apply le_min,
-    { apply min_le_right },
-    { apply min_le_left }},
-  { show min b a ≤ min a b,
-    apply le_min,
-    { apply min_le_right },
-    { apply min_le_left }},
-end
+by
+  apply le_antisymm
+  . -- ⊢ min a b ≤ min b a
+    exact aux a b
+  . -- ⊢ min b a ≤ min a b
+    exact aux b a
 
--- Nota: Se usa "show" para indicar lo que se demuestra en cada bloque.
-
--- El desarrollo de la prueba es
---
---    ⊢ min a b = min b a
--- apply le_antisymm,
--- |    ⊢ min a b ≤ min b a
--- | apply le_min,
--- | |    ⊢ min a b ≤ b
--- | | { apply min_le_right },
--- | |    ⊢ min a b ≤ a
--- | apply min_le_left,
--- |    ⊢ min b a ≤ min a b
--- | apply le_min,
--- | |    ⊢ min b a ≤ a
--- | { apply min_le_right },
--- | |    ⊢ min b a ≤ b
--- | apply min_le_left }
---    no goals
-
--- 2ª demostración (con lema local)
--- ================================
-
-example : min a b = min b a :=
-begin
-  have h : ∀ x y : ℝ, min x y ≤ min y x,
-  { intros x y,
-    apply le_min,
-    { apply min_le_right },
-    { apply min_le_left }},
-  apply le_antisymm,
-  apply h,
-  apply h,
-end
-
--- Nota: La táctica "intros" introduce las variables en el contexto. Ver
--- https://bit.ly/2UF1EdL
-
--- 3ª demostración
+-- 2ª demostración
 -- ===============
 
 example : min a b = min b a :=
-begin
-  have h : ∀ {x y : ℝ}, min x y ≤ min y x,
-  { intros x y,
-    exact le_min (min_le_right x y) (min_le_left x y) },
-  exact le_antisymm h h,
-end
-
--- 4ª demostración (con repeat)
--- ============================
-
-example : min a b = min b a :=
-begin
-  apply le_antisymm,
-  repeat {
-    apply le_min,
-    apply min_le_right,
-    apply min_le_left },
-end
-
--- Nota. La táctica "repeat" aplica una táctica recursivamente a todos los
--- subobjetivos. Ver https://bit.ly/2YuO5P9
-
--- Lemas usados
--- ============
-
--- #check (le_antisymm : a ≤ b → b ≤ a → a = b)
--- #check (le_min : c ≤ a → c ≤ b → c ≤ min a b)
--- #check (min_le_left a b : min a b ≤ a)
--- #check (min_le_right a b : min a b ≤ b)
+le_antisymm (aux a b) (aux b a)

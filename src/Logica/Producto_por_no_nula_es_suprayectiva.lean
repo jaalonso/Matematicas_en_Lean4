@@ -1,42 +1,79 @@
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si c es un número real no nulo, entonces la
--- función 
+-- función
 --    f(x) = c * x
--- es suprayectiva. 
+-- es suprayectiva.
 -- ----------------------------------------------------------------------
 
-import data.real.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-open function
+-- Hay que demostrar que
+--    (∀ x ∈ ℝ)(∃ y ∈ ℝ)[cy = x]
+-- Sea x ∈ ℝ. Entonces, y = x/c ∈ R y
+--    cy = c(x/c)
+--       = y
 
-example 
-  {c : ℝ} 
-  (h : c ≠ 0) 
-  : surjective (λ x, c * x) :=
-begin
-  intro x,
-  use (x / c),
-  change c * (x / c) = x,
-  rw mul_comm,
-  apply div_mul_cancel,
-  exact h,
-end
+-- Demostraciones con Lean4
+-- ========================
 
--- Su prueba es
--- 
--- c : ℝ,
--- h : c ≠ 0
--- ⊢ surjective (λ (x : ℝ), c * x)
---    >> intro x,
--- x : ℝ
--- ⊢ ∃ (a : ℝ), (λ (x : ℝ), c * x) a = x
---    >> use (x / c),
--- ⊢ (λ (x : ℝ), c * x) (x / c) = x
---    >> change c * (x / c) = x,
--- ⊢ c * (x / c) = x
---    >> rw mul_comm,
--- ⊢ x / c * c = x
---    >> apply div_mul_cancel,
--- ⊢ c ≠ 0
---    >> exact h,
--- no goals
+import Mathlib.Data.Real.Basic
+variable {c : ℝ}
+open Function
+
+-- 1ª demostración
+-- ===============
+
+example
+  (h : c ≠ 0)
+  : Surjective (fun x ↦ c * x) :=
+by
+  intro x
+  -- x : ℝ
+  -- ⊢ ∃ a, (fun x => c * x) a = x
+  use (x / c)
+  -- ⊢ (fun x => c * x) (x / c) = x
+  dsimp
+  -- ⊢ c * (x / c) = x
+  rw [mul_comm]
+  -- ⊢ (x / c) * c = x
+  exact div_mul_cancel x h
+
+-- 2ª demostración
+-- ===============
+
+example
+  (h : c ≠ 0)
+  : Surjective (fun x ↦ c * x) :=
+by
+  intro x
+  -- x : ℝ
+  -- ⊢ ∃ a, (fun x => c * x) a = x
+  use (x / c)
+  -- ⊢ (fun x => c * x) (x / c) = x
+  exact mul_div_cancel' x h
+
+-- 3ª demostración
+-- ===============
+
+example
+  (h : c ≠ 0)
+  : Surjective (fun x ↦ c * x) :=
+fun x ↦ ⟨x / c, mul_div_cancel' x h⟩
+
+-- 4ª demostración
+-- ===============
+
+example
+  (h : c ≠ 0)
+  : Surjective (fun x ↦ c * x) :=
+mul_left_surjective₀ h
+
+-- Lemas usados
+-- ============
+
+-- variable (a b : ℝ)
+-- #check (div_mul_cancel a : b ≠ 0 → (a / b) * b = a)
+-- #check (mul_comm a b : a * b = b * a)
+-- #check (mul_div_cancel' a : b ≠ 0 → b * (a / b) = a)
+-- #check (mul_left_surjective₀ : c ≠ 0 → Surjective (fun x ↦ c * x))
