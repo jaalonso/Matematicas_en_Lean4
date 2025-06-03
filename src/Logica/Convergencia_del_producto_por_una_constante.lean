@@ -1,146 +1,180 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar si s es una suceción que converge a a y c es un
--- número real, entonces c * s converge a c * a.
--- ----------------------------------------------------------------------
+-- Ejercicio. Demostrar que que si el límite de uₙ es a, entonces el de
+-- cuₙ es ca.
+-- ---------------------------------------------------------------------
 
-import .Convergencia_de_la_funcion_constante
+-- Demostración en lenguaje natural
+-- ================================
 
-variables {s : ℕ → ℝ} {a : ℝ}
+-- Sea ε ∈ ℝ tal que ε > 0. Tenemos que demostrar que
+--    (∃ N ∈ ℕ)(∀ n ≥ N)[|cuₙ - ca| < ε]                             (1)
+-- Distinguiremos dos casos según sea c = 0 o no.
+--
+-- Primer caso: Supongamos que c = 0. Entonces, (1) se reduce a
+--    (∃ N ∈ ℕ)(∀ n ≥ N)[|0·uₙ - 0·a| < ε]
+-- es decir,
+--    (∃ N ∈ ℕ)(∀ n ≥ N)[0 < ε]
+-- que se verifica para cualquier número N, ya que ε > 0.
+--
+-- Segundo caso: Supongamos que c ≠ 0. Entonces, ε/|c| > 0 y, puesto que
+-- el límite de uₙ es a, existe un k ∈ ℕ tal que
+--    (∀ n ≥ k)[|uₙ - a| < ε/|c|]                                    (2)
+-- Veamos que con k se cumple (1). En efecto, sea n ≥ k. Entonces,
+--    |cuₙ - ca| = |c(uₙ - a)|
+--               = |c||u n - a|
+--               < |c|(ε/|c|)     [por (2)]
+--               = ε
 
-lemma converges_to_mul_const_l1
-  {c ε : ℝ}
-  (h : 0 < c)
-  : c * (ε / c) = ε :=
-begin
-  rw mul_comm,
-  apply div_mul_cancel ε,
-  exact ne_of_gt h,
-end
+-- Demostraciones con Lean4
+-- ========================
 
--- Prueba
--- ======
+import src.Logica.Definicion_de_convergencia
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
-/-
-c ε : ℝ,
-h : 0 < c
-⊢ c * (ε / c) = ε
-  >> rw mul_comm,
-⊢ ε / c * c = ε
-  >> apply div_mul_cancel ε,
-⊢ c ≠ 0
-  >> exact ne_of_gt h,
-no goals
--/
+variable {u v : ℕ → ℝ}
+variable {a : ℝ}
+variable (c : ℝ)
 
-theorem converges_to_mul_const
-  {c : ℝ}
-  (cs : converges_to s a)
-  : converges_to (λ n, c * s n) (c * a) :=
-begin
-  by_cases h : c = 0,
-  { convert converges_to_const 0,
-    { ext,
-      rw [h, zero_mul] },
-    { rw [h, zero_mul] }},
-  have acpos : 0 < abs c,
-    from abs_pos.mpr h,
-  intros ε εpos,
-  dsimp,
-  have εcpos : 0 < ε / abs c,
-    by exact div_pos εpos acpos,
-  cases cs (ε / abs c) εcpos with Ns hs,
-  use Ns,
-  intros n hn,
-  specialize hs n hn,
-  calc abs (c * s n - c * a)
-           = abs (c * (s n - a))   : by { congr, ring }
-       ... = abs c * abs (s n - a) : by apply abs_mul
-       ... < abs c * (ε / abs c)   : by exact mul_lt_mul_of_pos_left hs acpos
-       ... = ε                     : by apply converges_to_mul_const_l1 acpos
-end
+-- 1ª demostración
+-- ===============
 
--- Prueba
--- ======
+example
+  (h : limite u a)
+  : limite (fun n ↦ c * (u n)) (c * a) :=
+by
+  by_cases hc : c = 0
+  . -- hc : c = 0
+    subst hc
+    -- ⊢ limite (fun n => 0 * u n) (0 * a)
+    intros ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ N, ∀ (n : ℕ), n ≥ N → |(fun n => 0 * u n) n - 0 * a| < ε
+    aesop
+  . -- hc : ¬c = 0
+    intros ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ N, ∀ (n : ℕ), n ≥ N → |(fun n => c * u n) n - c * a| < ε
+    have hc' : 0 < |c| := abs_pos.mpr hc
+    have hεc : 0 < ε / |c| := div_pos hε hc'
+    specialize h (ε/|c|) hεc
+    -- h : ∃ N, ∀ (n : ℕ), n ≥ N → |u n - a| < ε / |c|
+    cases' h with N hN
+    -- N : ℕ
+    -- hN : ∀ (n : ℕ), n ≥ N → |u n - a| < ε / |c|
+    use N
+    -- ⊢ ∀ (n : ℕ), n ≥ N → |(fun n => c * u n) n - c * a| < ε
+    intros n hn
+    -- n : ℕ
+    -- hn : n ≥ N
+    -- ⊢ |(fun n => c * u n) n - c * a| < ε
+    specialize hN n hn
+    -- hN : |u n - a| < ε / |c|
+    dsimp only
+    calc |c * u n - c * a|
+         = |c * (u n - a)| := congrArg abs (mul_sub c (u n) a).symm
+       _ = |c| * |u n - a| := abs_mul c  (u n - a)
+       _ < |c| * (ε / |c|) := (mul_lt_mul_left hc').mpr hN
+       _ = ε               := mul_div_cancel₀ ε (ne_of_gt hc')
 
-/-
-s : ℕ → ℝ,
-a c : ℝ,
-cs : converges_to s a
-⊢ converges_to (λ (n : ℕ), c * s n) (c * a)
-  >> by_cases h : c = 0,
-| h : c = 0
-| ⊢ converges_to (λ (n : ℕ), c * s n) (c * a)
-|   >> { convert converges_to_const 0,
-| | ⊢ (λ (n : ℕ), c * s n) = λ (x : ℕ), 0
-| |   >>   { ext,
-| | x : ℕ
-| | ⊢ c * s x = 0
-| |   >>     rw [h, zero_mul] },
-| s : ℕ → ℝ,
-| a c : ℝ,
-| cs : converges_to s a,
-| h : c = 0
-| ⊢ c * a = 0
-|   >>   rw [h, zero_mul] },
-s : ℕ → ℝ,
-a c : ℝ,
-cs : converges_to s a,
-h : ¬c = 0
-⊢ converges_to (λ (n : ℕ), c * s n) (c * a)
-  >> have acpos : 0 < abs c,
-| ⊢ 0 < abs c
-|   >>   from abs_pos_of_ne_zero h,
-acpos : 0 < abs c
-⊢ converges_to (λ (n : ℕ), c * s n) (c * a)
-  >> intros ε εpos,
-ε : ℝ,
-εpos : ε > 0
-⊢ ∃ (N : ℕ), ∀ (n : ℕ), n ≥ N → abs ((λ (n : ℕ), c * s n) n - c * a) < ε
-  >> dsimp,
-⊢ ∃ (N : ℕ), ∀ (n : ℕ), n ≥ N → abs (c * s n - c * a) < ε
-  >> have εcpos : 0 < ε / abs c,
-  >>   by exact div_pos εpos acpos,
-εcpos : 0 < ε / abs c
-⊢ ∃ (N : ℕ), ∀ (n : ℕ), n ≥ N → abs (c * s n - c * a) < ε
-  >> cases cs (ε / abs c) εcpos with Ns hs,
-Ns : ℕ,
-hs : ∀ (n : ℕ), n ≥ Ns → abs (s n - a) < ε / abs c
-⊢ ∃ (N : ℕ), ∀ (n : ℕ), n ≥ N → abs (c * s n - c * a) < ε
-  >> use Ns,
-⊢ ∀ (n : ℕ), n ≥ Ns → abs (c * s n - c * a) < ε
-  >> intros n hn,
-n : ℕ,
-hn : n ≥ Ns
-⊢ abs (c * s n - c * a) < ε
-  >> specialize hs n hn,
-hs : abs (s n - a) < ε / abs c
-⊢ abs (c * s n - c * a) < ε
-  >> calc abs (c * s n - c * a)
-  >>     = abs (c * (s n - a))   : by { congr, ring }
-  >> ... = abs c * abs (s n - a) : by apply abs_mul
-  >> ... < abs c * (ε / abs c)   : by exact mul_lt_mul_of_pos_left hs acpos
-  >> ... = ε                     : by apply converges_to_mul_const_l1-/
-/-acpos,
-no goals
--/
+-- 2ª demostración
+-- ===============
 
--- Comentario: Se han usado los lemas
--- + mul_comm a b : a * b = b * a
--- + ne_of_gt : a > b → a ≠ b
--- + converges_to_const a : converges_to (λ (x : ℕ), a) a
--- + zero_mul a : 0 * a = 0
--- + abs_pos_of_ne_zero : a ≠ 0 → 0 < abs a
--- + div_pos : 0 < a → 0 < b → 0 < a / b
--- + abs_mul a b : abs (a * b) = abs a * abs b
--- + mul_lt_mul_of_pos_left : a < b → 0 < d → d * a < d * b
+example
+  (h : limite u a)
+  : limite (fun n ↦ c * (u n)) (c * a) :=
+by
+  by_cases hc : c = 0
+  . -- hc : c = 0
+    subst hc
+    -- ⊢ limite (fun n => 0 * u n) (0 * a)
+    intros ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ N, ∀ (n : ℕ), n ≥ N → |(fun n => 0 * u n) n - 0 * a| < ε
+    aesop
+  . -- hc : ¬c = 0
+    intros ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ N, ∀ (n : ℕ), n ≥ N → |(fun n => c * u n) n - c * a| < ε
+    have hc' : 0 < |c| := abs_pos.mpr hc
+    have hεc : 0 < ε / |c| := div_pos hε hc'
+    specialize h (ε/|c|) hεc
+    -- h : ∃ N, ∀ (n : ℕ), n ≥ N → |u n - a| < ε / |c|
+    cases' h with N hN
+    -- N : ℕ
+    -- hN : ∀ (n : ℕ), n ≥ N → |u n - a| < ε / |c|
+    use N
+    -- ⊢ ∀ (n : ℕ), n ≥ N → |(fun n => c * u n) n - c * a| < ε
+    intros n hn
+    -- n : ℕ
+    -- hn : n ≥ N
+    -- ⊢ |(fun n => c * u n) n - c * a| < ε
+    specialize hN n hn
+    -- hN : |u n - a| < ε / |c|
+    dsimp only
+    -- ⊢ |c * u n - c * a| < ε
+    rw [← mul_sub]
+    -- ⊢ |c * (u n - a)| < ε
+    rw [abs_mul]
+    -- ⊢ |c| * |u n - a| < ε
+    rw [← lt_div_iff₀' hc']
+    -- ⊢ |u n - a| < ε / |c|
+    exact hN
 
--- Comprobación:
--- variables (b d : ℝ)
--- #check @mul_comm _ _ a b
--- #check @ne_of_gt _ _ a b
--- #check converges_to_const a
--- #check @zero_mul _ _ a
--- #check @abs_pos_of_ne_zero _ _ a
--- #check @div_pos _ _ a b
--- #check @abs_mul _ _ a b
--- #check @mul_lt_mul_of_pos_left _ _ a b d
+-- 3ª demostración
+-- ===============
+
+theorem limite_por_constante
+  (h : limite u a)
+  : limite (fun n ↦ c * (u n)) (c * a) :=
+by
+  by_cases hc : c = 0
+  . -- hc : c = 0
+    subst hc
+    -- ⊢ limite (fun n => 0 * u n) (0 * a)
+    intros ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ N, ∀ n ≥ N, |(fun n => 0 * u n) n - 0 * a| < ε
+    aesop
+  . -- hc : ¬c = 0
+    intros ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ N, ∀ n ≥ N, |(fun n => c * u n) n - c * a| < ε
+    have hc' : 0 < |c| := by aesop
+    have hεc : 0 < ε / |c| := div_pos hε hc'
+    rcases h (ε/|c|) hεc with ⟨N, hN⟩
+    -- N : ℕ
+    -- hN : ∀ n ≥ N, |u n - a| < ε / |c|
+    use N
+    -- ⊢ ∀ n ≥ N, |(fun n => c * u n) n - c * a| < ε
+    intros n hn
+    -- n : ℕ
+    -- hn : n ≥ N
+    -- ⊢ |(fun n => c * u n) n - c * a| < ε
+    specialize hN n hn
+    -- hN : |u n - a| < ε / |c|
+    dsimp only
+    -- ⊢ |c * u n - c * a| < ε
+    rw [← mul_sub, abs_mul, ← lt_div_iff₀' hc']
+    -- ⊢ |u n - a| < ε / |c|
+    exact hN
+
+-- Lemas usados
+-- ============
+
+variable (b c : ℝ)
+variable (f : ℝ → ℝ)
+#check (abs_mul a b : |a * b| = |a| * |b|)
+#check (abs_pos.mpr : a ≠ 0 → 0 < |a|)
+#check (congrArg f : a = b → f a = f b)
+#check (div_pos : 0 < a → 0 < b → 0 < a / b)
+#check (lt_div_iff₀' : 0 < c → (a < b / c ↔ c * a < b))
+#check (mul_div_cancel₀ a : b ≠ 0 → b * (a / b) = a)
+#check (mul_lt_mul_left : 0 < a → (a * b < a * c ↔ b < c))
+#check (mul_sub a b c : a * (b - c) = a * b - a * c)

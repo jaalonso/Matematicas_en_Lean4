@@ -104,7 +104,6 @@ by
   -- ⊢ ∃ x, f x > a
   use x
   -- ⊢ f x > a
-  exact h2
 
 -- 3ª demostración
 -- ===============
@@ -169,9 +168,8 @@ by
 -- Lemas usados
 -- ============
 
--- variable {α : Type _}
--- variable (P : α → Prop)
--- #check (forall_not_of_not_exists : (¬∃ x, P x) → ∀ x, ¬P x)
---
--- variable (a b : ℝ)
--- #check (le_of_not_gt : ¬a > b → a ≤ b)
+variable (a b : ℝ)
+variable {α : Type _}
+variable (P : α → Prop)
+#check (forall_not_of_not_exists : (¬∃ x, P x) → ∀ x, ¬P x)
+#check (le_of_not_gt : ¬a > b → a ≤ b)

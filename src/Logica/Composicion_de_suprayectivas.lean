@@ -106,4 +106,4 @@ Surjective.comp hg hf
 -- Lemas usados
 -- ============
 
--- #check (Surjective.comp : Surjective g → Surjective f → Surjective (g ∘ f))
+#check (Surjective.comp : Surjective g → Surjective f → Surjective (g ∘ f))

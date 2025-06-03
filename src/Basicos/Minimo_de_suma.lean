@@ -91,10 +91,10 @@ le_min (add_le_add_right (min_le_left a b) c)
 lemma aux2 :
   min (a + c) (b + c) ≤ min a b + c :=
 by
-  have h1 : min (a + c) (b + c) + -c ≤ min a b
-  calc min (a + c) (b + c) + -c
-       ≤ min (a + c + -c) (b + c + -c) := aux1
-     _ = min a b                       := by ring_nf
+  have h1 : min (a + c) (b + c) + -c ≤ min a b :=
+    calc min (a + c) (b + c) + -c
+         ≤ min (a + c + -c) (b + c + -c) := aux1
+       _ = min a b                       := by simp_all only [add_neg_cancel_right]
   show min (a + c) (b + c) ≤ min a b + c
   exact add_neg_le_iff_le_add.mp h1
 
@@ -147,3 +147,17 @@ by
 -- 6ª demostración del ejercicio
 example : min a b + c = min (a + c) (b + c) :=
 (min_add_add_right a b c).symm
+
+-- Lemas usados
+-- ============
+
+#check (add_le_add_right : b ≤ c → ∀ a,  b + a ≤ c + a)
+#check (add_neg_cancel_right a b : (a + b) + -b = a)
+#check (add_neg_le_iff_le_add : a + -b ≤ c ↔ a ≤ c + b)
+#check (le_antisymm : a ≤ b → b ≤ a → a = b)
+#check (le_min : c ≤ a → c ≤ b → c ≤ min a b)
+#check (min_add_add_right a b c : min (a + c) (b + c) = min a b + c)
+#check (min_eq_left : a ≤ b → min a b = a)
+#check (min_eq_right : b ≤ a → min a b = b)
+#check (min_le_left a b : min a b ≤ a)
+#check (min_le_right a b : min a b ≤ b)

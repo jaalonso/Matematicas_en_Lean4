@@ -22,11 +22,12 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
 
+variable (a b c d : ℝ)
+
 -- 1ª demostración
 -- ===============
 
 example
-  (a b c d : ℝ)
   (h1 : c = b * a - d)
   (h2 : d = a * b)
   : c = 0 :=
@@ -40,7 +41,6 @@ calc
 -- ===============
 
 example
-  (a b c d : ℝ)
   (h1 : c = b * a - d)
   (h2 : d = a * b)
   : c = 0 :=
@@ -55,5 +55,9 @@ by
 
 -- Comentario: El último lema se puede encontrar escribiendo previamente
 --    exact?
--- y afirma que
---    ∀ (a : G), a - a = 0
+
+-- Lemas usados
+-- ============
+
+#check (mul_comm a b : a * b = b * a)
+#check (sub_self a : a - a = 0)

@@ -40,8 +40,8 @@ variable (a : R)
 
 example : a + 0 = a :=
 calc a + 0
-     = 0 + a := by rw [add_comm]
-   _ = a     := by rw [zero_add]
+     = 0 + a := add_comm a 0
+   _ = a     := zero_add a
 
 -- 2ª demostración
 -- ===============
@@ -75,8 +75,8 @@ by rw [add_comm, zero_add]
 
 example : a + -a = 0 :=
 calc a + -a
-     = -a + a := by rw [add_comm]
-   _ = 0      := by rw [add_left_neg]
+     = -a + a := add_comm a (-a)
+   _ = 0      := neg_add_cancel a
 
 -- 2ª demostración
 -- ===============
@@ -85,13 +85,21 @@ example : a + -a = 0 :=
 by
   rw [add_comm]
   -- ⊢ -a + a = 0
-  rw [add_left_neg]
+  rw [neg_add_cancel]
 
 -- 3ª demostración
 -- ===============
 
 theorem add_right_neg : a + -a = 0 :=
-by rw [add_comm, add_left_neg]
+by rw [add_comm, neg_add_cancel]
+
+-- Lemas usados
+-- ============
+
+variable (a b : R)
+#check (add_comm a b : a + b = b + a)
+#check (neg_add_cancel a : -a + a = 0)
+#check (zero_add a : 0 + a = a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6. Cerrar el espacio de nombre myRing.
@@ -106,7 +114,7 @@ end myRing
 #check @myRing.add_zero
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
---    myRing.add_zero : ∀ {R : Type u_1} [_inst_1 : Ring R] (a : R),
+--    myRing.add_zero : ∀ {R : Type u_1} [inst : Ring R] (a : R),
 --                      a + 0 = a
 
 -- ---------------------------------------------------------------------
@@ -116,5 +124,4 @@ end myRing
 #check @add_zero
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
---    @add_zero : ∀ {M : Type u_1} [inst : AddZeroClass M] (a : M),
---                a + 0 = a
+--    @add_zero : ∀ {M : Type u_1} [inst : AddZeroClass M] (a : M), a + 0 = a

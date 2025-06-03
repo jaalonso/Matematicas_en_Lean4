@@ -103,5 +103,7 @@ by
 -- Lemas usados
 -- ============
 
--- #check (mul_assoc a b c : (a * b) * c = a * (b * c))
--- #check (Dvd.intro c : a * c = b → a ∣ b)
+variable (f : ℕ → ℕ)
+#check (Dvd.intro c : a * c = b → a ∣ b)
+#check (congrArg f : a = b → f a = f b)
+#check (mul_assoc a b c : (a * b) * c = a * (b * c))

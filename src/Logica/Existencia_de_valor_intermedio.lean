@@ -3,6 +3,7 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 -- 1ª demostración
 -- ===============
@@ -38,3 +39,10 @@ by
 
 example : ∃ x : ℝ, 2 < x ∧ x < 3 :=
 ⟨5 / 2, by norm_num⟩
+
+-- Lemas usados
+-- ============
+
+variable (w : ℝ)
+variable (p : ℝ → Prop)
+#check (Exists.intro w : p w → Exists p)

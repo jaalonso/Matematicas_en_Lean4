@@ -19,12 +19,12 @@
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 
+variable (a b c : ℝ)
+
 -- 1ª demostración
 -- ===============
 
-example
-  (a b c : ℝ)
-  : (c * b) * a = b * (a * c) :=
+example : (c * b) * a = b * (a * c) :=
 calc
   (c * b) * a
     = (b * c) * a := by rw [mul_comm c b]
@@ -34,9 +34,7 @@ calc
 -- 2ª demostración
 -- ===============
 
-example
-  (a b c : ℝ)
-  : (c * b) * a = b * (a * c) :=
+example : (c * b) * a = b * (a * c) :=
 by
   rw [mul_comm c b]
   -- ⊢ (b * c) * a = b * (a * c)
@@ -47,7 +45,11 @@ by
 -- 3ª demostración
 -- ===============
 
-example
-  (a b c : ℝ)
-  : (c * b) * a = b * (a * c) :=
+example : (c * b) * a = b * (a * c) :=
 by ring
+
+-- Lemas usados
+-- ============
+
+#check (mul_comm a b : a * b = b * a)
+#check (mul_assoc a b c : (a * b) * c = a * (b * c))

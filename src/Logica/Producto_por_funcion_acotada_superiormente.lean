@@ -84,12 +84,6 @@ lemma FnUb_mul
   : FnUb (fun x ↦ c * f x) (c * a) :=
 fun y ↦ mul_le_mul_of_nonneg_left (hfa y) h
 
--- Lemas usados
--- ============
-
--- variable (c : ℝ)
--- #check (mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si c ≥ 0 y f está acotada superiormente,
 -- entonces c * f también lo está.
@@ -177,4 +171,6 @@ fun ⟨a, ha⟩ ↦ ⟨c * a, FnUb_mul ha hc⟩
 -- Lemas usados
 -- ============
 
--- #check (FnUb_mul : FnUb f a → c ≥ 0 → FnUb (fun x ↦ c * f x) (c * a))
+variable (b : ℝ)
+#check (FnUb_mul : FnUb f a → c ≥ 0 → FnUb (fun x ↦ c * f x) (c * a))
+#check (mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c)

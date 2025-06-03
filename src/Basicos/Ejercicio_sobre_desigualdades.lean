@@ -78,8 +78,7 @@ by
 example : (0 : ℝ) < 1 :=
 by norm_num
 
--- Nota: La táctica norm_num normaliza expresiones numéricas. Ver
--- https://bit.ly/3hoJMgQ
+-- Nota: La táctica norm_num normaliza expresiones numéricas.
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que si
@@ -126,14 +125,14 @@ by
   have h5 : 1 + exp a ≤ 1 + exp b :=
     add_le_add_left h4 1
   show log (1 + exp a) ≤ log (1 + exp b)
-  exact log_le_log' h3 h5
+  exact log_le_log h3 h5
 
 -- 2ª demostraciṕn
 example
   (h : a ≤ b)
   : log (1 + exp a) ≤ log (1 + exp b) :=
 by
-  apply log_le_log'
+  apply log_le_log
   . -- ⊢ 0 < 1 + exp a
     apply add_pos
     . -- ⊢ 0 < 1
@@ -144,3 +143,13 @@ by
     apply add_le_add_left
     -- ⊢ exp a ≤ exp b
     exact exp_le_exp.mpr h
+
+-- Lemas usados
+-- ============
+
+#check (add_le_add_left : a ≤ b → ∀ c, c + a ≤ c + b)
+#check (add_pos : 0 < a → 0 < b → 0 < a + b)
+#check (exp_le_exp : exp a ≤ exp b ↔ a ≤ b)
+#check (exp_pos a : 0 < exp a)
+#check (log_le_log : 0 < a → a ≤ b → log a ≤ log b)
+#check (zero_lt_one : (0 : ℝ) < 1)

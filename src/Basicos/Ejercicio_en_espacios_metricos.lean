@@ -74,12 +74,12 @@ dist_nonneg
 -- Lemas usados
 -- ============
 
--- variable (a b : ℝ)
--- variable (z : X)
--- #check (dist_comm x y : dist x y = dist y x)
--- #check (dist_nonneg : 0 ≤ dist x y)
--- #check (dist_self x : dist x x = 0)
--- #check (dist_triangle x y z : dist x z ≤ dist x y + dist y z)
--- #check (mul_two a : a * 2 = a + a)
--- #check (nonneg_of_mul_nonneg_left : 0 ≤ a * b → 0 < b → 0 ≤ a)
--- #check (zero_lt_two : 0 < 2)
+variable (a b : ℝ)
+variable (z : X)
+#check (dist_comm x y : dist x y = dist y x)
+#check (dist_nonneg : 0 ≤ dist x y)
+#check (dist_self x : dist x x = 0)
+#check (dist_triangle x y z : dist x z ≤ dist x y + dist y z)
+#check (mul_two a : a * 2 = a + a)
+#check (nonneg_of_mul_nonneg_left : 0 ≤ a * b → 0 < b → 0 ≤ a)
+#check (zero_lt_two : 0 < 2)

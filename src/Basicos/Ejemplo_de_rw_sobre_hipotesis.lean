@@ -20,14 +20,15 @@
 -- Demostraciones en Lean4
 -- =======================
 
-import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c d e f : ℝ)
 
 -- 1ª demostración
 -- ===============
 
 example
-  (a b c d e f : ℝ)
   (h1 : a * b = c * d)
   (h2 : e = f)
   : a * (b * e) = c * (d * f) :=
@@ -42,7 +43,6 @@ calc
 -- ===============
 
 example
-  (a b c d e f : ℝ)
   (h1 : a * b = c * d)
   (h2 : e = f)
   : a * (b * e) = c * (d * f) :=
@@ -55,16 +55,20 @@ by
   -- ⊢ (c * d) * f = c * (d * f)
   rw [mul_assoc]
 
--- Comentario: La táctica (rw h2) reescribe el objetivo con la igualdad
--- de la nipótesis h2.
+-- Comentario: La táctica (rw [h2]) reescribe el objetivo con la igualdad
+-- de la hipótesis h2.
 
 -- 3ª demostración
 -- ===============
 
 example
-  (a b c d e f : ℝ)
   (h1 : a * b = c * d)
   (h2 : e = f)
   : a * (b * e) = c * (d * f) :=
 by
   simp [*, ←mul_assoc]
+
+-- Lemas usados
+-- ============
+
+#check (mul_assoc a b c : (a * b) * c = a * (b * c))

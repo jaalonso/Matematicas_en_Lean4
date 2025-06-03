@@ -46,12 +46,6 @@ by
 example : ¬a < a :=
   irrefl a
 
--- Lemas usados
--- ============
-
--- #check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
--- #check (irrefl a : ¬a < a)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que que la relación menor es transitiva.
 -- ----------------------------------------------------------------------
@@ -162,6 +156,7 @@ example : a < b → b < c → a < c :=
 -- Lemas usados
 -- ============
 
--- #check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
--- #check (le_trans : a ≤ b → b ≤ c → a ≤ c)
--- #check (lt_trans : a < b → b < c → a < c)
+#check (irrefl a : ¬a < a)
+#check (le_trans : a ≤ b → b ≤ c → a ≤ c)
+#check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
+#check (lt_trans : a < b → b < c → a < c)

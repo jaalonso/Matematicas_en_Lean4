@@ -5,12 +5,28 @@
 --    s ∩ u ⊆ t ∩ u
 -- ----------------------------------------------------------------------
 
-import tactic
+-- Demostración en lenguaje natural
+-- ================================
 
-variable {α : Type*}
-variables (s t u : set α)
+-- Sea x ∈ s ∩ u. Entonces, se tiene que
+--   x ∈ s                                                           (1)
+--   x ∈ u                                                           (2)
+-- De (1) y s ⊆ t, se tiene que
+--   x ∈ t                                                           (3)
+-- De (3) y (2) se tiene que
+--   x ∈ t ∩ u
+-- que es lo que teníamos que demostrar.
 
-open set
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Set.Basic
+import Mathlib.Tactic
+
+open Set
+
+variable {α : Type}
+variable (s t u : Set α)
 
 -- 1ª demostración
 -- ===============
@@ -18,49 +34,25 @@ open set
 example
   (h : s ⊆ t)
   : s ∩ u ⊆ t ∩ u :=
-begin
-  rw subset_def,
-  rw inter_def,
-  rw inter_def,
-  dsimp,
-  rw subset_def at h,
-  rintros x ⟨xs, xu⟩,
-  split,
-  { exact h x xs },
-  { exact xu },
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t u : set α,
-h : s ⊆ t
-⊢ s ∩ u ⊆ t ∩ u
-  >> rw subset_def,
-⊢ ∀ (x : α), x ∈ s ∩ u → x ∈ t ∩ u
-  >> rw inter_def,
-⊢ ∀ (x : α), x ∈ {a : α | a ∈ s ∧ a ∈ u} → x ∈ t ∩ u
-  >> rw inter_def,
-⊢ ∀ (x : α), x ∈ {a : α | a ∈ s ∧ a ∈ u} → x ∈ {a : α | a ∈ t ∧ a ∈ u}
-  >> dsimp,
-⊢ ∀ (x : α), x ∈ s ∧ x ∈ u → x ∈ t ∧ x ∈ u
-  >> rw subset_def at h,
-h : ∀ (x : α), x ∈ s → x ∈ t
-⊢ ∀ (x : α), x ∈ s ∧ x ∈ u → x ∈ t ∧ x ∈ u
-  >> rintros x ⟨xs, xu⟩,
-x : α,
-xs : x ∈ s,
-xu : x ∈ u
-⊢ x ∈ t ∧ x ∈ u
-  >> split,
-| ⊢ x ∈ t
-|   >> { exact h x xs },
-⊢ x ∈ u
-  >> { exact xu },
-no goals
--/
+by
+  rw [subset_def]
+  -- ⊢ ∀ (x : α), x ∈ s ∩ u → x ∈ t ∩ u
+  intros x h1
+  -- x : α
+  -- h1 : x ∈ s ∩ u
+  -- ⊢ x ∈ t ∩ u
+  rcases h1 with ⟨xs, xu⟩
+  -- xs : x ∈ s
+  -- xu : x ∈ u
+  constructor
+  . -- ⊢ x ∈ t
+    rw [subset_def] at h
+    -- h : ∀ (x : α), x ∈ s → x ∈ t
+    apply h
+    -- ⊢ x ∈ s
+    exact xs
+  . -- ⊢ x ∈ u
+    exact xu
 
 -- 2ª demostración
 -- ===============
@@ -68,35 +60,16 @@ no goals
 example
   (h : s ⊆ t)
   : s ∩ u ⊆ t ∩ u :=
-begin
-  rw [subset_def, inter_def, inter_def],
-  dsimp,
-  rw subset_def at h,
-  rintros x ⟨xs, xu⟩,
-  exact ⟨h _ xs, xu⟩,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t u : set α,
-h : s ⊆ t
-⊢ s ∩ u ⊆ t ∩ u  >> rw [subset_def, inter_def, inter_def],
-  >> dsimp,
-⊢ ∀ (x : α), x ∈ s ∧ x ∈ u → x ∈ t ∧ x ∈ u
-  >> rw subset_def at h,
-h : ∀ (x : α), x ∈ s → x ∈ t
-⊢ ∀ (x : α), x ∈ s ∧ x ∈ u → x ∈ t ∧ x ∈ u
-  >> rintros x ⟨xs, xu⟩,
-x : α,
-xs : x ∈ s,
-xu : x ∈ u
-⊢ x ∈ t ∧ x ∈ u
-  >> exact ⟨h _ xs, xu⟩,
-no goals
--/
+by
+  rw [subset_def]
+  -- ⊢ ∀ (x : α), x ∈ s ∩ u → x ∈ t ∩ u
+  rintro x ⟨xs, xu⟩
+  -- x : α
+  -- xs : x ∈ s
+  -- xu : x ∈ u
+  rw [subset_def] at h
+  -- h : ∀ (x : α), x ∈ s → x ∈ t
+  exact ⟨h x xs, xu⟩
 
 -- 3ª demostración
 -- ===============
@@ -104,31 +77,16 @@ no goals
 example
   (h : s ⊆ t)
   : s ∩ u ⊆ t ∩ u :=
-begin
-  simp only [subset_def, mem_inter_eq] at *,
-  rintros x ⟨xs, xu⟩,
-  exact ⟨h _ xs, xu⟩,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t u : set α,
-h : s ⊆ t
-⊢ s ∩ u ⊆ t ∩ u
-  >> simp only [subset_def, mem_inter_eq] at *,
-h : ∀ (x : α), x ∈ s → x ∈ t
-⊢ ∀ (x : α), x ∈ s ∧ x ∈ u → x ∈ t ∧ x ∈ u
-  >> rintros x ⟨xs, xu⟩,
-x : α,
-xs : x ∈ s,
-xu : x ∈ u
-⊢ x ∈ t ∧ x ∈ u
-  >> exact ⟨h _ xs, xu⟩,
-no goals
--/
+by
+  simp only [subset_def]
+  -- ⊢ ∀ (x : α), x ∈ s ∩ u → x ∈ t ∩ u
+  rintro x ⟨xs, xu⟩
+  -- x : α
+  -- xs : x ∈ s
+  -- xu : x ∈ u
+  rw [subset_def] at h
+  -- h : ∀ (x : α), x ∈ s → x ∈ t
+  exact ⟨h _ xs, xu⟩
 
 -- 4ª demostración
 -- ===============
@@ -136,7 +94,12 @@ no goals
 example
   (h : s ⊆ t)
   : s ∩ u ⊆ t ∩ u :=
-by finish [subset_def, mem_inter_eq]
+by
+  intros x xsu
+  -- x : α
+  -- xsu : x ∈ s ∩ u
+  -- ⊢ x ∈ t ∩ u
+  exact ⟨h xsu.1, xsu.2⟩
 
 -- 5ª demostración
 -- ===============
@@ -144,45 +107,22 @@ by finish [subset_def, mem_inter_eq]
 example
   (h : s ⊆ t)
   : s ∩ u ⊆ t ∩ u :=
-begin
-  intros x xsu,
-  exact ⟨h xsu.1, xsu.2⟩,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t u : set α,
-h : s ⊆ t
-⊢ s ∩ u ⊆ t ∩ u
-  >> intros x xsu,
-x : α,
-xsu : x ∈ s ∩ u
-⊢ x ∈ t ∩ u
-  >> exact ⟨h xsu.1, xsu.2⟩,
-no goals
--/
-
--- Comentario: La táctica *intro* aplica una *reducción definicional*
--- expandiendo las definiciones.
+by
+  rintro x ⟨xs, xu⟩
+  -- xs : x ∈ s
+  -- xu : x ∈ u
+  -- ⊢ x ∈ t ∩ u
+  exact ⟨h xs, xu⟩
 
 -- 6ª demostración
 -- ===============
 
-example (h : s ⊆ t) : s ∩ u ⊆ t ∩ u :=
-by exact λ x ⟨xs, xu⟩, ⟨h xs, xu⟩
-
--- 7ª demostración
--- ===============
-
-lemma monotonia
+example
   (h : s ⊆ t)
   : s ∩ u ⊆ t ∩ u :=
-λ x ⟨xs, xu⟩, ⟨h xs, xu⟩
+  fun _ ⟨xs, xu⟩ ↦  ⟨h xs, xu⟩
 
--- 8ª demostración
+-- 7ª demostración
 -- ===============
 
 example
@@ -190,15 +130,8 @@ example
   : s ∩ u ⊆ t ∩ u :=
 inter_subset_inter_left u h
 
--- Comentario: Se han usado los lemas
--- + inter_def : s ∩ t = {a : α | a ∈ s ∧ a ∈ t}
--- + inter_subset_inter_left : s ⊆ t → s ∩ u ⊆ t ∩ u
--- + mem_inter_eq x s t : x ∈ s ∩ t = (x ∈ s ∧ x ∈ t)
--- + subset_def : s ⊆ t = ∀ (x : α), x ∈ s → x ∈ t
+-- Lema usado
+-- ==========
 
--- Comprobación:
-variable (x : α)
--- #check @subset_def _ s t
--- #check @inter_def _ s t
--- #check @mem_inter_eq _ x s t
--- #check @inter_subset_inter_left _ s t u
+#check (subset_def : (s ⊆ t) = ∀ x ∈ s, x ∈ t)
+#check (inter_subset_inter_left u : s ⊆ t → s ∩ u ⊆ t ∩ u)

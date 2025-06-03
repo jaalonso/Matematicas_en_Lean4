@@ -3,49 +3,31 @@
 -- conjunto de los números positivos,
 -- ----------------------------------------------------------------------
 
-import analysis.special_functions.exp_log
+import Mathlib.Data.Set.Function
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
-open set real
+open Set Real
 
-example : range exp = { y | y > 0 } :=
-begin
-  ext y,
-  split,
-  { rintros ⟨x, rfl⟩,
-    apply exp_pos },
-  { intro ypos,
-    use log y,
-    rw exp_log ypos },
-end
+example : range exp = { y | y > 0 } := by
+  ext y
+  -- y : ℝ
+  -- ⊢ y ∈ range rexp ↔ y ∈ {y | y > 0}
+  constructor
+  · -- ⊢ y ∈ range rexp → y ∈ {y | y > 0}
+    rintro ⟨x, rfl⟩
+    -- x : ℝ
+    -- ⊢ rexp x ∈ {y | y > 0}
+    apply exp_pos
+  . -- ⊢ y ∈ {y | y > 0} → y ∈ range rexp
+    intro hy
+    -- hy : y ∈ {y | y > 0}
+    -- ⊢ y ∈ range rexp
+    use log y
+    -- ⊢ rexp (log y) = y
+    rw [exp_log hy]
 
--- Prueba
--- ======
-
-/-
-⊢ range exp = {y : ℝ | y > 0}
-  >> ext y,
-y : ℝ
-⊢ y ∈ range exp ↔ y ∈ {y : ℝ | y > 0}
-  >> split,
-| y : ℝ
-| ⊢ y ∈ range exp ↔ y ∈ {y : ℝ | y > 0}
-|   >> { rintros ⟨x, rfl⟩
-| x : ℝ
-| ⊢ x.exp ∈ {y : ℝ | y > 0},
-|   >>   apply exp_pos },
-y : ℝ
-⊢ y ∈ {y : ℝ | y > 0} → y ∈ range exp
-  >> { intro ypos,
-ypos : y ∈ {y : ℝ | y > 0}
-⊢ y ∈ range exp
-  >>   use log y,
-⊢ y.log.exp = y
-  >>   rw exp_log ypos },
-⊢ y.log.exp = y
--/
-
--- Comentario: Se ha usado el lema
--- + exp_log : 0 < x → log (exp x) = x
+-- Lemas usados
+-- ============
 
 variable (x : ℝ)
--- #check @exp_log x
+#check (exp_log : 0 < x → exp (log x) = x)

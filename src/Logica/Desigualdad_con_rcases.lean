@@ -160,7 +160,7 @@ by rcases h with ⟨a, b, rfl | rfl⟩ <;> nlinarith
 -- Lemas usados
 -- ============
 
--- variable (x y : ℝ)
--- #check (add_nonneg : 0 ≤ x → 0 ≤ y → 0 ≤ x + y)
--- #check (pow_two_nonneg x : 0 ≤ x ^ 2)
--- #check (zero_le_one : 0 ≤ 1)
+variable (x y : ℝ)
+#check (add_nonneg : 0 ≤ x → 0 ≤ y → 0 ≤ x + y)
+#check (pow_two_nonneg x : 0 ≤ x ^ 2)
+#check (zero_le_one : 0 ≤ 1)

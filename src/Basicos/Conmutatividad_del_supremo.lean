@@ -82,13 +82,13 @@ by apply le_antisymm; simp ; simp
 -- 5ª demostración
 example : x ⊔ y = y ⊔ x :=
 -- by apply?
-sup_comm
+sup_comm x y
 
 -- Lemas usados
 -- ============
 
--- #check (le_antisymm : x ≤ y → y ≤ x → x = y)
--- #check (le_sup_left : x ≤ x ⊔ y)
--- #check (le_sup_right : y ≤ x ⊔ y)
--- #check (sup_comm : x ⊔ y = y ⊔ x)
--- #check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)
+#check (le_sup_left : x ≤ x ⊔ y)
+#check (le_sup_right : y ≤ x ⊔ y)
+#check (sup_comm x y : x ⊔ y = y ⊔ x)
+#check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)

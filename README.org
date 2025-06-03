@@ -24,6 +24,9 @@
   - [[#conjunción-y-bicondicional][Conjunción y bicondicional]]
   - [[#disyunción][Disyunción]]
   - [[#sucesiones-y-convergencia][Sucesiones y convergencia]]
+- [[#conjuntos-y-funciones][Conjuntos y funciones]]
+  - [[#conjuntos][Conjuntos]]
+  - [[#funciones][Funciones]]
 - [[#bibliografía][Bibliografía]]
 
 * Introducción
@@ -544,123 +547,122 @@ propiedades matemáticas relacionadas con límites de sucesiones.
 *** [[./src/Logica/Convergencia_de_la_suma.lean][Convergencia de la suma]]
 #+INCLUDE: "./src/Logica/Convergencia_de_la_suma.lean" src lean
 
-#+BEGIN_COMMENT
+*** [[./src/Logica/Convergencia_del_producto_por_una_constante.lean][Convergencia del producto por una constante]]
+#+INCLUDE: "./src/Logica/Convergencia_del_producto_por_una_constante.lean" src lean
 
-# *** [[./src/Logica/Convergencia_del_producto_por_una_constante.lean][Convergencia del producto por una constante]]
-# #+INCLUDE: "./src/Logica/Convergencia_del_producto_por_una_constante.lean" src lean
-#
-# *** [[./src/Logica/Acotacion_de_convergentes.lean][Acotación de convergentes]]
-# #+INCLUDE: "./src/Logica/Acotacion_de_convergentes.lean" src lean
-#
-# *** [[./src/Logica/Producto_por_sucesion_convergente_a_cero.lean][Producto por sucesión convergente a cero]]
-# #+INCLUDE: "./src/Logica/Producto_por_sucesion_convergente_a_cero.lean" src lean
-#
-# *** [[./src/Logica/Convergencia_del_producto.lean][Convergencia del producto]]
-# #+INCLUDE: "./src/Logica/Convergencia_del_producto.lean" src lean
-#
-# *** [[./src/Logica/Unicidad_del_limite.lean][Unicidad del límite]]
-# #+INCLUDE: "./src/Logica/Unicidad_del_limite.lean" src lean
-#
-# * Conjuntos y funciones
-#
-# En este capítulo se muestra el razonamiento con Lean sobre las operaciones
-# conjuntistas y sobre las funciones.
-#
-# ** Conjuntos
-#
-# *** [[./src/Conjuntos/Monotonia_de_la_interseccion.lean][Monotonía de la intersección]]
-# #+INCLUDE: "./src/Conjuntos/Monotonia_de_la_interseccion.lean" src lean
-#
-# *** [[./src/Conjuntos/Distributiva_de_la_interseccion.lean][Distributiva de la intersección]]
-# #+INCLUDE: "./src/Conjuntos/Distributiva_de_la_interseccion.lean" src lean
-#
-# *** [[./src/Conjuntos/Diferencia_de_diferencia.lean][Diferencia de diferencia]]
-# #+INCLUDE: "./src/Conjuntos/Diferencia_de_diferencia.lean" src lean
-#
-# *** [[./src/Conjuntos/Conmutativa_de_la_interseccion.lean][Conmutativa de la intersección]]
-# #+INCLUDE: "./src/Conjuntos/Conmutativa_de_la_interseccion.lean" src lean
-#
-# *** [[./src/Conjuntos/Identidades_conjuntistas.lean][Identidades conjuntistas]]
-# #+INCLUDE: "./src/Conjuntos/Identidades_conjuntistas.lean" src lean
-#
-# *** [[./src/Conjuntos/Union_de_pares_e_impares.lean][Unión de pares e impares]]
-# #+INCLUDE: "./src/Conjuntos/Union_de_pares_e_impares.lean" src lean
-#
-# *** [[./src/Conjuntos/Pertenencia_al_vacio_y_al_universal.lean][Pertenencia al vacío y al universal]]
-# #+INCLUDE: "./src/Conjuntos/Pertenencia_al_vacio_y_al_universal.lean" src lean
-#
-# *** [[./src/Conjuntos/Primos_mayores_que_dos.lean][Primos mayores que dos]]
-# #+INCLUDE: "./src/Conjuntos/Primos_mayores_que_dos.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejemplos_con_cuantificadores_acotados.lean][Ejemplos con cuantificadores acotados]]
-# #+INCLUDE: "./src/Conjuntos/Ejemplos_con_cuantificadores_acotados.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejercicios_con_cuantificadores_acotados.lean][Ejercicios con cuantificadores acotados]]
-# #+INCLUDE: "./src/Conjuntos/Ejercicios_con_cuantificadores_acotados.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales.lean][Ejemplos de uniones e intersecciones generales]]
-# #+INCLUDE: "./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejercicios_de_uniones_e_intersecciones_generales.lean][Ejercicios de uniones e intersecciones generales]]
-# #+INCLUDE: "./src/Conjuntos/Ejercicios_de_uniones_e_intersecciones_generales.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_2.lean][Ejemplos de uniones e intersecciones generales (2)]]
-# #+INCLUDE: "./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_2.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_3.lean][Ejemplos de uniones e intersecciones generales (3)]]
-# #+INCLUDE: "./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_3.lean" src lean
-#
-# ** Funciones
-#
-# *** [[./src/Conjuntos/Preimagen_de_la_interseccion.lean][Preimagen de la intersección]]
-# #+INCLUDE: "./src/Conjuntos/Preimagen_de_la_interseccion.lean" src lean
-#
-# *** [[./src/Conjuntos/Imagen_de_la_union.lean][Imagen de la unión]]
-# #+INCLUDE: "./src/Conjuntos/Imagen_de_la_union.lean" src lean
-#
-# *** [[./src/Conjuntos/Primagen_de_imagen.lean][Primagen de imagen]]
-# #+INCLUDE: "./src/Conjuntos/Primagen_de_imagen.lean" src lean
-#
-# *** [[./src/Conjuntos/Inclusion_de_la_imagen.lean][Inclusión de la imagen]]
-# #+INCLUDE: "./src/Conjuntos/Inclusion_de_la_imagen.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejercicios_de_imagenes_y_uniones.lean][Ejercicios de imágenes y uniones]]
-# #+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_uniones.lean" src lean
-#
-# *** [[./src/Conjuntos/Definicion_de_inyectiva.lean][Definición de inyectiva]]
-# #+INCLUDE: "./src/Conjuntos/Definicion_de_inyectiva.lean" src lean
-#
-# *** [[./src/Conjuntos/Inyectividad_del_logaritmo.lean][Inyectividad del logaritmo]]
-# #+INCLUDE: "./src/Conjuntos/Inyectividad_del_logaritmo.lean" src lean
-#
-# *** [[./src/Conjuntos/Rango_de_la_exponencial.lean][Rango de la exponencial]]
-# #+INCLUDE: "./src/Conjuntos/Rango_de_la_exponencial.lean" src lean
-#
-# *** [[./src/Conjuntos/Inyectividad_del_cuadrado.lean][Inyectividad del cuadrado]]
-# #+INCLUDE: "./src/Conjuntos/Inyectividad_del_cuadrado.lean" src lean
-#
-# *** [[./src/Conjuntos/Rango_del_cuadrado.lean][Rango del cuadrado]]
-# #+INCLUDE: "./src/Conjuntos/Rango_del_cuadrado.lean" src lean
-#
-# *** [[./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean][Ejercicios de imágenes y preimágenes]]
-# #+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean" src lean
-#
-# *** [[./src/Conjuntos/Valor_por_defecto_y_eleccion_de_valores.lean][Valor por defecto y elección de valores]]
-# #+INCLUDE: "./src/Conjuntos/Valor_por_defecto_y_eleccion_de_valores.lean" src lean
-#
-# *** [[./src/Conjuntos/Funcion_inversa.lean][Función inversa]]
-# #+INCLUDE: "./src/Conjuntos/Funcion_inversa.lean" src lean
-#
-# *** [[./src/Conjuntos/Caracterizacion_de_las_funciones_inyectivas_mediante_la_inversa_por_la_izquierda.lean][Caracterización de las funciones inyectivas mediante la inversa por la izquierda]]
-# #+INCLUDE: "./src/Conjuntos/Caracterizacion_de_las_funciones_inyectivas_mediante_la_inversa_por_la_izquierda.lean" src lean
-#
-# *** [[./src/Conjuntos/Caracterizacion_de_las_funciones_suprayectivas_mediante_la_inversa_por_la_derecha.lean][Caracterización de las funciones suprayectivas mediante la inversa por la derecha]]
-# #+INCLUDE: "./src/Conjuntos/Caracterizacion_de_las_funciones_suprayectivas_mediante_la_inversa_por_la_derecha.lean" src lean
-#
-# *** [[./src/Conjuntos/Teorema_de_Cantor.lean][Teorema de Cantor]]
-# #+INCLUDE: "./src/Conjuntos/Teorema_de_Cantor.lean" src lean
+*** [[./src/Logica/Acotacion_de_convergentes.lean][Acotación de convergentes]]
+#+INCLUDE: "./src/Logica/Acotacion_de_convergentes.lean" src lean
 
-#+END_COMMENT
+*** [[./src/Logica/Producto_por_sucesion_convergente_a_cero.lean][Producto por sucesión convergente a cero]]
+#+INCLUDE: "./src/Logica/Producto_por_sucesion_convergente_a_cero.lean" src lean
+
+*** [[./src/Logica/Convergencia_del_producto.lean][Convergencia del producto]]
+#+INCLUDE: "./src/Logica/Convergencia_del_producto.lean" src lean
+
+*** [[./src/Logica/Unicidad_del_limite.lean][Unicidad del límite]]
+#+INCLUDE: "./src/Logica/Unicidad_del_limite.lean" src lean
+
+* Conjuntos y funciones
+
+En este capítulo se muestra el razonamiento con Lean sobre las operaciones
+conjuntistas y sobre las funciones.
+
+** Conjuntos
+
+*** [[./src/Conjuntos/Monotonia_de_la_interseccion.lean][Monotonía de la intersección]]
+#+INCLUDE: "./src/Conjuntos/Monotonia_de_la_interseccion.lean" src lean
+
+*** [[./src/Conjuntos/Distributiva_de_la_interseccion.lean][Distributiva de la intersección]]
+#+INCLUDE: "./src/Conjuntos/Distributiva_de_la_interseccion.lean" src lean
+
+*** [[./src/Conjuntos/Diferencia_de_diferencia.lean][Diferencia de diferencia]]
+#+INCLUDE: "./src/Conjuntos/Diferencia_de_diferencia.lean" src lean
+
+*** [[./src/Conjuntos/Conmutativa_de_la_interseccion.lean][Conmutativa de la intersección]]
+#+INCLUDE: "./src/Conjuntos/Conmutativa_de_la_interseccion.lean" src lean
+
+*** [[./src/Conjuntos/Identidades_conjuntistas.lean][Identidades conjuntistas]]
+#+INCLUDE: "./src/Conjuntos/Identidades_conjuntistas.lean" src lean
+
+*** [[./src/Conjuntos/Union_de_pares_e_impares.lean][Unión de pares e impares]]
+#+INCLUDE: "./src/Conjuntos/Union_de_pares_e_impares.lean" src lean
+
+*** [[./src/Conjuntos/Pertenencia_al_vacio_y_al_universal.lean][Pertenencia al vacío y al universal]]
+#+INCLUDE: "./src/Conjuntos/Pertenencia_al_vacio_y_al_universal.lean" src lean
+
+*** [[./src/Conjuntos/Primos_mayores_que_dos.lean][Primos mayores que dos]]
+#+INCLUDE: "./src/Conjuntos/Primos_mayores_que_dos.lean" src lean
+
+*** [[./src/Conjuntos/Definiciones_de_primo.lean][Definiciones de primo]]
+#+INCLUDE: "./src/Conjuntos/Definiciones_de_primo.lean" src lean
+
+*** [[./src/Conjuntos/Ejemplos_con_cuantificadores_acotados.lean][Ejemplos con cuantificadores acotados]]
+#+INCLUDE: "./src/Conjuntos/Ejemplos_con_cuantificadores_acotados.lean" src lean
+
+*** [[./src/Conjuntos/Ejercicios_con_cuantificadores_acotados.lean][Ejercicios con cuantificadores acotados]]
+#+INCLUDE: "./src/Conjuntos/Ejercicios_con_cuantificadores_acotados.lean" src lean
+
+*** [[./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales.lean][Ejemplos de uniones e intersecciones generales]]
+#+INCLUDE: "./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales.lean" src lean
+
+*** [[./src/Conjuntos/Ejercicios_de_uniones_e_intersecciones_generales.lean][Ejercicios de uniones e intersecciones generales]]
+#+INCLUDE: "./src/Conjuntos/Ejercicios_de_uniones_e_intersecciones_generales.lean" src lean
+
+*** [[./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_2.lean][Ejemplos de uniones e intersecciones generales (2)]]
+#+INCLUDE: "./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_2.lean" src lean
+
+*** [[./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_3.lean][Ejemplos de uniones e intersecciones generales (3)]]
+#+INCLUDE: "./src/Conjuntos/Ejemplos_de_uniones_e_intersecciones_generales_3.lean" src lean
+
+** Funciones
+
+*** [[./src/Conjuntos/Preimagen_de_la_interseccion.lean][Preimagen de la intersección]]
+#+INCLUDE: "./src/Conjuntos/Preimagen_de_la_interseccion.lean" src lean
+
+*** [[./src/Conjuntos/Imagen_de_la_union.lean][Imagen de la unión]]
+#+INCLUDE: "./src/Conjuntos/Imagen_de_la_union.lean" src lean
+
+*** [[./src/Conjuntos/Primagen_de_imagen.lean][Preimagen de imagen]]
+#+INCLUDE: "./src/Conjuntos/Preimagen_de_imagen.lean" src lean
+
+*** [[./src/Conjuntos/Inclusion_de_la_imagen.lean][Inclusión de la imagen]]
+#+INCLUDE: "./src/Conjuntos/Inclusion_de_la_imagen.lean" src lean
+
+*** [[./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean][Ejercicios de imágenes y preimágenes]]
+#+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean" src lean
+
+*** [[./src/Conjuntos/Ejercicios_de_imagenes_y_uniones.lean][Ejercicios de imágenes y uniones]]
+#+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_uniones.lean" src lean
+
+*** [[./src/Conjuntos/Definicion_de_inyectiva.lean][Definición de inyectiva]]
+#+INCLUDE: "./src/Conjuntos/Definicion_de_inyectiva.lean" src lean
+
+*** [[./src/Conjuntos/Inyectividad_del_logaritmo.lean][Inyectividad del logaritmo]]
+#+INCLUDE: "./src/Conjuntos/Inyectividad_del_logaritmo.lean" src lean
+
+*** [[./src/Conjuntos/Rango_de_la_exponencial.lean][Rango de la exponencial]]
+#+INCLUDE: "./src/Conjuntos/Rango_de_la_exponencial.lean" src lean
+
+*** [[./src/Conjuntos/Inyectividad_del_cuadrado.lean][Inyectividad del cuadrado]]
+#+INCLUDE: "./src/Conjuntos/Inyectividad_del_cuadrado.lean" src lean
+
+*** [[./src/Conjuntos/Rango_del_cuadrado.lean][Rango del cuadrado]]
+#+INCLUDE: "./src/Conjuntos/Rango_del_cuadrado.lean" src lean
+
+*** [[./src/Conjuntos/Valor_por_defecto_y_eleccion_de_valores.lean][Valor por defecto y elección de valores]]
+#+INCLUDE: "./src/Conjuntos/Valor_por_defecto_y_eleccion_de_valores.lean" src lean
+
+*** [[./src/Conjuntos/Funcion_inversa.lean][Función inversa]]
+#+INCLUDE: "./src/Conjuntos/Funcion_inversa.lean" src lean
+
+*** [[./src/Conjuntos/Caracterizacion_de_las_funciones_inyectivas_mediante_la_inversa_por_la_izquierda.lean][Caracterización de las funciones inyectivas mediante la inversa por la izquierda]]
+#+INCLUDE: "./src/Conjuntos/Caracterizacion_de_las_funciones_inyectivas_mediante_la_inversa_por_la_izquierda.lean" src lean
+
+*** [[./src/Conjuntos/Caracterizacion_de_las_funciones_suprayectivas_mediante_la_inversa_por_la_derecha.lean][Caracterización de las funciones suprayectivas mediante la inversa por la derecha]]
+#+INCLUDE: "./src/Conjuntos/Caracterizacion_de_las_funciones_suprayectivas_mediante_la_inversa_por_la_derecha.lean" src lean
+
+*** [[./src/Conjuntos/Teorema_de_Cantor.lean][Teorema de Cantor]]
+#+INCLUDE: "./src/Conjuntos/Teorema_de_Cantor.lean" src lean
 
 * Bibliografía
 

@@ -100,3 +100,10 @@ by
 
 example : ¬¬P → P :=
 by tauto
+
+-- Lemas usados
+-- ============
+
+variable (Q : Prop)
+#check (absurd : P → ¬P → Q)
+#check (em P : P ∨ ¬P)

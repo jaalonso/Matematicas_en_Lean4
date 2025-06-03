@@ -3,42 +3,29 @@
 -- los números positivos.
 -- ----------------------------------------------------------------------
 
-import analysis.special_functions.exp_log
+import Mathlib.Data.Set.Function
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
-open set real
+open Set Real
 
-example : inj_on log { x | x > 0 } :=
-begin
-  intros x xpos y ypos,
-  intro h,
+example : InjOn log { x | x > 0 } :=
+by
+  intro x hx y hy
+  -- x : ℝ
+  -- hx : x ∈ {x | x > 0}
+  -- y : ℝ
+  -- hy : y ∈ {x | x > 0}
+  -- ⊢ log x = log y → x = y
+  intro e
+  -- e : log x = log y
+  -- ⊢ x = y
   calc
-    x   = exp (log x) : by rw exp_log xpos
-    ... = exp (log y) : by rw h
-    ... = y           : by rw exp_log ypos,
-end
+    x = exp (log x) := by rw [exp_log hx]
+    _ = exp (log y) := by rw [e]
+    _ = y           := by rw [exp_log hy]
 
--- Prueba
--- ======
+-- Lemas usados
+-- ============
 
-/-
-⊢ inj_on log {x : ℝ | x > 0}
-  >> intros x y xpos ypos,
-x y : ℝ,
-xpos : x ∈ {x : ℝ | x > 0},
-ypos : y ∈ {x : ℝ | x > 0}
-⊢ x.log = y.log → x = y
-  >> intro h,
-h : x.log = y.log
-⊢ x = y
-  >> calc
-  >>   x   = exp (log x) : by rw exp_log xpos
-  >>   ... = exp (log y) : by rw h
-  >>   ... = y           : by rw exp_log ypos,
--/
-
--- Comentario: Se ha usado el lema
--- + exp_log : 0 < x → exp (log x) = x
-
--- Comprobación:
 variable (x : ℝ)
--- #check @exp_log x
+#check (exp_log : 0 < x → exp (log x) = x)

@@ -1,9 +1,11 @@
-import Mathlib.Data.Nat.Prime
 import Mathlib.Data.Real.Basic
+import Mathlib.Data.Nat.Prime.Defs
 import Mathlib.Tactic
 
+variable (x y : ℝ)
+
 -- ---------------------------------------------------------------------
--- Ejercicio 1. Demostrar que (∃x ∈ ℝ)[2 < x < 3]
+-- Ejercicio. Demostrar que (∃x ∈ ℝ)[2 < x < 3]
 -- ---------------------------------------------------------------------
 
 -- Demostración en lenguaje natural
@@ -20,11 +22,11 @@ import Mathlib.Tactic
 example : ∃ x : ℝ, 2 < x ∧ x < 3 :=
 by
   use 5 / 2
-  -- ⊢ 2 < 5 / 2 ∧ 5 / 2 < 3
+  show 2 < 5 / 2 ∧ 5 / 2 < 3
   constructor
-  . -- ⊢ 2 < 5 / 2
+  . show 2 < 5 / 2
     norm_num
-  . -- ⊢ 5 / 2 < 3
+  . show 5 / 2 < 3
     norm_num
 
 -- 2ª demostración
@@ -33,17 +35,26 @@ by
 example : ∃ x : ℝ, 2 < x ∧ x < 3 :=
 by
   use 5 / 2
-  -- ⊢ 2 < 5 / 2 ∧ 5 / 2 < 3
-  constructor <;> norm_num
+  constructor
+  . norm_num
+  . norm_num
 
 -- 3ª demostración
+-- ===============
+
+example : ∃ x : ℝ, 2 < x ∧ x < 3 :=
+by
+  use 5 / 2
+  constructor <;> norm_num
+
+-- 4ª demostración
 -- ===============
 
 example : ∃ x : ℝ, 2 < x ∧ x < 3 :=
 ⟨5/2, by norm_num⟩
 
 -- ---------------------------------------------------------------------
--- Ejercicio 2. Demostrar que si (∃z ∈ ℝ)[x < z < y], entonces x < y.
+-- Ejercicio. Demostrar que si (∃z ∈ ℝ)[x < z < y], entonces x < y.
 -- ---------------------------------------------------------------------
 
 -- Demostración en lenguaje natural
@@ -58,31 +69,28 @@ example : ∃ x : ℝ, 2 < x ∧ x < 3 :=
 -- Demostraciones con Lean4
 -- ========================
 
-variable (x y : ℝ)
-
 -- 1ª demostración
 -- ===============
 
 example : (∃ z : ℝ, x < z ∧ z < y) → x < y :=
 by
-  rintro ⟨z, h1, h2⟩
-  -- z : ℝ
-  -- h1 : x < z
-  -- h2 : z < y
-  -- ⊢ x < y
+  rintro ⟨z, h1 : x < z, h2 : z < y⟩
+  show x < y
   exact lt_trans h1 h2
 
 -- 2ª demostración
 -- ===============
 
 example : (∃ z : ℝ, x < z ∧ z < y) → x < y :=
+by
+  rintro ⟨z, h1, h2⟩
+  exact lt_trans h1 h2
+
+-- 3ª demostración
+-- ===============
+
+example : (∃ z : ℝ, x < z ∧ z < y) → x < y :=
 fun ⟨_, h1, h2⟩ ↦ lt_trans h1 h2
-
--- Lemas usados
--- ============
-
--- variable (a b c : ℝ)
--- #check (lt_trans : a < b → b < c → a < c)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que existen números primos m y n tales que
@@ -92,8 +100,8 @@ fun ⟨_, h1, h2⟩ ↦ lt_trans h1 h2
 -- Demostración en lenguaje natural
 -- ================================
 
--- Basta considerar los números 5 y 7, ya que sob primos y
--- 4 < 5 < 7 < 10
+-- Basta considerar los números 5 y 7, ya que son primos y
+-- 4 < 5 < 7 < 10.
 
 -- Demostración con Lean4
 -- ======================
@@ -126,16 +134,12 @@ by
 
 example : x ≤ y ∧ x ≠ y → x ≤ y ∧ ¬ y ≤ x :=
 by
-  rintro ⟨h1, h2⟩
-  -- h1 : x ≤ y
-  -- h2 : x ≠ y
-  -- ⊢ x ≤ y ∧ ¬y ≤ x
+  rintro ⟨h1 : x ≤ y, h2 : x ≠ y⟩
   constructor
-  . -- ⊢ x ≤ y
+  . show x ≤ y
     exact h1
-  . -- ⊢ ¬y ≤ x
-    rintro h3
-    -- h3 : y ≤ x
+  . show ¬ y ≤ x
+    rintro h3 : y ≤ x
     -- ⊢ False
     have h4 : x = y := le_antisymm h1 h3
     show False
@@ -146,16 +150,13 @@ by
 
 example : x ≤ y ∧ x ≠ y → x ≤ y ∧ ¬ y ≤ x :=
 by
-  rintro ⟨h1, h2⟩
-  -- h1 : x ≤ y
-  -- h2 : x ≠ y
+  rintro ⟨h1 : x ≤ y, h2 : x ≠ y⟩
   -- ⊢ x ≤ y ∧ ¬y ≤ x
   constructor
-  . -- ⊢ x ≤ y
+  . show x ≤ y
     exact h1
-  . -- ⊢ ¬y ≤ x
-    rintro h3
-    -- h3 : y ≤ x
+  . show ¬ y ≤ x
+    rintro h3 : y ≤ x
     -- ⊢ False
     show False
     exact h2 (le_antisymm h1 h3)
@@ -165,14 +166,11 @@ by
 
 example : x ≤ y ∧ x ≠ y → x ≤ y ∧ ¬ y ≤ x :=
 by
-  rintro ⟨h1, h2⟩
-  -- h1 : x ≤ y
-  -- h2 : x ≠ y
-  -- ⊢ x ≤ y ∧ ¬y ≤ x
+  rintro ⟨h1 : x ≤ y, h2 : x ≠ y⟩
   constructor
-  . -- ⊢ x ≤ y
+  . show x ≤ y
     exact h1
-  . -- ⊢ ¬y ≤ x
+  . show ¬ y ≤ x
     exact fun h3 ↦ h2 (le_antisymm h1 h3)
 
 -- 4ª demostración
@@ -181,9 +179,6 @@ by
 example : x ≤ y ∧ x ≠ y → x ≤ y ∧ ¬ y ≤ x :=
 by
   rintro ⟨h1, h2⟩
-  -- h1 : x ≤ y
-  -- h2 : x ≠ y
-  -- ⊢ x ≤ y ∧ ¬y ≤ x
   exact ⟨h1, fun h3 ↦ h2 (le_antisymm h1 h3)⟩
 
 -- 5ª demostración
@@ -197,12 +192,8 @@ example : x ≤ y ∧ x ≠ y → x ≤ y ∧ ¬ y ≤ x :=
 
 example : x ≤ y ∧ x ≠ y → x ≤ y ∧ ¬ y ≤ x :=
 by
-  rintro ⟨h1, h2⟩
-  -- h1 : x ≤ y
-  -- h2 : x ≠ y
-  -- ⊢ x ≤ y ∧ ¬y ≤ x
+  rintro ⟨h1 : x ≤ y, h2 : x ≠ y⟩
   use h1
-  -- h1 : x ≤ y
   exact fun h3 ↦ h2 (le_antisymm h1 h3)
 
 -- 7ª demostración
@@ -224,4 +215,6 @@ by
 -- Lemas usados
 -- ============
 
--- #check (le_antisymm : x ≤ y → y ≤ x → x = y)
+variable (z : ℝ)
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)
+#check (lt_trans : x < y → y < z → x < z)

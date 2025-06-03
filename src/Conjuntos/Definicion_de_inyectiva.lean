@@ -1,19 +1,24 @@
-import data.set.function
+import Mathlib.Data.Set.Function
 
-open set
+open Set
 
-universes u v
+universe u v
 variable {α : Type u}
 variable {β : Type v}
 variable (f : α → β)
-variable (s : set α)
+variable (s : Set α)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que f es inyectiva sobre s syss
---    ∀ {x₁ x₂}, x₁ ∈ s → x₂ ∈ s → f x₁ = f x₂ → x₁ = x₂
+--    ∀ x1 ∈ s, ∀ x2 ∈ s, f x1 = f x2 → x1 = x2
 -- ----------------------------------------------------------------------
 
 example :
-  inj_on f s ↔
-  ∀ ⦃x₁ : α⦄, x₁ ∈ s → ∀ ⦃x₂ : α⦄, x₂ ∈ s → f x₁ = f x₂ → x₁ = x₂ :=
-iff.rfl
+  InjOn f s ↔ ∀ x1 ∈ s, ∀ x2 ∈ s, f x1 = f x2 → x1 = x2 :=
+Iff.refl _
+
+-- Lemas usados
+-- ============
+
+variable (a : Prop)
+#check (Iff.refl a : a ↔ a)

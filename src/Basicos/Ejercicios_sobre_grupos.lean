@@ -33,18 +33,30 @@ variable (a b : G)                -- 4
 -- ========================
 
 -- 1ª demostración
-theorem mul_right_inv : a * a⁻¹ = 1 :=
+example : a * a⁻¹ = 1 :=
+calc
+  a * a⁻¹ = 1 * (a * a⁻¹)                := by exact (one_mul (a * a⁻¹)).symm
+        _ = (1 * a) * a⁻¹                := (mul_assoc 1 a a⁻¹).symm
+        _ = (((a⁻¹)⁻¹ * a⁻¹)  * a) * a⁻¹ := by {congr ; exact (inv_mul_cancel a⁻¹).symm}
+        _ = ((a⁻¹)⁻¹ * (a⁻¹  * a)) * a⁻¹ := congrArg (. * a⁻¹) (mul_assoc a⁻¹⁻¹ a⁻¹ a)
+        _ = ((a⁻¹)⁻¹ * 1) * a⁻¹          := by {congr ; exact inv_mul_cancel a}
+        _ = (a⁻¹)⁻¹ * (1 * a⁻¹)          := mul_assoc a⁻¹⁻¹ 1 a⁻¹
+        _ = (a⁻¹)⁻¹ * a⁻¹                := congrArg (a⁻¹⁻¹ * .) (one_mul a⁻¹)
+        _ = 1                            := inv_mul_cancel a⁻¹
+
+-- 2ª demostración
+example : a * a⁻¹ = 1 :=
 calc
   a * a⁻¹ = 1 * (a * a⁻¹)                := by rw [one_mul]
         _ = (1 * a) * a⁻¹                := by rw [mul_assoc]
-        _ = (((a⁻¹)⁻¹ * a⁻¹)  * a) * a⁻¹ := by rw [mul_left_inv]
+        _ = (((a⁻¹)⁻¹ * a⁻¹)  * a) * a⁻¹ := by rw [inv_mul_cancel]
         _ = ((a⁻¹)⁻¹ * (a⁻¹  * a)) * a⁻¹ := by rw [← mul_assoc]
-        _ = ((a⁻¹)⁻¹ * 1) * a⁻¹          := by rw [mul_left_inv]
+        _ = ((a⁻¹)⁻¹ * 1) * a⁻¹          := by rw [inv_mul_cancel]
         _ = (a⁻¹)⁻¹ * (1 * a⁻¹)          := by rw [mul_assoc]
         _ = (a⁻¹)⁻¹ * a⁻¹                := by rw [one_mul]
-        _ = 1                            := by rw [mul_left_inv]
+        _ = 1                            := by rw [inv_mul_cancel]
 
--- 2ª demostración
+-- 3ª demostración
 example : a * a⁻¹ = 1 :=
 calc
   a * a⁻¹ = 1 * (a * a⁻¹)                := by simp
@@ -56,8 +68,8 @@ calc
         _ = (a⁻¹)⁻¹ * a⁻¹                := by simp
         _ = 1                            := by simp
 
--- 3ª demostración
-example : a * a⁻¹ = 1 :=
+-- 4ª demostración
+theorem mul_right_inv : a * a⁻¹ = 1 :=
 by simp
 
 -- ---------------------------------------------------------------------
@@ -78,14 +90,22 @@ by simp
 -- ========================
 
 -- 1ª demostración
-theorem mul_one : a * 1 = a :=
+example : a * 1 = a :=
 calc
-  a * 1 = a * (a⁻¹ * a) := by rw [mul_left_inv]
+  a * 1 = a * (a⁻¹ * a) := by {congr ; exact (inv_mul_cancel a).symm}
+      _ = (a * a⁻¹) * a := (mul_assoc a a⁻¹ a).symm
+      _ = 1 * a         := congrArg (. * a) (mul_right_inv a)
+      _ = a             := one_mul a
+
+-- 2ª demostración
+example : a * 1 = a :=
+calc
+  a * 1 = a * (a⁻¹ * a) := by rw [inv_mul_cancel]
       _ = (a * a⁻¹) * a := by rw [mul_assoc]
       _ = 1 * a         := by rw [mul_right_inv]
       _ = a             := by rw [one_mul]
 
--- 2ª demostración
+-- 3ª demostración
 example : a * 1 = a :=
 calc
   a * 1 = a * (a⁻¹ * a) := by simp
@@ -93,8 +113,8 @@ calc
       _ = 1 * a         := by simp
       _ = a             := by simp
 
--- 3ª demostración
-example : a * 1 = a :=
+-- 4ª demostración
+theorem mul_one : a * 1 = a :=
 by simp
 
 -- ---------------------------------------------------------------------
@@ -118,7 +138,18 @@ by simp
 -- ========================
 
 -- 1º demostración
-lemma inv_eq_of_mul_eq_one
+example
+  (h : b * a = 1)
+  : a⁻¹ = b :=
+calc
+  a⁻¹ =  1 * a⁻¹       := by exact (one_mul a⁻¹).symm
+    _ =  (b * a) * a⁻¹ := congrArg (. * a⁻¹) h.symm
+    _ =  b * (a * a⁻¹) := mul_assoc b a a⁻¹
+    _ =  b * 1         := congrArg (b * .) (mul_right_inv a)
+    _ =  b             := mul_one b
+
+-- 2º demostración
+example
   (h : b * a = 1)
   : a⁻¹ = b :=
 calc
@@ -128,7 +159,7 @@ calc
     _ =  b * 1         := by rw [mul_right_inv]
     _ =  b             := by rw [mul_one]
 
--- 2º demostración
+-- 3º demostración
 example
   (h : b * a = 1)
   : a⁻¹ = b :=
@@ -139,8 +170,8 @@ calc
     _ =  b * 1         := by simp
     _ =  b             := by simp
 
--- 3º demostración
-example
+-- 4º demostración
+lemma inv_eq_of_mul_eq_one
   (h : b * a = 1)
   : a⁻¹ = b :=
 calc
@@ -175,9 +206,9 @@ calc
   (b⁻¹ * a⁻¹) * (a * b)
     = b⁻¹ * (a⁻¹ * (a * b)) := by rw [mul_assoc]
   _ = b⁻¹ * ((a⁻¹ * a) * b) := by rw [mul_assoc]
-  _ = b⁻¹ * (1 * b)         := by rw [mul_left_inv]
+  _ = b⁻¹ * (1 * b)         := by rw [inv_mul_cancel]
   _ = b⁻¹ * b               := by rw [one_mul]
-  _ = 1                     := by rw [mul_left_inv]
+  _ = 1                     := by rw [inv_mul_cancel]
 
 -- 1ª demostración
 example : (a * b)⁻¹ = b⁻¹ * a⁻¹ :=
@@ -208,6 +239,20 @@ by
   apply inv_eq_of_mul_eq_one
   -- ⊢ (b⁻¹ * a⁻¹) * (a * b) = 1
   rw [mul_inv_rev_aux]
+
+-- Lemas usados
+-- ============
+
+variable (c : G)
+variable (f : G → G)
+#check (inv_mul_cancel a : a⁻¹ * a = 1)
+#check (congrArg f : a = b → f a = f b)
+#check (inv_eq_of_mul_eq_one a b : b * a = 1 → a⁻¹ = b)
+#check (inv_mul_cancel a : a⁻¹ * a = 1)
+#check (mul_assoc a b c : (a * b) * c = a * (b * c))
+#check (mul_one a : a * 1 = a)
+#check (mul_right_inv a : a * a⁻¹ = 1)
+#check (one_mul a : 1 * a = a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6.  Cerrar el espacio de nombre Grupo.

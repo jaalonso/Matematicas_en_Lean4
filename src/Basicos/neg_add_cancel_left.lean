@@ -15,6 +15,7 @@ namespace MyRing
 -- ----------------------------------------------------------------------
 
 variable {R : Type _} [Ring R]
+variable (a b : R)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 5. Demostrar que para todo a, b ∈ R,
@@ -32,25 +33,38 @@ variable {R : Type _} [Ring R]
 -- 1ª demostración
 -- ===============
 
-example
-  (a b : R)
-  : -a + (a + b) = b :=
-calc -a + (a + b) = (-a + a) + b := by rw [← add_assoc]
-                _ = 0 + b        := by rw [add_left_neg]
-                _ = b            := by rw [zero_add]
+example : -a + (a + b) = b :=
+calc -a + (a + b) = (-a + a) + b := by exact (add_assoc (-a) a b).symm
+                _ = 0 + b        := congrArg (. + b) (neg_add_cancel a)
+                _ = b            := zero_add b
 
 -- 2ª demostración
 -- ===============
 
-theorem neg_add_cancel_left
-  (a b : R)
+example
   : -a + (a + b) = b :=
 by
   rw [←add_assoc]
   -- ⊢ (-a + a) + b = b
-  rw [add_left_neg]
+  rw [neg_add_cancel]
   -- ⊢ 0 + b = b
   rw [zero_add]
+
+-- 3ª demostración
+-- ===============
+
+theorem neg_add_cancel_left
+  : -a + (a + b) = b :=
+by
+  rw [←add_assoc, neg_add_cancel, zero_add]
+
+-- Lemas usados
+-- ============
+
+variable (c : R)
+#check (add_assoc a b c : a + b + c = a + (b + c))
+#check (neg_add_cancel a : -a + a = 0)
+#check (zero_add a :  0 + a = a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6. Cerrar el espacio de nombre MyRing.

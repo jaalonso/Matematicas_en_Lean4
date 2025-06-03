@@ -74,11 +74,11 @@ theorem add_left_cancel
   : b = c :=
 calc
   b = 0 + b        := by rw [zero_add]
-  _ = (-a + a) + b := by rw [add_left_neg]
+  _ = (-a + a) + b := by rw [neg_add_cancel]
   _ = -a + (a + b) := by rw [add_assoc]
   _ = -a + (a + c) := by rw [h]
   _ = (-a + a) + c := by rw [←add_assoc]
-  _ = 0 + c        := by rw [add_left_neg]
+  _ = 0 + c        := by rw [neg_add_cancel]
   _ = c            := by rw [zero_add]
 
 -- 2ª demostración
@@ -93,13 +93,13 @@ by
   clear h
   rw [← add_assoc] at h1
   -- h1 : (-a + a) + b = -a + (a + c)
-  rw [add_left_neg] at h1
+  rw [neg_add_cancel] at h1
   -- h1 : 0 + b = -a + (a + c)
   rw [zero_add] at h1
   -- h1 : b = -a + (a + c)
   rw [← add_assoc] at h1
   -- h1 : b = (-a + a) + c
-  rw [add_left_neg] at h1
+  rw [neg_add_cancel] at h1
   -- h1 : b = 0 + c
   rw [zero_add] at h1
   -- h1 : b = c
@@ -182,11 +182,11 @@ theorem add_right_cancel
   : a = c :=
 calc
   a = a + 0        := by rw [add_zero]
-  _ = a + (b + -b) := by rw [add_right_neg]
+  _ = a + (b + -b) := by rw [add_neg_cancel]
   _ = (a + b) + -b := by rw [add_assoc]
   _ = (c + b) + -b := by rw [h]
   _ = c + (b + -b) := by rw [← add_assoc]
-  _ = c + 0        := by rw [← add_right_neg]
+  _ = c + 0        := by rw [← add_neg_cancel]
   _ = c            := by rw [add_zero]
 
 -- 2ª demostración con Lean4

@@ -44,11 +44,6 @@ example
   : (a ⊔ b) ⊓ c = (a ⊓ c) ⊔ (b ⊓ c) :=
 by simp [h, inf_comm]
 
--- Lemas usados
--- ============
-
-#check (inf_comm : a ⊓ b = b ⊓ a)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
 --    ∀ x y z : α, x ⊔ (y ⊓ z) = (x ⊔ y) ⊓ (x ⊔ z)
@@ -87,4 +82,5 @@ by simp [h, sup_comm]
 -- Lemas usados
 -- ============
 
-#check (sup_comm : a ⊔ b = b ⊔ a)
+#check (inf_comm a b : a ⊓ b = b ⊓ a)
+#check (sup_comm a b : a ⊔ b = b ⊔ a)

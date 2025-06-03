@@ -37,7 +37,7 @@ by
   -- ⊢ c * (x / c) = x
   rw [mul_comm]
   -- ⊢ (x / c) * c = x
-  exact div_mul_cancel x h
+  exact div_mul_cancel₀ x h
 
 -- 2ª demostración
 -- ===============
@@ -51,7 +51,7 @@ by
   -- ⊢ ∃ a, (fun x => c * x) a = x
   use (x / c)
   -- ⊢ (fun x => c * x) (x / c) = x
-  exact mul_div_cancel' x h
+  exact mul_div_cancel₀ x h
 
 -- 3ª demostración
 -- ===============
@@ -59,7 +59,7 @@ by
 example
   (h : c ≠ 0)
   : Surjective (fun x ↦ c * x) :=
-fun x ↦ ⟨x / c, mul_div_cancel' x h⟩
+fun x ↦ ⟨x / c, mul_div_cancel₀ x h⟩
 
 -- 4ª demostración
 -- ===============
@@ -72,8 +72,8 @@ mul_left_surjective₀ h
 -- Lemas usados
 -- ============
 
--- variable (a b : ℝ)
--- #check (div_mul_cancel a : b ≠ 0 → (a / b) * b = a)
--- #check (mul_comm a b : a * b = b * a)
--- #check (mul_div_cancel' a : b ≠ 0 → b * (a / b) = a)
--- #check (mul_left_surjective₀ : c ≠ 0 → Surjective (fun x ↦ c * x))
+variable (a b : ℝ)
+#check (div_mul_cancel₀ a : b ≠ 0 → (a / b) * b = a)
+#check (mul_comm a b : a * b = b * a)
+#check (mul_div_cancel₀ a : b ≠ 0 → b * (a / b) = a)
+#check (mul_left_surjective₀ : c ≠ 0 → Surjective (fun x ↦ c * x))

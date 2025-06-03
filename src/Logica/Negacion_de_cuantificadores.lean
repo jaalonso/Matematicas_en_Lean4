@@ -62,7 +62,6 @@ by
   -- ⊢ ∃ x, P x
   use y
   -- ⊢ P y
-  exact h1
 
 -- 3ª demostración
 -- ===============
@@ -126,11 +125,6 @@ example
   (h : ¬ ∃ x, P x)
   : ∀ x, ¬ P x :=
 by aesop
-
--- Lemas usados
--- ============
-
--- #check (not_exists : (¬∃ x, P x) ↔ ∀ (x : α), ¬P x)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
@@ -215,12 +209,6 @@ example
   : ¬ ∃ x, P x :=
 by aesop
 
--- Lemas usados
--- ============
-
--- variable (q : Prop)
--- #check (not_exists_of_forall_not : (∀ x, P x → q) → (∃ x, P x) → q)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que si
 --    ¬ ∀ x, P x
@@ -285,11 +273,6 @@ example
   (h : ¬ ∀ x, P x)
   : ∃ x, ¬ P x :=
 by aesop
-
--- Lemas usados
--- ============
-
--- #check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 6. Demostrar que si
@@ -394,5 +377,7 @@ by aesop
 -- Lemas usados
 -- ============
 
--- #check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
--- #check (not_forall_of_exists_not : (∃ x, ¬P x) → ¬∀ x, P x)
+#check (not_exists : (¬∃ x, P x) ↔ ∀ (x : α), ¬P x)
+#check (not_exists_of_forall_not : (∀ x, ¬ P x) → ¬ ∃ x, P x)
+#check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
+#check (not_forall_of_exists_not : (∃ x, ¬P x) → ¬∀ x, P x)

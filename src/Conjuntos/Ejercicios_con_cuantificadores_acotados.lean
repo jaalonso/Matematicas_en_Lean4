@@ -7,82 +7,50 @@
 -- 5, Añadir ssubt como hipótesis de la teoría.
 -- ----------------------------------------------------------------------
 
-import data.nat.prime data.nat.parity  -- 1
-open nat                               -- 2
-variables (s t : set ℕ)                -- 3
-variables (ssubt : s ⊆ t)              -- 4
-include ssubt                          -- 5
+import Mathlib.Data.Nat.Prime.Basic
+
+open Nat                              -- 2
+
+variable (s t : Set ℕ)                -- 3
+variable (ssubt : s ⊆ t)              -- 4
+
+include ssubt                         -- 5
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si
---    ∀ x ∈ t, ¬ even x
---    ∀ x ∈ t, prime x
+--    ∀ x ∈ t, ¬ Even x
+--    ∀ x ∈ t, Nat.Prime x
 -- entonces
---    ∀ x ∈ s, ¬ even x ∧ prime x
+--    ∀ x ∈ s, ¬ Even x ∧ Nat.Prime x
 -- ----------------------------------------------------------------------
 
-example 
-  (h₀ : ∀ x ∈ t, ¬ even x) 
-  (h₁ : ∀ x ∈ t, prime x) 
-  : ∀ x ∈ s, ¬ even x ∧ prime x :=
-begin
-  intros x xs,
-  split,
-  { apply h₀ x (ssubt xs) },
-  { apply h₁ x (ssubt xs) },
-end
-
--- Prueba
--- ======
-
-/-
-s t : set ℕ,
-ssubt : s ⊆ t,
-h₀ : ∀ (x : ℕ), x ∈ t → ¬x.even,
-h₁ : ∀ (x : ℕ), x ∈ t → x.prime
-⊢ ∀ (x : ℕ), x ∈ s → ¬x.even ∧ x.prime
-  >> intros x xs,
-x : ℕ,
-xs : x ∈ s
-⊢ ¬x.even ∧ x.prime
-  >> split,
-| ⊢ ¬x.even
-|   >> { apply h₀ x (ssubt xs) },
-⊢ x.prime
-  >> { apply h₁ x (ssubt xs) },
-no goals
--/
+example
+  (h₀ : ∀ x ∈ t, ¬Even x)
+  (h₁ : ∀ x ∈ t, Nat.Prime x)
+  : ∀ x ∈ s, ¬Even x ∧ Nat.Prime x :=
+by
+  intro x xs
+  -- x : ℕ
+  -- xs : x ∈ s
+  -- ⊢ ¬Even x ∧ Nat.Prime x
+  constructor
+  · -- ⊢ ¬Even x
+    apply h₀ x (ssubt xs)
+  . -- ⊢ Nat.Prime x
+    apply h₁ x (ssubt xs)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que si
---    ∃ x ∈ s, ¬ even x ∧ prime x
+--    ∃ x ∈ s, ¬ Even x ∧ Nat.Prime x
 -- entonces
---   ∃ x ∈ t, prime x 
+--    ∃ x ∈ t, Nat.Prime x
 -- ----------------------------------------------------------------------
 
-example 
-  (h : ∃ x ∈ s, ¬ even x ∧ prime x) 
-  : ∃ x ∈ t, prime x :=
-begin
-  rcases h with ⟨x, xs, _, px⟩,
-  use [x, ssubt xs, px],
-end
-
--- Prueba
--- ======
-
-/-
-s t : set ℕ,
-ssubt : s ⊆ t,
-h : ∃ (x : ℕ) (H : x ∈ s), ¬x.even ∧ x.prime
-⊢ ∃ (x : ℕ) (H : x ∈ t), x.prime
-  >> rcases h with ⟨x, xs, _, px⟩,
-x : ℕ,
-xs : x ∈ s,
-h_h_h_left : ¬x.even,
-px : x.prime
-⊢ ∃ (x : ℕ) (H : x ∈ t), x.prime
-  >> use [x, ssubt xs, px],
-no goals
--/
-
+example (h : ∃ x ∈ s, ¬Even x ∧ Nat.Prime x) : ∃ x ∈ t, Nat.Prime x :=
+by
+  rcases h with ⟨x, xs, -, px⟩
+  -- x : ℕ
+  -- xs : x ∈ s
+  -- px : Nat.Prime x
+  -- ⊢ ∃ x ∈ t, Nat.Prime x
+  use x, ssubt xs

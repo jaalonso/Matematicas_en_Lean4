@@ -17,13 +17,13 @@ variable (x y z : α)                       -- 3
 --    @sup_inf_right α _ x y z
 -- ----------------------------------------------------------------------
 
-#check @inf_sup_left α _ x y z
-#check @inf_sup_right α _ x y z
-#check @sup_inf_left α _ x y z
-#check @sup_inf_right α _ x y z
+--- #check @inf_sup_left α _ x y z
+--- #check @inf_sup_right α _ x y z
+--- #check @sup_inf_left α _ x y z
+--- #check @sup_inf_right α _ x y z
 
 -- Comentario: Al situar el cursor sobre check se obtiene
---    inf_sup_left  : x ⊓ (y ⊔ z) = (x ⊓ y) ⊔ (x ⊓ z)
---    inf_sup_right : (x ⊔ y) ⊓ z = (x ⊓ z) ⊔ (y ⊓ z)
---    sup_inf_left  : x ⊔ (y ⊓ z) = (x ⊔ y) ⊓ (x ⊔ z)
---    sup_inf_right : (x ⊓ y) ⊔ z = (x ⊔ z) ⊓ (y ⊔ z)
+#check (inf_sup_left x y z : x ⊓ (y ⊔ z) = (x ⊓ y) ⊔ (x ⊓ z))
+#check (inf_sup_right x y z : (x ⊔ y) ⊓ z = (x ⊓ z) ⊔ (y ⊓ z))
+#check (sup_inf_left x y z : x ⊔ (y ⊓ z) = (x ⊔ y) ⊓ (x ⊔ z))
+#check (sup_inf_right x y z : (x ⊓ y) ⊔ z = (x ⊔ z) ⊓ (y ⊔ z))

@@ -20,7 +20,7 @@ variable (a b c d : ℝ)
 
 #check (exp_le_exp : exp a ≤ exp b ↔ a ≤ b)
 #check (exp_lt_exp : exp a < exp b ↔ a < b)
-#check (log_le_log : 0 < a → 0 < b → (log a ≤ log b ↔ a ≤ b))
+#check (log_le_log : 0 < a → a ≤ b → log a ≤ log b)
 #check (log_lt_log : 0 < a → a < b → log a < log b)
 #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
 #check (add_le_add_left : a ≤ b → ∀ c, c + a ≤ c + b)

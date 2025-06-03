@@ -114,8 +114,8 @@ by
 -- Lemas usados
 -- ============
 
--- #check (dvd_mul_of_dvd_left : m ∣ n → ∀ (c : ℕ), m ∣ n * c)
--- #check (dvd_mul_of_dvd_right : m ∣ n → ∀ (c : ℕ), m ∣ c * n)
--- #check (dvd_mul_right m n : m ∣ m * n)
--- #check (mul_assoc m n k : m * n * k = m * (n * k))
--- #check (mul_comm m n : m * n = n * m)
+#check (dvd_mul_of_dvd_left : m ∣ n → ∀ (c : ℕ), m ∣ n * c)
+#check (dvd_mul_of_dvd_right : m ∣ n → ∀ (c : ℕ), m ∣ c * n)
+#check (dvd_mul_right m n : m ∣ m * n)
+#check (mul_assoc m n k : m * n * k = m * (n * k))
+#check (mul_comm m n : m * n = n * m)

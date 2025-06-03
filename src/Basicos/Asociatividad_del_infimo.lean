@@ -173,16 +173,16 @@ le_antisymm
 
 example : (x ⊓ y) ⊓ z = x ⊓ (y ⊓ z) :=
 -- by apply?
-inf_assoc
+inf_assoc x y z
 
 -- Lemas usados
 -- ============
 
--- #check (inf_assoc : (x ⊓ y) ⊓ z = x ⊓ (y ⊓ z))
--- #check (inf_le_left : x ⊓ y ≤ x)
--- #check (inf_le_of_left_le : x ≤ z → x ⊓ y ≤ z)
--- #check (inf_le_of_right_le : y ≤ z → x ⊓ y ≤ z)
--- #check (inf_le_right : x ⊓ y ≤ y)
--- #check (le_antisymm : x ≤ y → y ≤ x → x = y)
--- #check (le_inf : z ≤ x → z ≤ y → z ≤ x ⊓ y)
--- #check (le_trans : x ≤ y → y ≤ z → x ≤ z)
+#check (inf_assoc x y z : (x ⊓ y) ⊓ z = x ⊓ (y ⊓ z))
+#check (inf_le_left : x ⊓ y ≤ x)
+#check (inf_le_of_left_le : x ≤ z → x ⊓ y ≤ z)
+#check (inf_le_of_right_le : y ≤ z → x ⊓ y ≤ z)
+#check (inf_le_right : x ⊓ y ≤ y)
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)
+#check (le_inf : z ≤ x → z ≤ y → z ≤ x ⊓ y)
+#check (le_trans : x ≤ y → y ≤ z → x ≤ z)

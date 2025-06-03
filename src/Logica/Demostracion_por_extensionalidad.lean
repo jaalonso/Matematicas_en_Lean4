@@ -3,7 +3,8 @@
 --    (fun x y : ℝ ↦ (x + y)^2) = (fun x y : ℝ ↦ x^2 + 2*x*y + y^2)
 -- ----------------------------------------------------------------------
 
-import  Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 -- 1ª demostración
 -- ===============

@@ -101,8 +101,9 @@ by apply dvd_mul_left
 -- Lemas usados
 -- ============
 
--- #check (dvd_trans : x ∣ y → y ∣ z → x ∣ z)
--- #check (dvd_mul_left : ∀ (a b : ℕ), a ∣ b * a)
--- #check (dvd_mul_right : ∀ (a b : ℕ), a ∣ a * b)
--- #check (dvd_mul_of_dvd_left : x ∣ y → ∀ (c : ℕ), x ∣ y * c)
--- #check (pow_two : ∀ (a : ℕ), a ^ 2 = a * a)
+variable (a b : ℕ)
+#check (dvd_mul_left a b : a ∣ b * a)
+#check (dvd_mul_of_dvd_left : x ∣ y → ∀ (c : ℕ), x ∣ y * c)
+#check (dvd_mul_right a b : a ∣ a * b)
+#check (dvd_trans : x ∣ y → y ∣ z → x ∣ z)
+#check (pow_two a : a ^ 2 = a * a)

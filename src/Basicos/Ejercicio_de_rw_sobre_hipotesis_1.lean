@@ -21,11 +21,12 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
 
+variable (a b c d e f : ℝ)
+
 -- 1ª demostración
 -- ===============
 
 example
-  (a b c d e f : ℝ)
   (h : b * c = e * f)
   : ((a * b) * c) * d = ((a * e) * f) * d :=
 calc
@@ -38,7 +39,6 @@ calc
 -- ===============
 
 example
-  (a b c d e f : ℝ)
   (h : b * c = e * f)
   : ((a * b) * c) * d = ((a * e) * f) * d :=
 by
@@ -47,3 +47,8 @@ by
   rw [h]
   -- ⊢ (a * (e * f)) * d = ((a * e) * f) * d
   rw [←mul_assoc a]
+
+-- Lemas usados
+-- ============
+
+#check (mul_assoc a b c : (a * b) * c = a * (b * c))

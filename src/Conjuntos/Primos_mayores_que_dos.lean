@@ -1,61 +1,114 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que los primos mayores que 2 son impares.
+-- Ejercicio. Los números primos, los mayores que 2 y los impares se
+-- definen por
+--    def Primos      : Set ℕ := {n | Nat.Prime n}
+--    def MayoresQue2 : Set ℕ := {n | n > 2}
+--    def Impares     : Set ℕ := {n | ¬Even n}
+--
+-- Demostrar que
+--    Primos ∩ MayoresQue2 ⊆ Impares
 -- ----------------------------------------------------------------------
 
-import data.nat.prime data.nat.parity tactic
+-- Demostraciones con Lean4
+-- ========================
 
-open set nat
+import Mathlib.Algebra.Ring.Parity
+import Mathlib.Tactic
 
-example : { n | prime n } ∩ { n | n > 2} ⊆ { n | ¬ even n } :=
-begin
-  intro n,
-  simp,
-  intro nprime,
-  cases prime.eq_two_or_odd nprime with h h,
-  { rw h,
-    intro,
-    linarith },
-  { rw even_iff,
-    rw h,
-    norm_num },
-end
+open Nat
 
--- Prueba
--- ======
+def Primos      : Set ℕ := {n | Nat.Prime n}
+def MayoresQue2 : Set ℕ := {n | n > 2}
+def Impares     : Set ℕ := {n | ¬Even n}
 
-/-
-⊢ {n : ℕ | n.prime} ∩ {n : ℕ | n > 2} ⊆ {n : ℕ | ¬n.even}
-  >> intro n,
-n : ℕ
-⊢ n ∈ {n : ℕ | n.prime} ∩ {n : ℕ | n > 2} → n ∈ {n : ℕ | ¬n.even}
-  >> simp,
-⊢ n.prime → 2 < n → ¬n.even
-  >> intro nprime,
-nprime : n.prime
-⊢ 2 < n → ¬n.even
-  >> cases prime.eq_two_or_odd nprime with h h,
-| h : n = 2
-| ⊢ 2 < n → ¬n.even
-|   >> { rw h,
-| ⊢ 2 < 2 → ¬2.even
-|   >>   intro,
-| a : 2 < 2
-| ⊢ ¬2.even
-|   >>   linarith },
-h : n % 2 = 1
-⊢ 2 < n → ¬n.even
-  >> { rw even_iff,
-⊢ 2 < n → ¬n % 2 = 0
-  >>   rw h,
-⊢ 2 < n → ¬1 = 0
-  >>   norm_num },
-no goals
--/
+-- 1ª demostración
+-- ===============
 
--- Comentario: Se han usado los lemas
--- + prime.eq_two_or_odd : p.prime → p = 2 ∨ p % 2 = 1
--- + even_iff : even n ↔ n % 2 = 0
+example : Primos ∩ MayoresQue2 ⊆ Impares :=
+by
+  unfold Primos MayoresQue2 Impares
+  -- ⊢ {n | Nat.Prime n} ∩ {n | n > 2} ⊆ {n | ¬Even n}
+  intro n
+  -- n : ℕ
+  -- ⊢ n ∈ {n | Nat.Prime n} ∩ {n | n > 2} → n ∈ {n | ¬Even n}
+  simp
+  -- ⊢ Nat.Prime n → 2 < n → Odd n
+  intro hn
+  -- hn : Nat.Prime n
+  -- ⊢ 2 < n → Odd n
+  rcases Prime.eq_two_or_odd hn with (h | h)
+  . -- h : n = 2
+    rw [h]
+    -- ⊢ 2 < 2 → ¬Even 2
+    intro h1
+    -- h1 : 2 < 2
+    -- ⊢ Odd 2
+    exfalso
+    exact absurd h1 (lt_irrefl 2)
+  . -- h : n % 2 = 1
+    intro
+    -- a : 2 < n
+    -- ⊢ Odd n
+    exact odd_iff.mpr h
 
-variables (n p : ℕ)
--- #check @prime.eq_two_or_odd p
--- #check @even_iff n
+-- 2ª demostración
+-- ===============
+
+example : Primos ∩ MayoresQue2 ⊆ Impares :=
+by
+  unfold Primos MayoresQue2 Impares
+  -- ⊢ {n | Nat.Prime n} ∩ {n | n > 2} ⊆ {n | ¬Even n}
+  rintro n ⟨h1, h2⟩
+  -- n : ℕ
+  -- h1 : n ∈ {n | Nat.Prime n}
+  -- h2 : n ∈ {n | n > 2}
+  -- ⊢ n ∈ {n | ¬Even n}
+  simp at *
+  -- h1 : Nat.Prime n
+  -- h2 : 2 < n
+  -- ⊢ ¬Even n
+  rcases Prime.eq_two_or_odd h1 with (h3 | h4)
+  . -- h3 : n = 2
+    rw [h3] at h2
+    -- h2 : 2 < 2
+    exfalso
+    -- ⊢ False
+    exact absurd h2 (lt_irrefl 2)
+  . -- h4 : n % 2 = 1
+    exact odd_iff.mpr h4
+
+-- 3ª demostración
+-- ===============
+
+example : Primos ∩ MayoresQue2 ⊆ Impares :=
+by
+  unfold Primos MayoresQue2 Impares
+  -- ⊢ {n | Nat.Prime n} ∩ {n | n > 2} ⊆ {n | ¬Even n}
+  rintro n ⟨h1, h2⟩
+  -- n : ℕ
+  -- h1 : n ∈ {n | Nat.Prime n}
+  -- h2 : n ∈ {n | n > 2}
+  -- ⊢ n ∈ {n | ¬Even n}
+  simp at *
+  -- h1 : Nat.Prime n
+  -- h2 : 2 < n
+  -- ⊢ ¬Even n
+  rcases Prime.eq_two_or_odd h1 with (h3 | h4)
+  . -- h3 : n = 2
+    rw [h3] at h2
+    -- h2 : 2 < 2
+    linarith
+  . -- h4 : n % 2 = 1
+    exact odd_iff.mpr h4
+
+-- Lemas usados
+-- ============
+
+variable (p n : ℕ)
+variable (a b : Prop)
+#check (Prime.eq_two_or_odd : Nat.Prime p → p = 2 ∨ p % 2 = 1)
+#check (absurd : a → ¬a → b)
+#check (even_iff : Even n ↔ n % 2 = 0)
+#check (lt_irrefl n : ¬n < n)
+#check (odd_iff : Odd n ↔ n % 2 = 1)
+#check (one_ne_zero : 1 ≠ 0)

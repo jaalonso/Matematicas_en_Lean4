@@ -44,10 +44,30 @@ by norm_num
 -- Demostración con Lean4
 -- ======================
 
+-- 1ª demostración
+-- ===============
+
+example : 2 * a = a + a :=
+calc
+  2 * a = (1 + 1) * a   := by rw [one_add_one_eq_two]
+      _ = 1 * a + 1 * a := add_mul 1 1 a
+      _ = a + 1 * a     := congrArg (. + 1 * a) (one_mul a)
+      _ = a + a         := congrArg (a + .) (one_mul a)
+
+-- 2ª demostración
+-- ===============
+
 theorem two_mul : 2 * a = a + a :=
 calc
   2 * a = (1 + 1) * a   := by rw [one_add_one_eq_two]
       _ = 1 * a + 1 * a := by rw [add_mul]
       _ = a + a         := by rw [one_mul]
+
+-- Lemas usados
+-- ============
+
+variable (b c : R)
+#check (add_mul a b c : (a + b) * c = a * c + b * c)
+#check (one_mul a : 1 * a = a)
 
 end MyRing

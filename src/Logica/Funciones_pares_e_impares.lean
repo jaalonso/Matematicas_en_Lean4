@@ -265,12 +265,6 @@ by
      _ = -(f (-x) * g (-x)) := by rw [ef, og, mul_neg]
      _ = -((f * g) (-x))    := rfl
 
--- Lemas usados
--- ===========
-
--- variable (a b : ℝ)
--- #check (mul_neg a b : a * -b = -(a * b))
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 7. Demostrar que si f es par y g es impar, entonces f ∘ g
 -- es par.
@@ -304,7 +298,7 @@ by
   -- ⊢ (f ∘ g) x = (f ∘ g) (-x)
   calc (f ∘ g) x
        = f (g x)      := rfl
-    _  = f (-g (-x))  := congr_arg f (og x)
+    _  = f (-g (-x))  := congrArg f (og x)
     _  = f (g (-x))   := (ef (g (-x))).symm
     _  = (f ∘ g) (-x) := rfl
 
@@ -324,5 +318,13 @@ by
      _ = f (-g (-x))  := by rw [og]
      _ = f (g (-x))   := by rw [← ef]
      _ = (f ∘ g) (-x) := rfl
+
+-- Lemas usados
+-- ============
+
+variable (a b : ℝ)
+#check (congrArg f : a = b → f a = f b)
+#check (mul_neg a b : a * -b = -(a * b))
+#check (neg_mul_neg a b : -a * -b = a * b)
 
 end oculto

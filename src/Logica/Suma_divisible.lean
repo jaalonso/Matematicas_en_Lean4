@@ -127,6 +127,8 @@ dvd_add divab divac
 -- Lemas usados
 -- ============
 
--- #check (Dvd.intro c : a * c = b → a ∣ b)
--- #check (dvd_add : a ∣ b →  a ∣ c → a ∣ (b + c))
--- #check (mul_add a b c : a * (b + c) = a * b + a * c)
+variable (f : ℕ → ℕ)
+#check (Dvd.intro c : a * c = b → a ∣ b)
+#check (congrArg f : a = b → f a = f b)
+#check (dvd_add : a ∣ b →  a ∣ c → a ∣ (b + c))
+#check (mul_add a b c : a * (b + c) = a * b + a * c)

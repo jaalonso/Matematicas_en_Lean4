@@ -95,8 +95,8 @@ variable (a b c : ℝ)
 #check mul_comm
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
---    mul_comm.{u_1} {G : Type u_1} [inst : CommSemigroup G] (a b : G) :
---    a * b = b * a
+--    mul_comm.{u_1} {G : Type u_1} [CommMagma G] (a b : G)
+--    : a * b = b * a
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 12. Calcular el tipo de
@@ -106,7 +106,7 @@ variable (a b c : ℝ)
 #check @mul_comm
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
---    mul_comm.{u_1} {G : Type u_1} [inst : CommSemigroup G] (a b : G),
+--    @mul_comm : ∀ {G : Type u_1} [inst : CommMagma G] (a b : G),
 --    a * b = b * a
 
 end

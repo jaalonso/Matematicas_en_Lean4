@@ -5,6 +5,8 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable {x y : ℝ}
 
 -- ---------------------------------------------------------------------
@@ -64,14 +66,6 @@ lemma aux
   : x = 0 :=
   have h' : x ^ 2 = 0 := by linarith [pow_two_nonneg x, pow_two_nonneg y]
   pow_eq_zero h'
-
--- Lemas usados
--- ============
-
--- #check (le_add_of_nonneg_right : 0 ≤ y → x ≤ x + y)
--- #check (le_antisymm : x ≤ y → y ≤ x → x = y)
--- #check (pow_eq_zero : ∀ {n : ℕ}, x ^ n = 0 → x = 0)
--- #check (pow_two_nonneg x : 0 ≤ x ^ 2)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que
@@ -183,4 +177,9 @@ example : x ^ 2 + y ^ 2 = 0 ↔ x = 0 ∧ y = 0 := by
 -- Lemas usados
 -- ============
 
--- #check (add_comm x y : x + y = y + x)
+variable (n : ℕ)
+#check (add_comm x y : x + y = y + x)
+#check (le_add_of_nonneg_right : 0 ≤ y → x ≤ x + y)
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)
+#check (pow_eq_zero : x ^ n = 0 → x = 0)
+#check (pow_two_nonneg x : 0 ≤ x ^ 2)

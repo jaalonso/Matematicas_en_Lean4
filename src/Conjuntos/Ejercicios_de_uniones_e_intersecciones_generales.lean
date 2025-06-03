@@ -1,108 +1,156 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Realizar las siguientes acciones
--- 1. Importar la librería tactic
--- 2. Abrir el espacio de nombres set
--- 3. Declarar u y v como variables de universos.
--- 4. Declarar α como una variable de tipos en u.
--- 5. Declarar I como una variable de tipos en v.
--- 6. Declarar A y B como variables sobre funciones de I en α.
--- 7. Declarar s como variable sobre conjuntos de elementos de α. 
--- 8. Usar la lógica clásica.
--- ----------------------------------------------------------------------
-
-import tactic                 -- 1
-open set                      -- 2
-universes u v                 -- 3
-variable (α : Type u)         -- 4
-variable (I : Type v)         -- 5
-variables (A B : I → set α)   -- 6
-variable  s : set α           -- 7
-open_locale classical         -- 8
-
--- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
 --    s ∪ (⋂ i, A i) = ⋂ i, (A i ∪ s)
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Tenemos que demostrar que para todo x,
+--    x ∈ s ∪ ⋂ i, A i ↔ x ∈ ⋂ i, A i ∪ s
+-- Lo haremos mediante la siguiente cadena de equivalencias
+--    x ∈ s ∪ ⋂ i, A i ↔ x ∈ s ∨ x ∈ ⋂ i, A i
+--                     ↔ x ∈ s ∨ ∀ i, x ∈ A i
+--                     ↔ ∀ i, x ∈ s ∨ x ∈ A i
+--                     ↔ ∀ i, x ∈ A i ∨ x ∈ s
+--                     ↔ ∀ i, x ∈ A i ∪ s
+--                     ↔ x ∈ ⋂ i, A i ∪ s
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Set.Basic
+import Mathlib.Tactic
+
+open Set
+
+variable {α : Type}
+variable (s : Set α)
+variable (A : ℕ → Set α)
+
+-- 1ª demostración
+-- ===============
+
 example : s ∪ (⋂ i, A i) = ⋂ i, (A i ∪ s) :=
-begin
-  ext x,
-  simp only [mem_union, mem_Inter],
-  split,
-  { rintros (xs | xI),
-    { intro i, 
-      right, 
-      exact xs },
-    { intro i, 
-      left, 
-      exact xI i }},
-  { intro h,
-    by_cases xs : x ∈ s,
-    { left, 
-      exact xs },
-    { right,
-      intro i,
-      cases h i,
-      { assumption },
-      { contradiction }}},
-end
+by
+  ext x
+  -- x : α
+  -- ⊢ x ∈ s ∪ ⋂ (i : ℕ), A i ↔ x ∈ ⋂ (i : ℕ), A i ∪ s
+  calc x ∈ s ∪ ⋂ i, A i
+     ↔ x ∈ s ∨ x ∈ ⋂ i, A i :=
+         by simp only [mem_union]
+   _ ↔ x ∈ s ∨ ∀ i, x ∈ A i :=
+         by simp only [mem_iInter]
+   _ ↔ ∀ i, x ∈ s ∨ x ∈ A i :=
+         by simp only [forall_or_left]
+   _ ↔ ∀ i, x ∈ A i ∨ x ∈ s  :=
+         by simp only [or_comm]
+   _ ↔ ∀ i, x ∈ A i ∪ s  :=
+         by simp only [mem_union]
+   _ ↔ x ∈ ⋂ i, A i ∪ s :=
+         by simp only [mem_iInter]
 
--- Prueba
--- ======
+-- 2ª demostración
+-- ===============
 
-/-
-α : Type u,
-I : Type v,
-A : I → set α,
-s : set α
-⊢ (s ∪ ⋂ (i : I), A i) = ⋂ (i : I), A i ∪ s
-  >> ext x,
-x : α
-⊢ (x ∈ s ∪ ⋂ (i : I), A i) ↔ x ∈ ⋂ (i : I), A i ∪ s
-  >> simp only [mem_union, mem_Inter],
-⊢ (x ∈ s ∨ ∀ (i : I), x ∈ A i) ↔ ∀ (i : I), x ∈ A i ∨ x ∈ s
-  >> split,
-| ⊢ (x ∈ s ∨ ∀ (i : I), x ∈ A i) → ∀ (i : I), x ∈ A i ∨ x ∈ s
-|   >> { rintros (xs | xI),
-| | xs : x ∈ s
-| | ⊢ ∀ (i : I), x ∈ A i ∨ x ∈ s
-| |   >>   { intro i,
-| | i : I
-| | ⊢ x ∈ A i ∨ x ∈ s 
-| |   >>     right, 
-| | ⊢ x ∈ s
-| |   >>     exact xs },
-| ⊢ ∀ (i : I), x ∈ A i ∨ x ∈ s
-|   >>   { intro i, 
-| i : I
-| ⊢ x ∈ A i ∨ x ∈ s
-|   >>     left, 
-| ⊢ x ∈ A i
-|   >>     exact xI i }},
-⊢ (∀ (i : I), x ∈ A i ∨ x ∈ s) → (x ∈ s ∨ ∀ (i : I), x ∈ A i)
-  >> { intro h,
-h : ∀ (i : I), x ∈ A i ∨ x ∈ s
-⊢ x ∈ s ∨ ∀ (i : I), x ∈ A i
-  >>   by_cases xs : x ∈ s,
-| xs : x ∈ s
-| ⊢ x ∈ s ∨ ∀ (i : I), x ∈ A i
-|   >>   { left, 
-| ⊢ x ∈ s
-|   >>     exact xs },
-xs : x ∉ s
-⊢ x ∈ s ∨ ∀ (i : I), x ∈ A i
-  >>   { right,
-⊢ ∀ (i : I), x ∈ A i
-  >>     intro i,
-i : I
-⊢ x ∈ A i
-  >>     cases h i,
-| h_1 : x ∈ A i
-| ⊢ x ∈ A i
-|   >>     { assumption },
-⊢ x ∈ A i
-  >>     { contradiction }}},
-no goals
--/
+example : s ∪ (⋂ i, A i) = ⋂ i, (A i ∪ s) :=
+by
+  ext x
+  -- x : α
+  -- ⊢ x ∈ s ∪ ⋂ (i : ℕ), A i ↔ x ∈ ⋂ (i : ℕ), A i ∪ s
+  simp only [mem_union, mem_iInter]
+  -- ⊢ (x ∈ s ∨ ∀ (i : ℕ), x ∈ A i) ↔ ∀ (i : ℕ), x ∈ A i ∨ x ∈ s
+  constructor
+  . -- ⊢ (x ∈ s ∨ ∀ (i : ℕ), x ∈ A i) → ∀ (i : ℕ), x ∈ A i ∨ x ∈ s
+    intros h i
+    -- h : x ∈ s ∨ ∀ (i : ℕ), x ∈ A i
+    -- i : ℕ
+    -- ⊢ x ∈ A i ∨ x ∈ s
+    rcases h with (xs | xAi)
+    . -- xs : x ∈ s
+      right
+      -- ⊢ x ∈ s
+      exact xs
+    . -- xAi : ∀ (i : ℕ), x ∈ A i
+      left
+      -- ⊢ x ∈ A i
+      exact xAi i
+  . -- ⊢ (∀ (i : ℕ), x ∈ A i ∨ x ∈ s) → x ∈ s ∨ ∀ (i : ℕ), x ∈ A i
+    intro h
+    -- h : ∀ (i : ℕ), x ∈ A i ∨ x ∈ s
+    -- ⊢ x ∈ s ∨ ∀ (i : ℕ), x ∈ A i
+    by_cases cxs : x ∈ s
+    . -- cxs : x ∈ s
+      left
+      -- ⊢ x ∈ s
+      exact cxs
+    . -- cns : ¬x ∈ s
+      right
+      -- ⊢ ∀ (i : ℕ), x ∈ A i
+      intro i
+      -- i : ℕ
+      -- ⊢ x ∈ A i
+      rcases h i with (xAi | xs)
+      . -- ⊢ x ∈ A i
+        exact xAi
+      . -- xs : x ∈ s
+        exact absurd xs cxs
 
+-- 3ª demostración
+-- ===============
 
+example : s ∪ (⋂ i, A i) = ⋂ i, (A i ∪ s) :=
+by
+  ext x
+  -- x : α
+  -- ⊢ x ∈ s ∪ ⋂ (i : ℕ), A i ↔ x ∈ ⋂ (i : ℕ), A i ∪ s
+  simp only [mem_union, mem_iInter]
+  -- ⊢ (x ∈ s ∨ ∀ (i : ℕ), x ∈ A i) ↔ ∀ (i : ℕ), x ∈ A i ∨ x ∈ s
+  constructor
+  . -- ⊢ (x ∈ s ∨ ∀ (i : ℕ), x ∈ A i) → ∀ (i : ℕ), x ∈ A i ∨ x ∈ s
+    rintro (xs | xI) i
+    . -- xs : x ∈ s
+      -- i : ℕ
+      -- ⊢ x ∈ A i ∨ x ∈ s
+      right
+      -- ⊢ x ∈ s
+      exact xs
+    . -- xI : ∀ (i : ℕ), x ∈ A i
+      -- i : ℕ
+      -- ⊢ x ∈ A i ∨ x ∈ s
+      left
+      -- ⊢ x ∈ A i
+      exact xI i
+  . -- ⊢ (∀ (i : ℕ), x ∈ A i ∨ x ∈ s) → x ∈ s ∨ ∀ (i : ℕ), x ∈ A i
+    intro h
+    -- h : ∀ (i : ℕ), x ∈ A i ∨ x ∈ s
+    -- ⊢ x ∈ s ∨ ∀ (i : ℕ), x ∈ A i
+    by_cases cxs : x ∈ s
+    . -- cxs : x ∈ s
+      left
+      -- ⊢ x ∈ s
+      exact cxs
+    . -- cxs : ¬x ∈ s
+      right
+      -- ⊢ ∀ (i : ℕ), x ∈ A i
+      intro i
+      -- i : ℕ
+      -- ⊢ x ∈ A i
+      cases h i
+      . -- h : x ∈ A i
+        assumption
+      . -- h : x ∈ s
+        contradiction
+
+-- Lemas usados
+-- ============
+
+variable (x : α)
+variable (s t : Set α)
+variable (a b q : Prop)
+variable (p : ℕ → Prop)
+#check (absurd : a → ¬a → b)
+#check (forall_or_left : (∀ x, q ∨ p x) ↔ q ∨ ∀ x, p x)
+#check (mem_iInter : x ∈ ⋂ i, A i ↔ ∀ i, x ∈ A i)
+#check (mem_union x s t : x ∈ s ∪ t ↔ x ∈ s ∨ x ∈ t)
+#check (or_comm : a ∨ b ↔ b ∨ a)

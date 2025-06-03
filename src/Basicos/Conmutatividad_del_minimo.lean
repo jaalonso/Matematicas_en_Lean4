@@ -72,3 +72,12 @@ by
 
 example : min a b = min b a :=
 le_antisymm (aux a b) (aux b a)
+
+-- Lemas usados
+-- ============
+
+variable (c : ℝ)
+#check (le_antisymm : a ≤ b → b ≤ a → a = b)
+#check (le_min : c ≤ a → c ≤ b → c ≤ min a b)
+#check (min_le_left a b : min a b ≤ a)
+#check (min_le_right a b : min a b ≤ b)

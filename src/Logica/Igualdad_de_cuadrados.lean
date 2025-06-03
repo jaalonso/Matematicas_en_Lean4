@@ -5,6 +5,8 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable (x y : ℝ)
 
 -- ---------------------------------------------------------------------
@@ -100,15 +102,6 @@ example
   : x = 1 ∨ x = -1 :=
 by aesop
 
--- Lemas usados
--- ============
-
--- #check (eq_neg_of_add_eq_zero_left : x + y = 0 → x = -y)
--- #check (eq_zero_or_eq_zero_of_mul_eq_zero : x * y = 0 → x = 0 ∨ y = 0)
--- #check (sq_eq_one_iff : x ^ 2 = 1 ↔ x = 1 ∨ x = -1)
--- #check (sub_eq_zero : x - y = 0 ↔ x = y)
--- #check (sub_self x : x - x = 0)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar si
 --    x^2 = y^2
@@ -192,8 +185,9 @@ sq_eq_sq_iff_eq_or_eq_neg.mp h
 -- Lemas usados
 -- ============
 
--- #check (eq_neg_of_add_eq_zero_left : x + y = 0 → x = -y)
--- #check (eq_zero_or_eq_zero_of_mul_eq_zero : x * y = 0 → x = 0 ∨ y = 0)
--- #check (sq_eq_sq_iff_eq_or_eq_neg : x ^ 2 = y ^ 2 ↔ x = y ∨ x = -y)
--- #check (sub_eq_zero : x - y = 0 ↔ x = y)
--- #check (sub_self x : x - x = 0)
+#check (eq_neg_of_add_eq_zero_left : x + y = 0 → x = -y)
+#check (eq_zero_or_eq_zero_of_mul_eq_zero : x * y = 0 → x = 0 ∨ y = 0)
+#check (sq_eq_one_iff : x ^ 2 = 1 ↔ x = 1 ∨ x = -1)
+#check (sq_eq_sq_iff_eq_or_eq_neg : x ^ 2 = y ^ 2 ↔ x = y ∨ x = -y)
+#check (sub_eq_zero : x - y = 0 ↔ x = y)
+#check (sub_self x : x - x = 0)

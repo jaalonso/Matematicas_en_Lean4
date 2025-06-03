@@ -12,7 +12,7 @@ variable {R : Type _} [Ring R]   -- 3
 variable (a : R)                 -- 4
 
 -- ---------------------------------------------------------------------
--- Ejercicio 2. Demostrar que
+-- Ejercicio. Demostrar que
 --     a - a = 0
 -- ----------------------------------------------------------------------
 
@@ -23,9 +23,30 @@ variable (a : R)                 -- 4
 --    a - a = a + -a    [por definición de resta]
 --          = 0         [por suma con opuesto]
 
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
+example : a - a = 0 :=
+calc
+  a - a = a + -a := by exact (sub_eq_add_neg a a)
+      _ = 0      := add_neg_cancel a
+
+-- 2ª demostración
+-- ===============
+
 theorem self_sub : a - a = 0 :=
 calc
   a - a = a + -a := by rw [sub_eq_add_neg a a]
-      _ = 0      := by rw [add_right_neg]
+      _ = 0      := by rw [add_neg_cancel]
+
+-- Lemas usados
+-- ============
+
+variable (b : R)
+#check (add_neg_cancel a : a + -a = 0)
+#check (sub_eq_add_neg a b : a - b = a + -b)
 
 end MyRing

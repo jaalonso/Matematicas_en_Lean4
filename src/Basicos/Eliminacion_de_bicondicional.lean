@@ -18,7 +18,7 @@ variable (a b c d e : ℝ)
 
 #check (add_lt_add_of_lt_of_le : a < b → c ≤ d → a + c < b + d)
 #check (exp_lt_exp : exp a < exp b ↔ a < b)
-#check (le_refl : ∀ a, a ≤ a)
+#check (le_refl a : a ≤ a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
@@ -111,3 +111,12 @@ by
     exact exp_lt_exp.mpr h2
   . -- ⊢ e ≤ e
     rfl
+
+-- Lemas usados
+-- ============
+
+#check (add_lt_add_of_le_of_lt : a ≤ b → c < d → a + c < b + d)
+#check (add_lt_add_of_lt_of_le : a < b → c ≤ d → a + c < b + d)
+#check (add_lt_add_right : a < b → ∀ c, a + c < b + c)
+#check (exp_lt_exp : exp a < exp b ↔ a < b)
+#check (le_refl a : a ≤ a)

@@ -136,3 +136,10 @@ by
   -- ⊢ (a ^ 2 + b ^ 2) * (c ^ 2 + d ^ 2)
   --   = (a * c - b * d) ^ 2 + (a * d + b * c) ^ 2
   ring
+
+-- Lemas usados
+-- ============
+
+variable (w : ℝ)
+variable (p : ℝ → Prop)
+#check (Exists.intro w : p w → Exists p)

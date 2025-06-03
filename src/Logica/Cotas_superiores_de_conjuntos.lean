@@ -69,5 +69,5 @@ by
 -- Lemas usados
 -- ============
 
--- variable (c : α)
--- #check (le_trans : a ≤ b → b ≤ c → a ≤ c)
+variable (c : α)
+#check (le_trans : a ≤ b → b ≤ c → a ≤ c)

@@ -73,5 +73,5 @@ example (mf : Monotone f) (nnc : 0 ≤ c) :
 -- Lemas usados
 -- ============
 
--- variable (a b : ℝ)
--- #check (mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c)
+variable (a b : ℝ)
+#check (mul_le_mul_of_nonneg_left : b ≤ c → 0 ≤ a → a * b ≤ a * c)

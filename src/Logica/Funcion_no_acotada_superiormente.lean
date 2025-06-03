@@ -16,6 +16,7 @@
 -- ========================
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
 

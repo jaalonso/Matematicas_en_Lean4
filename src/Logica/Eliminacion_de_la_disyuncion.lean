@@ -44,16 +44,16 @@ by
 example : x < |y| → x < y ∨ x < -y :=
 lt_abs.mp
 
--- Lemas usados
--- ============
-
--- #check (le_or_gt x y : x ≤ y ∨ x > y)
--- #check (abs_of_nonneg : 0 ≤ x → abs x = x)
--- #check (abs_of_neg : x < 0 → abs x = -x)
--- #check (lt_abs : x < |y| ↔ x < y ∨ x < -y)
-
 -- Comentario:
 -- + La táctica (rcases h with h1 | h2), cuando h es una diyunción, aplica
 --   la regla de eliminación de la disyunción; es decir, si h es (P ∨ Q)
 --   abre dos casos, en el primero añade la hipótesis (h1 : P) y en el
 --   segundo (h2 : Q).
+
+-- Lemas usados
+-- ============
+
+#check (abs_of_neg : x < 0 → abs x = -x)
+#check (abs_of_nonneg : 0 ≤ x → abs x = x)
+#check (le_or_gt x y : x ≤ y ∨ x > y)
+#check (lt_abs : x < |y| ↔ x < y ∨ x < -y)

@@ -19,6 +19,7 @@
 --    ne_comm          : a ≠ b ↔ b ≠ a
 --    mul_lt_mul_left  : 0 < a → (a * b < a * c ↔ b < c)
 --    mul_lt_mul_right : 0 < a → (b * a < c * a ↔ b < c)
+--    mul_le_mul_right : 0 < a → (b * a ≤ c * a ↔ b ≤ c)
 --    one_mul          : 1 * a = a
 --
 -- Sean x y ε ∈ ℝ tales que
@@ -54,14 +55,15 @@
 
 import Mathlib.Data.Real.Basic
 
+variable {x y ε : ℝ}
+
 -- 1ª demostración
 -- ===============
 
 example :
-  ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
+  0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
 by
-  intros x y ε he1 he2 hx hy
-  -- x y ε : ℝ
+  intros he1 he2 hx hy
   -- he1 : 0 < ε
   -- he2 : ε ≤ 1
   -- hx : |x| < ε
@@ -93,16 +95,15 @@ by
 -- ===============
 
 example :
-  ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
+  0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
 by
-  intros x y ε he1 he2 hx hy
-  -- x y ε : ℝ
+  intros he1 he2 hx hy
   -- he1 : 0 < ε
   -- he2 : ε ≤ 1
   -- hx : |x| < ε
   -- hy : |y| < ε
   -- ⊢ |x * y| < ε
-  by_cases (|x| = 0)
+  by_cases h : (|x| = 0)
   . -- h : |x| = 0
     show |x * y| < ε
     calc
@@ -126,16 +127,15 @@ by
 -- ===============
 
 example :
-  ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
+  0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
 by
-  intros x y ε he1 he2 hx hy
-  -- x y ε : ℝ
+  intros he1 he2 hx hy
   -- he1 : 0 < ε
   -- he2 : ε ≤ 1
   -- hx : |x| < ε
   -- hy : |y| < ε
   -- ⊢ |x * y| < ε
-  by_cases (|x| = 0)
+  by_cases h : (|x| = 0)
   . -- h : |x| = 0
     show |x * y| < ε
     calc |x * y| = |x| * |y| := by simp only [abs_mul]
@@ -157,12 +157,13 @@ by
 -- Lemas usados
 -- ============
 
--- variable (a b c : ℝ)
--- #check (abs_mul a b : |a * b| = |a| * |b|)
--- #check (abs_nonneg a : 0 ≤ |a|)
--- #check (lt_of_le_of_ne : a ≤ b → a ≠ b → a < b)
--- #check (mul_lt_mul_left : 0 < a → (a * b < a * c ↔ b < c))
--- #check (mul_lt_mul_right : 0 < a → (b * a < c * a ↔ b < c))
--- #check (ne_comm : a ≠ b ↔ b ≠ a)
--- #check (one_mul a : 1 * a = a)
--- #check (zero_mul a : 0 * a = 0)
+variable (a b c : ℝ)
+#check (abs_mul a b : |a * b| = |a| * |b|)
+#check (abs_nonneg a : 0 ≤ |a|)
+#check (lt_of_le_of_ne : a ≤ b → a ≠ b → a < b)
+#check (mul_le_mul_right : 0 < a → (b * a ≤ c * a ↔ b ≤ c))
+#check (mul_lt_mul_left : 0 < a → (a * b < a * c ↔ b < c))
+#check (mul_lt_mul_right : 0 < a → (b * a < c * a ↔ b < c))
+#check (ne_comm : a ≠ b ↔ b ≠ a)
+#check (one_mul a : 1 * a = a)
+#check (zero_mul a : 0 * a = 0)

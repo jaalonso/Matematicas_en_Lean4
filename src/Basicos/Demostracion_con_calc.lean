@@ -100,9 +100,11 @@ by
   -- ⊢ a * a + (b * a + a * b) + b * b = a * a + 2 * (a * b) + b * b
   rw [mul_comm b a, ←two_mul]
 
--- Los lemas usados son:
--- + add_assoc a b c : a + b + c = a + (b + c)
--- + add_mul a b c   : (a + b) * c = a * c + b * c
--- + mul_add a b c   : a * (b + c) = a * b + a * c
--- + mul_comm a b    : a * b = b * a
--- + two_mul a       : 2 * a = a + a
+-- Lemas usados
+-- ============
+
+#check (add_assoc a b c : a + b + c = a + (b + c))
+#check (add_mul a b c   : (a + b) * c = a * c + b * c)
+#check (mul_add a b c   : a * (b + c) = a * b + a * c)
+#check (mul_comm a b    : a * b = b * a)
+#check (two_mul a       : 2 * a = a + a)

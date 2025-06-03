@@ -5,6 +5,8 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable {f : ℝ → ℝ}
 
 -- ---------------------------------------------------------------------
@@ -89,3 +91,13 @@ by
   use 2, 3
   -- ⊢ 2 ≤ 3 ∧ -2 > -3
   norm_num
+
+-- Lemas usados
+-- ============
+
+variable (a b : ℝ)
+variable (P : ℝ → Prop)
+variable (p q : Prop)
+#check (exists_prop : (∃ (_ : p), q) ↔ p ∧ q)
+#check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
+#check (not_le : ¬a ≤ b ↔ b < a)

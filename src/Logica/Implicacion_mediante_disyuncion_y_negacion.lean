@@ -109,3 +109,9 @@ example
   (P Q : Prop)
   : (P → Q) ↔ ¬P ∨ Q :=
 by tauto
+
+-- Lemas usados
+-- ============
+
+#check (absurd : P → (¬P → Q))
+#check (imp_iff_not_or : (P → Q) ↔ (¬P ∨ Q))

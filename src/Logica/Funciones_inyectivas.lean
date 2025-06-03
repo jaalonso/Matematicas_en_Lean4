@@ -97,6 +97,7 @@ fun _ _ h1 ↦ mul_left_cancel₀ h h1
 -- Lemas usados
 -- ============
 
--- variable (a b : ℝ)
--- #check (mul_right_inj' : a ≠ 0 → (a * b = a * c ↔ b = c))
--- #check (mul_left_cancel₀ : a ≠ 0 → a * b = a * c → b = c)
+variable (a b : ℝ)
+#check (mul_right_inj' : a ≠ 0 → (a * b = a * c ↔ b = c))
+#check (mul_left_cancel₀ : a ≠ 0 → a * b = a * c → b = c)
+#check (add_right_cancel : a + b = c + b → a = c)

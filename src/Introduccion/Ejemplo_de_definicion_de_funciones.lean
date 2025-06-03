@@ -18,7 +18,7 @@ def f (x : ℕ) :=
 #check f
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
---    f (x : ℕ) → ℕ
+--    f (x : ℕ) : ℕ
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Calcular el valor de f(2).

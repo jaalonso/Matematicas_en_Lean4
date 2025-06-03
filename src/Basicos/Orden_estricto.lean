@@ -19,17 +19,9 @@ variable (x y z : α)                      -- 3
 --    lt_iff_le_and_ne
 -- ----------------------------------------------------------------------
 
-#check x < y
+#check (x < y : Prop)
 #check (lt_irrefl x : ¬x < x)
 #check (lt_trans : x < y → y < z → x < z)
 #check (lt_of_le_of_lt : x ≤ y → y < z → x < z)
 #check (lt_of_lt_of_le : x < y → y ≤ z → x < z)
 #check (lt_iff_le_and_ne : x < y ↔ x ≤ y ∧ x ≠ y)
-
--- Comentario: Al colocar el cursor sobre check se obtiene
---    x < y : Prop
---    lt_irrefl x : ¬ x < x
---    lt_trans : x < y → y < z → x < z
---    lt_of_le_of_lt : x ≤ y → y < z → x < z
---    lt_of_lt_of_le : x < y → y ≤ z → x < z
---    lt_iff_le_and_ne : x < y ↔ x ≤ y ∧ x ≠ y

@@ -21,7 +21,7 @@ variable (a : ℝ)
 -- 1ª demostración
 -- ===============
 
-example : ConvergesTo (fun _ : ℕ ↦ a) a :=
+example : limite (fun _ : ℕ ↦ a) a :=
 by
   intros ε hε
   -- ε : ℝ
@@ -42,7 +42,8 @@ by
 -- 2ª demostración
 -- ===============
 
-example : ConvergesTo (fun _ : ℕ ↦ a) a :=
+theorem limite_constante
+  : limite (fun _ : ℕ ↦ a) a :=
 by
   intros ε hε
   -- ε : ℝ
@@ -65,4 +66,5 @@ by
 -- Lemas usados
 -- ============
 
--- #check (sub_self a : a - a = 0)
+#check (abs_zero : |(0 : ℝ)| = 0)
+#check (sub_self a : a - a = 0)

@@ -16,15 +16,15 @@ variable (x y z : α)                      -- 3
 --    @le_trans α _ x y z
 -- ----------------------------------------------------------------------
 
-#check x ≤ y
-#check le_refl x
-#check @le_trans α _ x y z
-#check @le_antisymm α _ x y
+-- #check x ≤ y
+-- #check le_refl x
+-- #check @le_trans α _ x y z
+-- #check @le_antisymm α _ x y
 
--- Conentario: Al colocar el cursor sobre check se obtiene
---    x ≤ y : Prop
---    le_refl x : x ≤ x)
---    le_trans : x ≤ y → y ≤ z → x ≤ z)
---    le_antisymm : x ≤ y → y ≤ x → x = y
+-- Comentario: Al colocar el cursor sobre check se obtiene
+#check (x ≤ y : Prop)
+#check (le_refl x : x ≤ x)
+#check (le_trans : x ≤ y → y ≤ z → x ≤ z)
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)
 
 -- Nota: Las letras griegas se escriben con \a, \b, ...

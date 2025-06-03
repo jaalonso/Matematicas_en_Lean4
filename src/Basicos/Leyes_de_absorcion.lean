@@ -47,11 +47,11 @@ variable (x y : α)                 -- 3
 example : x ⊓ (x ⊔ y) = x :=
 by
   have h1 : x ⊓ (x ⊔ y) ≤ x := inf_le_left
-  have h2 : x ≤ x ⊓ (x ⊔ y)
-  { have h2a : x ≤ x := le_rfl
+  have h2 : x ≤ x ⊓ (x ⊔ y) := by
+    have h2a : x ≤ x := le_rfl
     have h2b : x ≤ x ⊔ y := le_sup_left
     show x ≤ x ⊓ (x ⊔ y)
-    exact le_inf h2a h2b }
+    exact le_inf h2a h2b
   show x ⊓ (x ⊔ y) = x
   exact le_antisymm h1 h2
 
@@ -102,14 +102,6 @@ by simp
 -- Lemas usados
 -- ============
 
--- variable (z : α)
--- #check (inf_le_left : x ⊓ y ≤ x)
--- #check (inf_sup_self : x ⊓ (x ⊔ y) = x)
--- #check (le_antisymm : x ≤ y → y ≤ x → x = y)
--- #check (le_inf : z ≤ x → z ≤ y → z ≤ x ⊓ y)
--- #check (le_rfl : x ≤ x)
--- #check (le_sup_left : x ≤ x ⊔ y)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que
 --    x ⊔ (x ⊓ y) = x
@@ -141,11 +133,11 @@ by simp
 
 example : x ⊔ (x ⊓ y) = x :=
 by
-  have h1 : x ⊔ (x ⊓ y) ≤ x
-  { have h1a : x ≤ x := le_rfl
+  have h1 : x ⊔ (x ⊓ y) ≤ x := by
+    have h1a : x ≤ x := le_rfl
     have h1b : x ⊓ y ≤ x := inf_le_left
     show x ⊔ (x ⊓ y) ≤ x
-    exact sup_le h1a h1b }
+    exact sup_le h1a h1b
   have h2 : x ≤ x ⊔ (x ⊓ y) := le_sup_left
   show x ⊔ (x ⊓ y) = x
   exact le_antisymm h1 h2
@@ -191,10 +183,12 @@ by simp
 -- Lemas usados
 -- ============
 
--- variable (z : α)
--- #check (le_rfl : x ≤ x)
--- #check (inf_le_left : x ⊓ y ≤ x)
--- #check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)
--- #check (le_sup_left : x ≤ x ⊔ y)
--- #check (le_antisymm : x ≤ y → y ≤ x → x = y)
--- #check (sup_inf_self : x ⊔ (x ⊓ y) = x)
+variable (z : α)
+#check (inf_le_left : x ⊓ y ≤ x)
+#check (inf_sup_self : x ⊓ (x ⊔ y) = x)
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)
+#check (le_inf : z ≤ x → z ≤ y → z ≤ x ⊓ y)
+#check (le_rfl : x ≤ x)
+#check (le_sup_left : x ≤ x ⊔ y)
+#check (sup_inf_self : x ⊔ (x ⊓ y) = x)
+#check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)

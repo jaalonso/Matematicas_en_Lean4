@@ -1,4 +1,5 @@
 import Mathlib.Data.Real.Basic                                               -- 1
+import Mathlib.Tactic
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 1. Declarar x como variable implícita sobre los reales.
@@ -26,11 +27,7 @@ by
   use a / 2
   -- ⊢ x < a / 2 * 2
   calc x < a         := hxa
-       _ = a / 2 * 2 := (div_mul_cancel a two_ne_zero).symm
-
--- Comentario: Se han usado los lemas
--- + div_mul_cancel a : b ≠ 0 → a / b * b = a
--- + two_ne_zero : 2 ≠ 0
+       _ = a / 2 * 2 := (div_mul_cancel_of_invertible a 2).symm
 
 -- 2ª demostración
 -- ===============
@@ -45,3 +42,11 @@ by
   use a / 2
   -- ⊢ x < a / 2 * 2
   linarith
+
+-- Lemas usados
+-- ============
+
+variable (a b : ℝ)
+variable (b : ℝ) [Invertible b]
+#check (div_mul_cancel_of_invertible a b : a / b * b = a)
+#check (two_ne_zero : 2 ≠ 0)

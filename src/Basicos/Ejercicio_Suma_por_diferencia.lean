@@ -48,18 +48,10 @@ calc
   _ = a^2 + ((-(a * b) + b * a) + -b^2) := by rw [← add_assoc
                                               (-(a * b)) (b * a) (-b^2)]
   _ = a^2 + ((-(a * b) + a * b) + -b^2) := by rw [mul_comm]
-  _ = a^2 + (0 + -b^2)                  := by rw [neg_add_self (a * b)]
+  _ = a^2 + (0 + -b^2)                  := by rw [neg_add_cancel (a * b)]
   _ = (a^2 + 0) + -b^2                  := by rw [← add_assoc]
   _ = a^2 + -b^2                        := by rw [add_zero]
   _ = a^2 - b^2                         := by linarith
-
--- Comentario. Se han usado los siguientes lemas:
--- + pow_two a : a ^ 2 = a * a
--- + mul_sub a b c : a * (b - c) = a * b - a * c
--- + add_mul a b c : (a + b) * c = a * c + b * c
--- + add_sub a b c : a + (b - c) = a + b - c
--- + sub_sub a b c : a - b - c = a - (b + c)
--- + add_zero a : a + 0 = a
 
 -- 2ª demostración
 -- ===============
@@ -108,7 +100,7 @@ by
   -- ⊢ a * a + (-(a * b) + b * a) + b * -b = a ^ 2 - b ^ 2
   rw [mul_comm b a]
   -- ⊢ a * a + (-(a * b) + a * b) + b * -b = a ^ 2 - b ^ 2
-  rw [neg_add_self]
+  rw [neg_add_cancel]
   -- ⊢ a * a + 0 + b * -b = a ^ 2 - b ^ 2
   rw [add_zero]
   -- ⊢ a * a + b * -b = a ^ 2 - b ^ 2
@@ -119,3 +111,18 @@ by
   rw [← pow_two]
   -- ⊢ a ^ 2 + -b ^ 2 = a ^ 2 - b ^ 2
   rw [← sub_eq_add_neg]
+
+-- Lemas usados
+-- ============
+
+#check (add_assoc a b c    : (a + b) + c = a + (b + c))
+#check (add_mul a b c      : (a + b) * c = a * c + b * c)
+#check (add_sub a b c      : a + (b - c) = a + b - c)
+#check (add_zero a         : a + 0 = a)
+#check (mul_comm a b       : a * b = b * a)
+#check (mul_neg a b        : a * -b = -(a * b))
+#check (mul_sub a b c      : a * (b - c) = a * b - a * c)
+#check (neg_add_cancel a   : -a + a = 0)
+#check (sub_eq_add_neg a b : a - b = a + -b)
+#check (pow_two a          : a ^ 2 = a * a)
+#check (sub_sub a b c      : (a - b) - c = a - (b + c))

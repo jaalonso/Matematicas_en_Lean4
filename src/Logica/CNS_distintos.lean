@@ -166,3 +166,8 @@ by
     contrapose!
     -- ⊢ y ≤ x → x = y
     exact le_antisymm h
+
+-- Lemas usados
+-- ============
+
+#check (le_antisymm : x ≤ y → y ≤ x → x = y)

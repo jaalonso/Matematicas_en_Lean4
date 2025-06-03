@@ -6,6 +6,7 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que no para toda f : ℝ → ℝ monótona,
@@ -38,12 +39,12 @@ by
   let f := fun _ : ℝ ↦ (0 : ℝ)
   have h2 : Monotone f := monotone_const
   have h3 : f 1 ≤ f 0 := le_refl 0
-  have h4 : 1 ≤ 0 := h1 h2 h3
+  have h4 : (1 : ℝ) ≤ 0 := h1 h2 h3
   linarith
 
 -- Lemas usados
 -- ============
 
--- variable (a c : ℝ)
--- #check (monotone_const : Monotone fun _ : ℝ ↦ c)
--- #check (le_refl a : a ≤ a)
+variable (a c : ℝ)
+#check (le_refl a : a ≤ a)
+#check (monotone_const : Monotone fun _ : ℝ ↦ c)

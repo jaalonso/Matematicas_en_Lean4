@@ -16,15 +16,15 @@
 -- Demostraciones en Lean4
 -- =======================
 
-import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+variable (a b c : ℝ)
 
 -- 1ª demostración
 -- ===============
 
-example
-  (a b c : ℝ)
-  : a * (b * c) = b * (a * c) :=
+example : a * (b * c) = b * (a * c) :=
 calc
   a * (b * c)
     = (a * b) * c := by rw [←mul_assoc]
@@ -34,9 +34,7 @@ calc
 -- 2ª demostración
 -- ===============
 
-example
-  (a b c : ℝ)
-  : a * (b * c) = b * (a * c) :=
+example : a * (b * c) = b * (a * c) :=
 by
   rw [←mul_assoc]
   -- ⊢ (a * b) * c = b * (a * c)
@@ -50,7 +48,11 @@ by
 -- 3ª demostración
 -- ===============
 
-example
-  (a b c : ℝ)
-  : a * (b * c) = b * (a * c) :=
+example : a * (b * c) = b * (a * c) :=
 by ring
+
+-- Lemas usados
+-- ============
+
+#check (mul_comm a b : a * b = b * a)
+#check (mul_assoc a b c : (a * b) * c = a * (b * c))

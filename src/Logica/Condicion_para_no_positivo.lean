@@ -68,9 +68,9 @@ by
 -- Lemas usados
 -- ============
 
--- variable (a b : ℝ)
--- variable (p q : Prop)
--- #check (le_of_not_gt : ¬a > b → a ≤ b)
--- #check (half_lt_self : 0 < a → a / 2 < a)
--- #check (half_pos : 0 < a → 0 < a / 2)
--- #check (absurd : p → ¬p → q)
+variable (a b : ℝ)
+variable (p q : Prop)
+#check (absurd : p → ¬p → q)
+#check (half_lt_self : 0 < a → a / 2 < a)
+#check (half_pos : 0 < a → 0 < a / 2)
+#check (le_of_not_gt : ¬a > b → a ≤ b)

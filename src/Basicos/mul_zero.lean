@@ -30,9 +30,9 @@ variable (a : R)
 example : a * 0 = 0 :=
 by
   have h : a * 0 + a * 0 = a * 0 + 0 :=
-    calc a * 0 + a * 0 = a * (0 + 0) := by rw [mul_add a 0 0]
-                     _ = a * 0       := by rw [add_zero 0]
-                     _ = a * 0 + 0   := by rw [add_zero (a * 0)]
+    calc a * 0 + a * 0 = a * (0 + 0) := by exact (mul_add a 0 0).symm
+                     _ = a * 0       := congrArg (a * .) (add_zero 0)
+                     _ = a * 0 + 0   := by exact (add_zero (a * 0)).symm
   rw [add_left_cancel h]
 
 -- 2ª demostración
@@ -78,5 +78,15 @@ by
                      _ = a * 0       := by simp
                      _ = a * 0 + 0   := by simp
   simp
+
+-- Lemas usados
+-- ============
+
+variable (b c : R)
+variable (f : R → E)
+#check (add_zero a : a + 0 = a)
+#check (add_left_cancel : a + b = a + c → b = c)
+#check (congrArg f : a = b → f a = f b)
+#check (mul_add a b c : a * (b + c) = a * b + a * c)
 
 end MyRing

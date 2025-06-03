@@ -19,6 +19,8 @@
 -- ========================
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable (x y : ℝ)
 
 -- 1ª demostración
@@ -67,4 +69,4 @@ by
 -- Lemas usados
 -- ============
 
--- #check (abs_lt: |x| < y ↔ -y < x ∧ x < y)
+#check (abs_lt: |x| < y ↔ -y < x ∧ x < y)

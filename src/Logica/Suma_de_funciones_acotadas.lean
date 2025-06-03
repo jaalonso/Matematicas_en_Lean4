@@ -78,12 +78,6 @@ theorem FnUb_add
   : FnUb (f + g) (a + b) :=
 fun x ↦ add_le_add (hfa x) (hgb x)
 
--- Lemas usados
--- ============
-
--- variable (c d : ℝ)
--- #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que la suma de dos funciones acotadas
 -- superiormente también lo está.
@@ -211,6 +205,9 @@ example
 -- Lemas usados
 -- ============
 
--- variable (c d : ℝ)
--- #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
--- #check (FnUb_add : FnUb f a → FnUb g b → FnUb (f + g) (a + b))
+variable (c d : ℝ)
+variable (w : ℝ)
+variable (p : ℝ → Prop)
+#check (Exists.intro w : p w → Exists p)
+#check (FnUb_add : FnUb f a → FnUb g b → FnUb (f + g) (a + b))
+#check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)

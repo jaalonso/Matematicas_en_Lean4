@@ -72,3 +72,8 @@ example
   (hf : Injective f) :
   Injective (g ∘ f) :=
 by tauto
+
+-- Lemas usados
+-- ============
+
+#check (Injective.comp : Injective g → Injective f → Injective (g ∘ f))

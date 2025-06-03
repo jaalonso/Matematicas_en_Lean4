@@ -17,6 +17,7 @@
 -- ========================
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 
 variable {c : ℝ}
 
@@ -83,6 +84,6 @@ add_right_surjective c
 -- Lemas usados
 -- ============
 
--- variable (a b : ℝ)
--- #check (sub_add_cancel a b : (a - b) + b = a)
--- #check (add_right_surjective c : Surjective (fun x ↦ x + c))
+variable (a b : ℝ)
+#check (add_right_surjective c : Surjective (fun x ↦ x + c))
+#check (sub_add_cancel a b : (a - b) + b = a)

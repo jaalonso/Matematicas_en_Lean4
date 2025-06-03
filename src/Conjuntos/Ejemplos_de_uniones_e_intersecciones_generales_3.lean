@@ -7,10 +7,10 @@
 --    de α.
 -- ----------------------------------------------------------------------
 
-import data.set.lattice      -- 1
-open set                     -- 2 
-variable {α : Type*}         -- 3
-variable (s : set (set α))   -- 4
+import Mathlib.Data.Set.Lattice -- 1
+open Set                        -- 2
+variable {α : Type*}            -- 3
+variable (s : Set (Set α))      -- 4
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
@@ -21,36 +21,18 @@ variable (s : set (set α))   -- 4
 -- ===============
 
 example : ⋃₀ s = ⋃ t ∈ s, t :=
-begin
-  ext x,
-  rw mem_bUnion_iff,
-  refl,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s : set (set α)
-⊢ ⋃₀ s = ⋃ (t : set α) (H : t ∈ s), t
-  >> ext x,
-x : α
-⊢ x ∈ ⋃₀ s ↔ x ∈ ⋃ (t : set α) (H : t ∈ s), t
-  >> rw mem_bUnion_iff,
-⊢ x ∈ ⋃₀ s ↔ ∃ (x_1 : set α) (H : x_1 ∈ s), x ∈ x_1
-  >> refl,
-no goals
--/
-
--- Comentario: Se ha usado el lema
--- + mem_bUnion_iff: y ∈ (⋃ x ∈ s, t x) ↔ ∃ x ∈ s, y ∈ t x
+by
+  ext x
+  -- ⊢ x ∈ ⋃₀ s ↔ x ∈ ⋃ t ∈ s, t
+  rw [mem_iUnion₂]
+  -- ⊢ x ∈ ⋃₀ s ↔ ∃ i, ∃ (_ : i ∈ s), x ∈ i
+  simp
 
 -- 2ª demostración
 -- ===============
 
 example : ⋃₀ s = ⋃ t ∈ s, t :=
-sUnion_eq_bUnion
+sUnion_eq_biUnion
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
@@ -60,36 +42,25 @@ sUnion_eq_bUnion
 -- 1ª demostración
 -- ===============
 
-example : ⋂₀ s = ⋂ t ∈ s, t :=
-begin
-  ext x,
-  rw mem_bInter_iff,
-  refl,
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s : set (set α)
-⊢ ⋂₀ s = ⋂ (t : set α) (H : t ∈ s), t
-  >> ext x,
-x : α
-⊢ x ∈ ⋂₀ s ↔ x ∈ ⋂ (t : set α) (H : t ∈ s), t
-  >> rw mem_bInter_iff,
-⊢ x ∈ ⋂₀ s ↔ ∀ (x_1 : set α), x_1 ∈ s → x ∈ x_1
-  >> refl,
-no goals
--/
-
--- Comentario: Se ha usado el lema
--- + mem_bInter_iff : y ∈ (⋂ x ∈ s, t x) ↔ ∀ x ∈ s, y ∈ t x 
+example : ⋂₀ s = ⋂ t ∈ s, t := by
+  ext x
+  rw [mem_iInter₂]
+  rfl
 
 -- 2ª demostración
 -- ===============
 
 example : ⋂₀ s = ⋂ t ∈ s, t :=
-sInter_eq_bInter
+sInter_eq_biInter
 
+-- Lemas usados
+-- ============
 
+variable (α : Type u)
+variable (x : α)
+variable (A : I → J → Set α)
+variable (s : Set (Set α))
+#check (mem_iInter₂ : x ∈ ⋂ i, ⋂ j, A i j ↔ ∀ i j, x ∈ A i j)
+#check (mem_iUnion₂ : x ∈ ⋃ i, ⋃ j, A i j ↔ ∃ i j, x ∈ A i j)
+#check (sInter_eq_biInter : ⋂₀ s = ⋂ i ∈ s, i)
+#check (sUnion_eq_biUnion : ⋃₀ s = ⋃ i ∈ s, i)

@@ -6,6 +6,8 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable {x y a b : ℝ}
 
 -- ---------------------------------------------------------------------
@@ -86,17 +88,6 @@ by
 example : x ≤ |x| :=
   le_abs_self x
 
--- Lemas usados
--- ============
-
--- #check (Left.self_le_neg : x ≤ 0 → x ≤ -x)
--- #check (abs_of_neg : x < 0 → |x| = -x)
--- #check (abs_of_nonneg : 0 ≤ x → |x| = x)
--- #check (le_abs_self x : x ≤ |x|)
--- #check (le_neg_self_iff : x ≤ -x ↔ x ≤ 0)
--- #check (le_of_lt : x < y → x ≤ y)
--- #check (le_or_gt x y : x ≤ y ∨ x > y)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que
 --    -x ≤ |x|
@@ -169,17 +160,7 @@ by
 -- ===============
 
 example : -x ≤ |x| :=
-  neg_le_abs_self x
-
--- Lemas usados
--- ============
-
--- #check (abs_of_neg : x < 0 → |x| = -x)
--- #check (abs_of_nonneg : 0 ≤ x → |x| = x)
--- #check (le_or_gt x y : x ≤ y ∨ x > y)
--- #check (le_refl x : x ≤ x)
--- #check (neg_le_abs_self x : -x ≤ |x|)
--- #check (neg_le_self : 0 ≤ x → -x ≤ x)
+  neg_le_abs x
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que
@@ -224,7 +205,7 @@ example : |x + y| ≤ |x| + |y| := by
     show |x + y| ≤ |x| + |y|
     calc |x + y| = -(x + y)  := by exact abs_of_neg h2
                _ = -x + -y   := by exact neg_add x y
-               _ ≤ |x| + |y| := add_le_add (neg_le_abs_self x) (neg_le_abs_self y)
+               _ ≤ |x| + |y| := add_le_add (neg_le_abs x) (neg_le_abs y)
 
 -- 2ª demostración
 -- ===============
@@ -239,7 +220,7 @@ example : |x + y| ≤ |x| + |y| := by
     rw [abs_of_neg h2]
     -- ⊢ -(x + y) ≤ |x| + |y|
     calc -(x + y) = -x + -y    := by exact neg_add x y
-                _ ≤ |x| + |y|  := add_le_add (neg_le_abs_self x) (neg_le_abs_self y)
+                _ ≤ |x| + |y|  := add_le_add (neg_le_abs x) (neg_le_abs y)
 
 -- 2ª demostración
 -- ===============
@@ -253,7 +234,7 @@ example : |x + y| ≤ |x| + |y| := by
   . -- h2 : 0 > x + y
     rw [abs_of_neg h2]
     -- ⊢ -(x + y) ≤ |x| + |y|
-    linarith [neg_le_abs_self x, neg_le_abs_self y]
+    linarith [neg_le_abs x, neg_le_abs y]
 
 -- 3ª demostración
 -- ===============
@@ -264,12 +245,17 @@ example : |x + y| ≤ |x| + |y| :=
 -- Lemas usados
 -- ============
 
--- variable (c d : ℝ)
--- #check (abs_add x y : |x + y| ≤ |x| + |y|)
--- #check (abs_of_neg : x < 0 → |x| = -x)
--- #check (abs_of_nonneg : 0 ≤ x → |x| = x)
--- #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
--- #check (le_abs_self a : a ≤ |a|)
--- #check (le_or_gt x y : x ≤ y ∨ x > y)
--- #check (neg_add x y : -(x + y) = -x + -y)
--- #check (neg_le_abs_self x : -x ≤ |x|)
+variable (c d : ℝ)
+#check (Left.self_le_neg : x ≤ 0 → x ≤ -x)
+#check (abs_add x y : |x + y| ≤ |x| + |y|)
+#check (abs_of_neg : x < 0 → |x| = -x)
+#check (abs_of_nonneg : 0 ≤ x → |x| = x)
+#check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
+#check (le_abs_self a : a ≤ |a|)
+#check (le_neg_self_iff : x ≤ -x ↔ x ≤ 0)
+#check (le_of_lt : x < y → x ≤ y)
+#check (le_or_gt x y : x ≤ y ∨ x > y)
+#check (le_refl a : a ≤ a)
+#check (neg_add x y : -(x + y) = -x + -y)
+#check (neg_le_abs x : -x ≤ |x|)
+#check (neg_le_self : 0 ≤ x → -x ≤ x)

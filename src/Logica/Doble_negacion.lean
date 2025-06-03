@@ -63,11 +63,6 @@ by tauto
 -- Comentario: La táctica tauto demuestra las tautologís
 -- proposionales.
 
--- Lemas usados
--- ============
-
--- #check (of_not_not : ¬¬P → P)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
 --    P
@@ -123,4 +118,5 @@ by tauto
 -- Lemas usados
 -- ============
 
--- #check (not_not_intro : P → ¬¬P)
+#check (not_not_intro : P → ¬¬P)
+#check (of_not_not : ¬¬P → P)

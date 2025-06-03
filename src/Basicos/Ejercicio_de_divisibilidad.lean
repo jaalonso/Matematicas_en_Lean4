@@ -95,7 +95,7 @@ by
 
 #check (dvd_add : x ∣ y → x ∣ z → x ∣ y + z)
 #check (dvd_mul_left x y : x ∣ y * x)
-#check (dvd_mul_right x y : x ∣ x * y)
 #check (dvd_mul_of_dvd_left : x ∣ y → ∀ (c : ℕ), x ∣ y * c)
 #check (dvd_mul_of_dvd_right : x ∣ y → ∀ (c : ℕ), x ∣ c * y)
+#check (dvd_mul_right x y : x ∣ x * y)
 #check (pow_two x : x ^ 2 = x * x)

@@ -101,4 +101,4 @@ by
 -- Lemas usados
 -- ============
 
--- #check (dvd_antisymm : m ∣ n → n ∣ m → m = n)
+#check (dvd_antisymm : m ∣ n → n ∣ m → m = n)

@@ -70,3 +70,10 @@ by
 
 example : (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
 by rw [add_mul, mul_add, mul_add, ←add_assoc]
+
+-- Lemas usados
+-- ============
+
+#check (add_assoc a b c : (a + b) + c = a + (b + c))
+#check (add_mul a b c   : (a + b) * c = a * c + b * c)
+#check (mul_add a b c   : a * (b + c) = a * b + a * c)

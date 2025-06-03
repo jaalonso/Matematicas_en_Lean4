@@ -76,6 +76,6 @@ by linarith
 -- Lemas usados
 -- ============
 
--- variable (p q : Prop)
--- #check (lt_irrefl a : ¬a < a)
--- #check (absurd : p → ¬p → q)
+variable (p q : Prop)
+#check (absurd : p → ¬p → q)
+#check (lt_irrefl a : ¬a < a)

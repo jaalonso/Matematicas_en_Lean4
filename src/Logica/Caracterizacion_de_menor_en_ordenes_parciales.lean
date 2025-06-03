@@ -195,8 +195,11 @@ example : a < b ↔ a ≤ b ∧ a ≠ b :=
 -- Lemas usados
 -- ============
 
--- #check (le_antisymm : a ≤ b → b ≤ a → a = b)
--- #check (le_of_eq : a = b → a ≤ b)
--- #check (lt_iff_le_and_ne : a < b ↔ a ≤ b ∧ a ≠ b)
--- #check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
--- #check (lt_of_le_of_ne : a ≤ b → a ≠ b → a < b)
+#check (le_antisymm : a ≤ b → b ≤ a → a = b)
+#check (le_of_eq : a = b → a ≤ b)
+#check (le_of_eq : a = b → a ≤ b)
+#check (le_of_lt : a < b → a ≤ b)
+#check (lt_iff_le_and_ne : a < b ↔ a ≤ b ∧ a ≠ b)
+#check (lt_iff_le_not_le : a < b ↔ a ≤ b ∧ ¬b ≤ a)
+#check (lt_of_le_of_ne : a ≤ b → a ≠ b → a < b)
+#check (ne_of_lt : a < b → a ≠ b)

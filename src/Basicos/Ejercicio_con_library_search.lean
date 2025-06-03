@@ -60,11 +60,13 @@ example
   : c - exp b ≤ c - exp a :=
 by linarith [exp_le_exp.mpr h]
 
--- Los lemas usados son:
+-- Lemas usados
+-- ============
+
 variable (d : ℝ)
+variable (h : a ≤ b)
 #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
 #check (exp_le_exp : exp a ≤ exp b ↔ a ≤ b)
 #check (le_refl : ∀ (a : ℝ), a ≤ a)
 #check (neg_le_neg : a ≤ b → -b ≤ -a)
-variable (h : a ≤ b)
 #check (sub_le_sub_left h c : c - b ≤ c - a)

@@ -61,7 +61,7 @@ lt_asymm h
 -- Lemas usados
 -- ============
 
--- variable (c : ℝ)
--- #check (lt_asymm : a < b → ¬b < a)
--- #check (lt_irrefl a : ¬a < a)
--- #check (lt_trans : a < b → b < c → a < c)
+variable (c : ℝ)
+#check (lt_asymm : a < b → ¬b < a)
+#check (lt_irrefl a : ¬a < a)
+#check (lt_trans : a < b → b < c → a < c)

@@ -70,5 +70,6 @@ by aesop
 -- Lemas usados
 -- ============
 
--- variable (y : ℝ)
--- #check (lt_trichotomy x y : x < y ∨ x = y ∨ y < x)
+variable (y : ℝ)
+#check (Ne.lt_or_lt : x ≠ y → x < y ∨ y < x)
+#check (lt_trichotomy x y : x < y ∨ x = y ∨ y < x)

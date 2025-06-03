@@ -61,8 +61,8 @@ by
 -- Lemas usados
 -- ============
 
--- variables (a b c : ℝ)
--- #check (mul_lt_mul_right : 0 < a → (b * a < c * a ↔ b < c))
--- #check (one_mul a : 1 * a = a)
--- #check (lt_trans : a < b → b < c → a < c)
--- #check (zero_lt_one : 0 < 1)
+variable (a b c : ℝ)
+#check (lt_trans : a < b → b < c → a < c)
+#check (mul_lt_mul_right : 0 < a → (b * a < c * a ↔ b < c))
+#check (one_mul a : 1 * a = a)
+#check (zero_lt_one : 0 < 1)

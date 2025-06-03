@@ -116,3 +116,10 @@ example
   (h2 : b = a * d)
   : c = 2 * a * d :=
 by linarith
+
+-- Lemas usados
+-- ============
+
+#check (mul_assoc a b c : a * b * c = a * (b * c))
+#check (mul_comm a b : a * b = b * a)
+#check (two_mul a : 2 * a = a + a)

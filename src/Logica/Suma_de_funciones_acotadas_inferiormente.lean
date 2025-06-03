@@ -139,4 +139,9 @@ fun ⟨a, lbfa⟩ ⟨b, lbfb⟩ ↦ ⟨a + b, FnLb_add lbfa lbfb⟩
 -- Lemas usados
 -- ============
 
--- #check (FnLb_add : FnLb f a → FnLb g b → FnLb (f + g) (a + b))
+variable (c d : ℝ)
+variable (w : ℝ)
+variable (p : ℝ → Prop)
+#check (Exists.intro w : p w → Exists p)
+#check (FnLb_add : FnLb f a → FnLb g b → FnLb (f + g) (a + b))
+#check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)

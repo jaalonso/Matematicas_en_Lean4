@@ -116,5 +116,5 @@ example
 -- Lemas usados
 -- ============
 
--- variable (a b c d : ℝ)
--- #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
+variable (a b c d : ℝ)
+#check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)

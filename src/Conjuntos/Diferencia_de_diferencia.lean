@@ -3,161 +3,272 @@
 --    (s \ t) \ u ⊆ s \ (t ∪ u)
 -- ----------------------------------------------------------------------
 
-import tactic
+-- Demostración en lenguaje natural
+-- ================================
 
-variable {α : Type*}
-variables (s t u : set α)
+-- Sea x ∈ (s \ t) \ u. Entonces, se tiene que
+--    x ∈ s                                                      (1)
+--    x ∉ t                                                      (2)
+--    x ∉ u                                                      (3)
+-- Tenemos que demostrar que
+--    x ∈ s \ (t ∪ u)
+-- pero, por (1), se reduce a
+--    x ∉ t ∪ u
+-- que se verifica por (2) y (3).
+
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Set.Basic
+import Mathlib.Tactic
+
+open Set
+
+variable {α : Type}
+variable (s t u : Set α)
 
 -- 1ª demostración
 -- ===============
 
 example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
-begin
-  intros x xstu,
-  have xs : x ∈ s := xstu.1.1,
-  have xnt : x ∉ t := xstu.1.2,
-  have xnu : x ∉ u := xstu.2,
-  split,
-  { exact xs }, 
-  { dsimp,
-    intro xtu, 
-    cases xtu with xt xu,
-    { show false, 
-      from xnt xt },
-    { show false, 
-      from xnu xu }},
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t u : set α
-⊢ s \ t \ u ⊆ s \ (t ∪ u)
-  >> intros x xstu,
-x : α,
-xstu : x ∈ s \ t \ u
-⊢ x ∈ s \ (t ∪ u)
-  >> have xs : x ∈ s := xstu.1.1,
-xs : x ∈ s
-⊢ x ∈ s \ (t ∪ u)
-  >> have xnt : x ∉ t := xstu.1.2,
-xnt : x ∉ t
-⊢ x ∈ s \ (t ∪ u)
-  >> have xnu : x ∉ u := xstu.2,
-xnu : x ∉ u
-⊢ x ∈ s \ (t ∪ u)
-  >> split,
-| ⊢ x ∈ s
-|   >> { exact xs },
-⊢ (λ (a : α), a ∉ t ∪ u) x 
-  >> { dsimp,
-⊢ ¬(x ∈ t ∨ x ∈ u)
-  >>   intro xtu, 
-xtu : x ∈ t ∨ x ∈ u
-⊢ false
-  >>   cases xtu with xt xu,
-| xt : x ∈ t
-| ⊢ false
-|   >>   { show false, 
-| ⊢ false
-|   >>     from xnt xt },
-xu : x ∈ u
-⊢ false
-  >>   { show false,
-⊢ false 
-  >>     from xnu xu }},
-no goals
--/
+by
+  intros x hx
+  -- x : α
+  -- hx : x ∈ (s \ t) \ u
+  -- ⊢ x ∈ s \ (t ∪ u)
+  rcases hx with ⟨hxst, hxnu⟩
+  -- hxst : x ∈ s \ t
+  -- hxnu : ¬x ∈ u
+  rcases hxst with ⟨hxs, hxnt⟩
+  -- hxs : x ∈ s
+  -- hxnt : ¬x ∈ t
+  constructor
+  . -- ⊢ x ∈ s
+    exact hxs
+  . -- ⊢ ¬x ∈ t ∪ u
+    by_contra hxtu
+    -- hxtu : x ∈ t ∪ u
+    -- ⊢ False
+    rcases hxtu with (hxt | hxu)
+    . -- hxt : x ∈ t
+      apply hxnt
+      -- ⊢ x ∈ t
+      exact hxt
+    . -- hxu : x ∈ u
+      apply hxnu
+      -- ⊢ x ∈ u
+      exact hxu
 
 -- 2ª demostración
 -- ===============
 
-example : s \ t \ u ⊆ s \ (t ∪ u) :=
-begin
-  rintros x ⟨⟨xs, xnt⟩, xnu⟩,
-  use xs,
-  rintros (xt | xu), 
-  { contradiction },
-  { contradiction },
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t u : set α
-⊢ s \ t \ u ⊆ s \ (t ∪ u)
-  >> rintros x ⟨⟨xs, xnt⟩, xnu⟩,
-x : α,
-xnu : x ∉ u,
-xs : x ∈ s,
-xnt : x ∉ t
-⊢ x ∈ s \ (t ∪ u)
-  >> use xs,
-⊢ (λ (a : α), a ∉ t ∪ u) x
-  >> rintros (xt | xu), 
-| xt : x ∈ t
-| ⊢ false
-|   >> { contradiction },
-xu : x ∈ u
-⊢ false
-  >> { contradiction },
-no goals
--/
-
-
+example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
+by
+  rintro x ⟨⟨hxs, hxnt⟩, hxnu⟩
+  -- x : α
+  -- hxnu : ¬x ∈ u
+  -- hxs : x ∈ s
+  -- hxnt : ¬x ∈ t
+  -- ⊢ x ∈ s \ (t ∪ u)
+  constructor
+  . -- ⊢ x ∈ s
+    exact hxs
+  . -- ⊢ ¬x ∈ t ∪ u
+    by_contra hxtu
+    -- hxtu : x ∈ t ∪ u
+    -- ⊢ False
+    rcases hxtu with (hxt | hxu)
+    . -- hxt : x ∈ t
+      exact hxnt hxt
+    . -- hxu : x ∈ u
+      exact hxnu hxu
 
 -- 3ª demostración
 -- ===============
 
-example : s \ t \ u ⊆ s \ (t ∪ u) :=
-begin
-  rintros x ⟨⟨xs, xnt⟩, xnu⟩,
-  use xs,
-  rintros (xt | xu); contradiction
-end
+example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
+by
+  rintro x ⟨⟨xs, xnt⟩, xnu⟩
+  -- x : α
+  -- xnu : ¬x ∈ u
+  -- xs : x ∈ s
+  -- xnt : ¬x ∈ t
+  -- ⊢ x ∈ s \ (t ∪ u)
+  use xs
+  -- ⊢ ¬x ∈ t ∪ u
+  rintro (xt | xu)
+  . -- xt : x ∈ t
+    -- ⊢ False
+    contradiction
+  . -- xu : x ∈ u
+    -- ⊢ False
+    contradiction
+
+-- 4ª demostración
+-- ===============
+
+example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
+by
+  rintro x ⟨⟨xs, xnt⟩, xnu⟩
+  -- x : α
+  -- xnu : ¬x ∈ u
+  -- xs : x ∈ s
+  -- xnt : ¬x ∈ t
+  -- ⊢ x ∈ s \ (t ∪ u)
+  use xs
+  -- ⊢ ¬x ∈ t ∪ u
+  rintro (xt | xu) <;> contradiction
+
+-- 5ª demostración
+-- ===============
+
+example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
+by
+  intro x xstu
+  -- x : α
+  -- xstu : x ∈ (s \ t) \ u
+  -- ⊢ x ∈ s \ (t ∪ u)
+  simp at *
+  -- ⊢ x ∈ s ∧ ¬(x ∈ t ∨ x ∈ u)
+  aesop
+
+-- 6ª demostración
+-- ===============
+
+example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
+by
+  intro x xstu
+  -- x : α
+  -- xstu : x ∈ (s \ t) \ u
+  -- ⊢ x ∈ s \ (t ∪ u)
+  aesop
+
+-- 7ª demostración
+-- ===============
+
+example : (s \ t) \ u ⊆ s \ (t ∪ u) :=
+by rw [diff_diff]
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
 --    s \ (t ∪ u) ⊆ (s \ t) \ u
 -- ----------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Sea x ∈ s \ (t ∪ u). Entonces,
+--    x ∈ s                                                          (1)
+--    x ∉ t ∪ u                                                      (2)
+-- Tenemos que demostrar que x ∈ (s \ t) \ u; es decir, que se verifican
+-- las relaciones
+--    x ∈ s \ t                                                      (3)
+--    x ∉ u                                                          (4)
+-- Para demostrar (3) tenemos que demostrar las relaciones
+--    x ∈ s                                                          (5)
+--    x ∉ t                                                          (6)
+-- La (5) se tiene por la (1). Para demostrar la (6), supongamos que
+-- x ∈ t; entonces, x ∈ t ∪ u, en contracción con (2). Para demostrar la
+-- (4), supongamos que x ∈ u; entonces, x ∈ t ∪ u, en contracción con
+-- (2).
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+-- ===============
+
 example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
-begin
-  rintros x ⟨xs, xntu⟩,
-  use xs,
-  { intro xt, 
-    exact xntu (or.inl xt) },
-  { intro xu,
-    apply xntu (or.inr xu) },
-end
+by
+  intros x hx
+  -- x : α
+  -- hx : x ∈ s \ (t ∪ u)
+  -- ⊢ x ∈ (s \ t) \ u
+  constructor
+  . -- ⊢ x ∈ s \ t
+    constructor
+    . -- ⊢ x ∈ s
+      exact hx.1
+    . -- ⊢ ¬x ∈ t
+      intro xt
+      -- xt : x ∈ t
+      -- ⊢ False
+      apply hx.2
+      -- ⊢ x ∈ t ∪ u
+      left
+      -- ⊢ x ∈ t
+      exact xt
+  . -- ⊢ ¬x ∈ u
+    intro xu
+    -- xu : x ∈ u
+    -- ⊢ False
+    apply hx.2
+    -- ⊢ x ∈ t ∪ u
+    right
+    -- ⊢ x ∈ u
+    exact xu
 
--- Prueba
--- ======
+-- 2ª demostración
+-- ===============
 
-/-
-α : Type u_1,
-s t u : set α
-⊢ s \ (t ∪ u) ⊆ s \ t \ u
-  >> rintros x ⟨xs, xntu⟩,
-x : α,
-xs : x ∈ s,
-xntu : x ∉ t ∪ u
-⊢ x ∈ s \ t \ u
-  >> use xs,
-| ⊢ (λ (a : α), a ∉ t) x
-|   >> { intro xt, 
-| xt : x ∈ t
-| ⊢ false
-|   >>   exact xntu (or.inl xt) },
-⊢ (λ (a : α), a ∉ u) x
-  >> { intro xu,
-xu : x ∈ u
-⊢ false
-  >>   apply xntu (or.inr xu) },
-no goals
--/
+example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
+by
+  rintro x ⟨xs, xntu⟩
+  -- x : α
+  -- xs : x ∈ s
+  -- xntu : ¬x ∈ t ∪ u
+  -- ⊢ x ∈ (s \ t) \ u
+  constructor
+  . -- ⊢ x ∈ s \ t
+    constructor
+    . -- ⊢ x ∈ s
+      exact xs
+    . -- ¬x ∈ t
+      intro xt
+      -- xt : x ∈ t
+      -- ⊢ False
+      exact xntu (Or.inl xt)
+  . -- ⊢ ¬x ∈ u
+    intro xu
+    -- xu : x ∈ u
+    -- ⊢ False
+    exact xntu (Or.inr xu)
 
+-- 2ª demostración
+-- ===============
+
+example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
+  fun _ ⟨xs, xntu⟩ ↦ ⟨⟨xs, fun xt ↦ xntu (Or.inl xt)⟩,
+                      fun xu ↦ xntu (Or.inr xu)⟩
+
+-- 4ª demostración
+-- ===============
+
+example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
+by
+  rintro x ⟨xs, xntu⟩
+  -- x : α
+  -- xs : x ∈ s
+  -- xntu : ¬x ∈ t ∪ u
+  -- ⊢ x ∈ (s \ t) \ u
+  aesop
+
+-- 5ª demostración
+-- ===============
+
+example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
+by intro ; aesop
+
+-- 6ª demostración
+-- ===============
+
+example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
+by rw [diff_diff]
+
+-- Lemas usados
+-- ============
+
+variable (a b : Prop)
+#check (Or.inl : a → a ∨ b)
+#check (Or.inr : b → a ∨ b)
+#check (diff_diff : (s \ t) \ u = s \ (t ∪ u))

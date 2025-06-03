@@ -14,6 +14,7 @@ variable {G : Type _} [Group G]
 -- Ejercicio 3. Comprobar que G verifica los axiomas de los grupos
 -- ----------------------------------------------------------------------
 
-#check (mul_assoc :    ∀ a b c : G, a * b * c = a * (b * c))
-#check (one_mul :      ∀ a : G, 1 * a = a)
-#check (mul_left_inv : ∀ a : G, a⁻¹ * a = 1)
+variable (a b c : G)
+#check (mul_assoc a b c : a * b * c = a * (b * c))
+#check (one_mul a : 1 * a = a)
+#check (inv_mul_cancel a : a⁻¹ * a = 1)

@@ -8,59 +8,56 @@
 -- 6. Usar la lógica clásica.
 -- ----------------------------------------------------------------------
 
-import data.set.function               -- 1
-universes u v                          -- 2
-variables {α : Type u} [inhabited α]   -- 3
-variables {β : Type v}                 -- 4
-noncomputable theory                   -- 5
-open_locale classical                  -- 6
+import Mathlib.Data.Set.Lattice
+import Mathlib.Data.Set.Function
+
+universe u v                          -- 2
+variable {α : Type u} [Inhabited α]   -- 3
+variable {β : Type v}                 -- 4
+noncomputable section                 -- 5
+open Classical
 
 -- ---------------------------------------------------------------------
--- Ejercicio. Definir la inversa de una función 
+-- Ejercicio. Definir la inversa de una función
 -- ----------------------------------------------------------------------
 
-def inverse (f : α → β) : β → α :=
-λ y : β, if h : ∃ x, f x = y 
-         then classical.some h 
-         else default α
+def inverse (f : α → β) : β → α := fun y : β ↦
+  if h : ∃ x, f x = y
+  then Classical.choose h
+  else default
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Sea d una función de α en β e y un elemento de
--- β. Demostrar que si 
+-- β. Demostrar que si
 --    ∃ x, f x = y
 -- entonces
---    f (inverse f y) = y :=
+--    f (inverse f y) = y
 -- ----------------------------------------------------------------------
 
-theorem inverse_spec 
-  {f : α → β} 
-  (y : β) 
-  (h : ∃ x, f x = y) :
-  f (inverse f y) = y :=
-begin
-  rw inverse, dsimp, rw dif_pos h,
-  exact classical.some_spec h
-end
+theorem inverse_spec
+  {f : α → β}
+  (y : β)
+  (h : ∃ x, f x = y)
+  : f (inverse f y) = y :=
+by
+  rw [inverse, dif_pos h]
+  -- ⊢ f (choose h) = y
+  exact Classical.choose_spec h
 
--- Prueba
--- ======
-
-/-
-α : Type u,
-_inst_1 : inhabited α,
-β : Type v,
-f : α → β,
-y : β,
-h : ∃ (x : α), f x = y
-⊢ f (inverse f y) = y
-  >> rw inverse, dsimp, rw dif_pos h,
-⊢ f (classical.some h) = y
-  >> exact classical.some_spec h,
-no goals
--/
-
--- Comentarios: 
+-- Comentarios:
 -- 1. La identidad (dif_pos h), cuando (h : e), reescribe la expresión
---    (if h : e then x else y) a x. 
--- 2. La identidad (dif_neg h), cuando (h : ¬ e), reescribe la expresión
---    (if h : e then x else y) a y. 
+--    (if h : e then x else y) a x.
+
+-- Lemas usados
+-- ============
+
+variable (P : α -> Prop)
+variable (c : Prop)
+variable {t : c → α}
+variable {e : ¬c → α}
+variable (hc : c)
+variable (h : ∃ x, P x)
+#check (Classical.choose : (∃ x, P x) → α)
+#check (Classical.choose_spec : (∃ x, P x) → P (Classical.choose h))
+#check (dif_pos hc : dite c t e = t hc)
+#check (inverse : (α → β) → β → α)

@@ -109,4 +109,4 @@ by tauto
 -- Lemas usados
 -- ============
 
--- #check (Subset.trans : r ⊆ s → s ⊆ t → r ⊆ t)
+#check (Subset.trans : r ⊆ s → s ⊆ t → r ⊆ t)

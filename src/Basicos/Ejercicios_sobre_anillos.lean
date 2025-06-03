@@ -1,21 +1,11 @@
--- ---------------------------------------------------------------------
--- Ejercicio 1. Realizar las siguientes acciones:
---    1. Importar la teoría de anillos.
---    2. Crear el espacio de nombres my_ring
---    3. Declarar R como una variable sobre anillos.
---    4. Declarar a y b como variables sobre R.
--- ----------------------------------------------------------------------
-
 import Mathlib.Algebra.Ring.Defs
 import Mathlib.Tactic
-
-namespace MyRing
 
 variable {R : Type _} [Ring R]
 variable {a b : R}
 
 -- ---------------------------------------------------------------------
--- Ejercicio 2. Demostrar que si
+-- Ejercicio. Demostrar que si es un anillo y a, b ∈ R tales que
 --    a + b = 0
 -- entonces
 --    -a = b
@@ -46,10 +36,17 @@ variable {a b : R}
 -- Demostraciones con Lean 4
 -- =========================
 
--- 1ª demostración
--- ---------------
+-- 1ª demostración (basada en la 1º en LN)
+example
+  (h : a + b = 0)
+  : -a = b :=
+calc
+  -a = -a + 0       := by exact (add_zero (-a)).symm
+   _ = -a + (a + b) := congrArg (-a + .) h.symm
+   _ = b            := by exact (neg_add_cancel_left a b)
 
-theorem neg_eq_of_add_eq_zero
+-- 2ª demostración (basada en la 1º en LN)
+example
   (h : a + b = 0)
   : -a = b :=
 calc
@@ -57,9 +54,7 @@ calc
    _ = -a + (a + b) := by rw [h]
    _ = b            := by rw [neg_add_cancel_left]
 
--- 2ª demostración
--- ---------------
-
+-- 3ª demostración (basada en la 1º en LN)
 example
   (h : a + b = 0)
   : -a = b :=
@@ -68,9 +63,7 @@ calc
    _ = -a + (a + b) := by rw [h]
    _ = b            := by simp
 
--- 3ª demostración
--- ---------------
-
+-- 3ª demostración (basada en la 2º en LN)
 example
   (h : a + b = 0)
   : -a = b :=
@@ -82,19 +75,69 @@ by
   -- h1 : b = -a
   exact h1.symm
 
--- ---------------------------------------------------------------------
--- Ejercicio 3. Demostrar que
---     (a + b) + -b = a
--- -------------------------------------------------------------------------
+-- 4ª demostración
+example
+  (h : a + b = 0)
+  : -a = b :=
+neg_eq_iff_add_eq_zero.mpr h
 
-theorem neg_add_cancel_right : (a + b) + -b = a :=
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que si R es un anillo, entonces
+--    ∀ a, b : R, (a + b) + -b = a
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Por la siguiente cadena de igualdades
+--    (a + b) + -b = a + (b + -b)    [por la asociativa]
+--               _ = a + 0           [por suma con opuesto]
+--               _ = a               [por suma con cero]
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- 1ª demostración
+example : (a + b) + -b = a :=
+calc
+  (a + b) + -b = a + (b + -b) := by exact (add_assoc a b (-b))
+             _ = a + 0        := congrArg (a + .) (add_neg_cancel b)
+             _ = a            := add_zero a
+
+-- 2ª demostración
+example : (a + b) + -b = a :=
 calc
   (a + b) + -b = a + (b + -b) := by rw [add_assoc]
-             _ = a + 0        := by rw [add_right_neg]
+             _ = a + 0        := by rw [add_neg_cancel]
              _ = a            := by rw [add_zero]
 
+-- 3ª demostración
+example : (a + b) + -b = a :=
+by
+  rw [add_assoc]
+  -- ⊢ a + (b + -b) = a
+  rw [add_neg_cancel]
+  -- ⊢ a + 0 = a
+  rw [add_zero]
+
+-- 4ª demostración
+example : (a + b) + -b = a :=
+by rw [add_assoc, add_neg_cancel, add_zero]
+
+-- 5ª demostración
+example : (a + b) + -b = a :=
+  add_neg_cancel_right a b
+
+-- 6ª demostración
+example : (a + b) + -b = a :=
+  add_neg_cancel_right _ _
+
+-- 7ª demostración
+example : (a + b) + -b = a :=
+by simp
+
 -- ---------------------------------------------------------------------
--- Ejercicio 4. Demostrar que si
+-- Ejercicio. Demostrar que si R es un anillo y a, b ∈ R tales que
 --    a + b = 0
 -- entonces
 --    a = -b
@@ -123,20 +166,25 @@ calc
 -- Demostraciones con Lean4
 -- ========================
 
--- 1ª demostración
--- ---------------
-
-theorem eq_neg_of_add_eq_zero
+-- 1ª demostración (basada en la 1ª en LN)
+example
   (h : a + b = 0)
   : a = -b :=
 calc
-  a = (a + b) + -b := by rw [neg_add_cancel_right]
+  a = (a + b) + -b := by exact (add_neg_cancel_right a b).symm
+  _ = 0 + -b       := congrArg (. + -b) h
+  _ = -b           := zero_add (-b)
+
+-- 2ª demostración (basada en la 1ª en LN)
+example
+  (h : a + b = 0)
+  : a = -b :=
+calc
+  a = (a + b) + -b := by rw [add_neg_cancel_right]
   _ = 0 + -b       := by rw [h]
   _ = -b           := by rw [zero_add]
 
--- 2ª demostración
--- ---------------
-
+-- 3ª demostración (basada en la 1ª en LN)
 example
   (h : a + b = 0)
   : a = -b :=
@@ -145,20 +193,24 @@ calc
   _ = 0 + -b       := by rw [h]
   _ = -b           := by simp
 
--- 3ª demostración
--- ---------------
-
+-- 4ª demostración (basada en la 1ª en LN)
 example
   (h : a + b = 0)
   : a = -b :=
 by
-  have h1 : (a + b) + -b = 0 + -b := by rw [h]
-  have h2 : (a + b) + -b = a := neg_add_cancel_right
+  have h1 : (a + b) + -b = 0 + -b := congrArg (. + -b) h
+  have h2 : (a + b) + -b = a := add_neg_cancel_right a b
   have h3 : 0 + -b = -b := zero_add (-b)
   rwa [h2, h3] at h1
 
+-- 5ª demostración
+example
+  (h : a + b = 0)
+  : a = -b :=
+add_eq_zero_iff_eq_neg.mp h
+
 -- ---------------------------------------------------------------------
--- Ejercicio 5. Demostrar que
+-- Ejercicio. Demostrar que si R es un anillo, entonces
 --    -0 = 0
 -- ----------------------------------------------------------------------
 
@@ -192,17 +244,25 @@ example : (-0 : R) = 0 :=
 by
   have h1 : (0 : R) + 0 = 0 := add_zero 0
   show (-0 : R) = 0
-  exact neg_eq_of_add_eq_zero h1
+  exact neg_eq_of_add_eq_zero_left h1
 
 -- 2ª demostración (basada en la 2ª en LN)
-theorem neg_zero : (-0 : R) = 0 :=
+example : (-0 : R) = 0 :=
 by
-  apply neg_eq_of_add_eq_zero
+  apply neg_eq_of_add_eq_zero_left
   -- ⊢ 0 + 0 = 0
   rw [add_zero]
 
+-- 3ª demostración
+example : (-0 : R) = 0 :=
+  neg_zero
+
+-- 4ª demostración
+example : (-0 : R) = 0 :=
+by simp
+
 -- ---------------------------------------------------------------------
--- Ejercicio 6. Demostrar que
+-- Ejercicio. Demostrar que
 --     -(-a) = a
 -- ----------------------------------------------------------------------
 
@@ -220,15 +280,41 @@ by
 -- 1ª demostración
 example : -(-a) = a :=
 by
-  have h1 : -a + a = 0 := add_left_neg a
+  have h1 : -a + a = 0 := neg_add_cancel a
   show -(-a) = a
-  exact neg_eq_of_add_eq_zero h1
+  exact neg_eq_of_add_eq_zero_right h1
 
 -- 2ª demostración
-theorem neg_neg : -(-a) = a :=
+example : -(-a) = a :=
 by
-  apply neg_eq_of_add_eq_zero
+  apply neg_eq_of_add_eq_zero_right
   -- ⊢ -a + a = 0
-  rw [add_left_neg]
+  rw [neg_add_cancel]
 
-end MyRing
+-- 3ª demostración
+example : -(-a) = a :=
+neg_neg a
+
+-- 4ª demostración
+example : -(-a) = a :=
+by simp
+
+-- Lemas usados
+-- ============
+
+variable (c : R)
+variable (f : R → R)
+#check (add_assoc a b c : (a + b) + c = a + (b + c))
+#check (add_eq_zero_iff_eq_neg : a + b = 0 ↔ a = -b)
+#check (add_neg_cancel a : a + -a = 0)
+#check (add_neg_cancel_right a b : (a + b) + -b = a)
+#check (add_zero a : a + 0 = a)
+#check (congrArg f : a = b → f a = f b)
+#check (neg_add_cancel a : -a + a = 0)
+#check (neg_add_cancel_left a b : -a + (a + b) = b)
+#check (neg_eq_iff_add_eq_zero : -a = b ↔ a + b = 0)
+#check (neg_eq_of_add_eq_zero_left : a + b = 0 → -b = a)
+#check (neg_eq_of_add_eq_zero_right : a + b = 0 → -a = b)
+#check (neg_neg a : -(-a) = a)
+#check (neg_zero : -0 = 0)
+#check (zero_add a : 0 + a = a)

@@ -43,9 +43,9 @@ variable (a b : R)
 
 theorem neg_add_cancel_right : (a + b) + -b = a :=
 calc
-  (a + b) + -b = a + (b + -b) := by rw [add_assoc]
-             _ = a + 0        := by rw [add_right_neg]
-             _ = a            := by rw [add_zero]
+  (a + b) + -b = a + (b + -b) := by exact add_assoc a b (-b)
+             _ = a + 0        := congrArg (a + .) (add_neg_cancel b)
+             _ = a            := add_zero a
 
 -- 2ª demostración
 -- ===============
@@ -54,7 +54,7 @@ example : (a + b) + -b = a :=
 by
   rw [add_assoc]
   -- ⊢ a + (b + -b) = a
-  rw [add_right_neg]
+  rw [add_neg_cancel]
   -- ⊢ a + 0 = a
   rw [add_zero]
 
@@ -62,7 +62,17 @@ by
 -- ===============
 
 example : (a + b) + -b = a :=
-by rw [add_assoc, add_right_neg, add_zero]
+by rw [add_assoc, add_neg_cancel, add_zero]
+
+-- Lemas usados
+-- ============
+
+variable (c : R)
+variable (f : R → R)
+#check (add_assoc a b c : a + b + c = a + (b + c))
+#check (add_zero a : a + 0 = a)
+#check (add_neg_cancel a : a + -a = 0)
+#check (congrArg f : a = b → f a = f b)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Cerrar la teoría MyRing

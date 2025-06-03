@@ -5,6 +5,8 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable {x y : ℝ}
 
 -- ---------------------------------------------------------------------
@@ -76,11 +78,6 @@ by { left ; linarith [pow_two_nonneg x] }
 -- (P ∨ Q), aplica la regla de introducción de la disyunción; es decir,
 -- cambia el objetivo por P.
 
--- Lema usado
--- ==========
-
--- #check (pow_two_nonneg x : 0 ≤ x ^ 2)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si
 --    -y > x^2 + 1
@@ -96,7 +93,7 @@ by { left ; linarith [pow_two_nonneg x] }
 --    (∀ a ∈ ℝ)[0 ≤ a^2]                                             (L2)
 --    (∀ a  ∈ ℝ)[0 + a = a]                                          (L3)
 --    (∀ a, b ∈ ℝ)[a < -b ↔ b < -a]                                  (L4)
-
+--
 -- Se tiene
 --    -y > x^2 + 1    [por la hipótesis]
 --       ≥ 0 + 1      [por L1 y L2]
@@ -172,15 +169,6 @@ by { right ; linarith [pow_two_nonneg x] }
 -- (P ∨ Q), aplica la regla de introducción de la disyunción; es decir,
 -- cambia el objetivo por Q.
 
--- Lemas usados
--- ============
-
--- variable (a b c : ℝ)
--- #check (pow_two_nonneg a : 0 ≤ a ^ 2)
--- #check (add_le_add_right : b ≤ c → ∀ (a : ℝ),  b + a ≤ c + a)
--- #check (zero_add a : 0 + a = a)
--- #check (lt_neg : a < -b ↔ b < -a)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que si
 --      y > 0
@@ -214,12 +202,6 @@ example
   (h : y > 0)
   : y > 0 ∨ y < -1 :=
 by tauto
-
--- Lema usado
--- ==========
-
--- variable (a b : Prop)
--- #check (Or.inl : a → a ∨ b)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 5. Demostrar que si
@@ -255,8 +237,14 @@ example
   : y > 0 ∨ y < -1 :=
 by tauto
 
--- Lema usado
--- ==========
+-- Lemas usados
+-- ============
 
--- variable (a b : Prop)
--- #check (Or.inr : b → a ∨ b)
+variable (a b : Prop)
+variable (z : ℝ)
+#check (Or.inl : a → a ∨ b)
+#check (Or.inr : b → a ∨ b)
+#check (add_le_add_right : y ≤ z → ∀ x,  y + x ≤ z + x)
+#check (lt_neg : x < -y ↔ y < -x)
+#check (pow_two_nonneg x : 0 ≤ x ^ 2)
+#check (zero_add x :  0 + x = x)

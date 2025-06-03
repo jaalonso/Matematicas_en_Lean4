@@ -27,8 +27,8 @@ example
   : (a + b) * (a + b) = a * c + b * c :=
 calc
   (a + b) * (a + b)
-    = (a + b) * c   := by exact congrArg (HMul.hMul (a + b)) h
-  _ = a * c + b * c := by rw [add_mul]
+    = (a + b) * c   := congrArg ((a + b) * .) h
+  _ = a * c + b * c := add_mul a b c
 
 -- 2ª demostración
 example
@@ -38,3 +38,8 @@ by
   nth_rewrite 2 [h]
   -- ⊢ (a + b) * c = a * c + b * c
   rw [add_mul]
+
+-- Lemas usados
+-- ============
+
+#check (add_mul a b c : (a + b) * c = a * c + b * c)

@@ -98,12 +98,6 @@ example
   : a < b :=
 lt_of_not_ge (fun h3 ↦ (not_lt_of_ge (h1 h3)) h2)
 
--- Lemas usados
--- ============
-
--- #check (lt_of_not_ge : ¬ a ≥ b → a < b)
--- #check (not_lt_of_ge : a ≥ b → ¬ a < b)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que si a, b ∈ ℝ tales que
 --    a ≤ b
@@ -178,4 +172,5 @@ fun h3 ↦ (not_lt_of_ge (h3 h1)) h2
 -- Lemas usados
 -- ============
 
--- #check (not_lt_of_ge : a ≥ b → ¬a < b)
+#check (lt_of_not_ge : ¬ a ≥ b → a < b)
+#check (not_lt_of_ge : a ≥ b → ¬a < b)

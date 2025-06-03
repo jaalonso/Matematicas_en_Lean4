@@ -5,9 +5,9 @@
 --    3. Declarar a, b y c como variables sobre R.
 -- ----------------------------------------------------------------------
 
-import Mathlib.Algebra.Order.Ring.Defs        -- 1
-variable {R : Type _} [StrictOrderedRing R]   -- 2
-variable (a b c : R)                          -- 3
+import Mathlib.Algebra.Order.Ring.Defs                                  -- 1
+variable {R : Type _} [Ring R] [PartialOrder R] [IsStrictOrderedRing R] -- 2
+variable (a b c : R)                                                    -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que
@@ -47,13 +47,6 @@ sub_nonneg.mpr
 -- 3ª demostración
 example : a ≤ b → 0 ≤ b - a :=
 by simp
-
--- Lemas usados
--- ============
-
--- #check (sub_le_sub_right : a ≤ b → ∀ (c : R), a - c ≤ b - c)
--- #check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)
--- #check (sub_self a : a - a = 0)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que
@@ -103,14 +96,6 @@ sub_nonneg.mp
 
 example : 0 ≤ b - a → a ≤ b :=
 by simp
-
--- Lemas usados
--- ============
-
--- #check (zero_add a : 0 + a = a)
--- #check (add_le_add_right : b ≤ c → ∀ (a : R),  b + a ≤ c + a)
--- #check (sub_add_cancel a b : a - b + b = a)
--- #check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que
@@ -217,7 +202,13 @@ mul_le_mul_of_nonneg_right h1 h2
 -- Lemas usados
 -- ============
 
--- #check (mul_le_mul_of_nonneg_right : a ≤ b → 0 ≤ c → a * c ≤ b * c)
--- #check (mul_nonneg : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)
--- #check (sub_mul a b c : (a - b) * c = a * c - b * c)
--- #check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)
+#check (add_le_add_right : b ≤ c → ∀ (a : R),  b + a ≤ c + a)
+#check (mul_le_mul_of_nonneg_right : a ≤ b → 0 ≤ c → a * c ≤ b * c)
+#check (mul_le_mul_of_nonneg_right : a ≤ b → 0 ≤ c → a * c ≤ b * c)
+#check (mul_nonneg : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)
+#check (sub_add_cancel a b : a - b + b = a)
+#check (sub_le_sub_right : a ≤ b → ∀ c, a - c ≤ b - c)
+#check (sub_mul a b c : (a - b) * c = a * c - b * c)
+#check (sub_nonneg : 0 ≤ a - b ↔ b ≤ a)
+#check (sub_self a : a - a = 0)
+#check (zero_add a :  0 + a = a)

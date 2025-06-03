@@ -6,6 +6,8 @@
 -- ----------------------------------------------------------------------
 
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
 variable {x y z : ℝ}
 
 -- ---------------------------------------------------------------------
@@ -79,11 +81,6 @@ example : x < |y| ↔ x < y ∨ x < -y :=
 
 example : x < |y| ↔ x < y ∨ x < -y :=
   lt_abs
-
--- Lemas usados
--- ============
-
---  lt_max_iff : x < max y z ↔ x < y ∨ x < z
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Demostrar que
@@ -177,10 +174,15 @@ by
 example : |x| < y ↔ -y < x ∧ x < y :=
   abs_lt
 
--- Comentarios: Se han usado los siguientes lemas:
--- + max_lt_iff : max x y < z ↔ x < z ∧ y < z
--- + neg_lt : -x < y ↔ -y < x
+-- Lemas usados
+-- ============
 
--- Comprobación:
--- #check (@max_lt_iff ℝ _ x y z)
--- #check (@neg_lt ℝ _ x y)
+#check (abs_eq_max_neg : |x| = max x (-x))
+#check (abs_lt : |x| < y ↔ -y < x ∧ x < y)
+#check (abs_of_neg : x < 0 → |x| = -x)
+#check (abs_of_nonneg : 0 ≤ x → abs x = x)
+#check (le_or_gt x y : x ≤ y ∨ x > y)
+#check (lt_abs : x < |y| ↔ x < y ∨ x < -y)
+#check (lt_max_iff : x < max y z ↔ x < y ∨ x < z)
+#check (max_lt_iff : max x y < z ↔ x < z ∧ y < z)
+#check (neg_lt : -x < y ↔ -y < x)

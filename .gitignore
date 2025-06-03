@@ -303,3 +303,4 @@ TSWLatexianTemp*
 /lake-packages/
 /mathematics_in_lean.pdf
 /build/
+/.lake/

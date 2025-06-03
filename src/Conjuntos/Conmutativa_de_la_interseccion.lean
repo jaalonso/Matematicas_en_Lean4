@@ -3,118 +3,142 @@
 --    s ∩ t = t ∩ s
 -- ----------------------------------------------------------------------
 
-import tactic
+-- Demostración en lenguaje natural
+-- ================================
 
-open set
+-- Tenemos que demostrar que
+--    (∀ x)[x ∈ s ∩ t ↔ x ∈ t ∩ s]
+-- Demostratemos la equivalencia por la doble implicación.
+--
+-- Sea x ∈ s ∩ t. Entonces, se tiene
+--    x ∈ s                                                          (1)
+--    x ∈ t                                                          (2)
+-- Luego x ∈ t ∩ s (por (2) y (1)).
+--
+-- La segunda implicación se demuestra análogamente.
 
-variable {α : Type*}
-variables (s t u : set α)
+-- Demostraciones con Lean4
+-- ========================
+
+import Mathlib.Data.Set.Basic
+open Set
+
+variable {α : Type}
+variable (s t : Set α)
 
 -- 1ª demostración
 -- ===============
 
 example : s ∩ t = t ∩ s :=
-begin
-  ext x,
-  simp only [mem_inter_eq],
-  split,
-  { rintros ⟨xs, xt⟩,
-    exact ⟨xt, xs⟩ },
-  { rintros ⟨xt, xs⟩,
-    exact ⟨xs, xt⟩ },
-end
-
--- Prueba
--- ======
-
-/-
-α : Type u_1,
-s t : set α
-⊢ s ∩ t = t ∩ s
-  >> ext x,
-x : α
-⊢ x ∈ s ∩ t ↔ x ∈ t ∩ s
-  >> simp only [mem_inter_eq],
-⊢ x ∈ s ∧ x ∈ t ↔ x ∈ t ∧ x ∈ s
-  >> split,
-| ⊢ x ∈ s ∧ x ∈ t → x ∈ t ∧ x ∈ s
-|   >> { rintros ⟨xs, xt⟩,
-| xs : x ∈ s,
-| xt : x ∈ t
-| ⊢ x ∈ t ∧ x ∈ s
-|   >>   exact ⟨xt, xs⟩ },
-⊢ x ∈ t ∧ x ∈ s → x ∈ s ∧ x ∈ t
-  >> { rintros ⟨xt, xs⟩,
-xt : x ∈ t,
-xs : x ∈ s
-⊢ x ∈ s ∧ x ∈ t
-  >>   exact ⟨xs, xt⟩ },
-no goals
--/
-
--- Comentarios:
--- 1. La táctica (ext x) transforma la conclusión (s = t) en
---    (x ∈ s ↔ x ∈ t).
--- 2. Se ha usado el lema
---    + mem_inter_eq x s t : x ∈ s ∩ t = (x ∈ s ∧ x ∈ t)
-
--- Comprobación:
-variable (x : α)
--- #check @mem_inter_eq _ x s t
+by
+  ext x
+  -- x : α
+  -- ⊢ x ∈ s ∩ t ↔ x ∈ t ∩ s
+  simp only [mem_inter_iff]
+  -- ⊢ x ∈ s ∧ x ∈ t ↔ x ∈ t ∧ x ∈ s
+  constructor
+  . -- ⊢ x ∈ s ∧ x ∈ t → x ∈ t ∧ x ∈ s
+    intro h
+    -- h : x ∈ s ∧ x ∈ t
+    -- ⊢ x ∈ t ∧ x ∈ s
+    constructor
+    . -- ⊢ x ∈ t
+      exact h.2
+    . -- ⊢ x ∈ s
+      exact h.1
+  . -- ⊢ x ∈ t ∧ x ∈ s → x ∈ s ∧ x ∈ t
+    intro h
+    -- h : x ∈ t ∧ x ∈ s
+    -- ⊢ x ∈ s ∧ x ∈ t
+    constructor
+    . -- ⊢ x ∈ s
+      exact h.2
+    . -- ⊢ x ∈ t
+      exact h.1
 
 -- 2ª demostración
 -- ===============
 
 example : s ∩ t = t ∩ s :=
-ext $ λ x, ⟨λ ⟨xs, xt⟩, ⟨xt, xs⟩, λ ⟨xt, xs⟩, ⟨xs, xt⟩⟩
-
--- Comentario: La notación `f $ ...`  es equivalente a `f (...)`.
+by
+  ext
+  -- x : α
+  -- ⊢ x ∈ s ∩ t ↔ x ∈ t ∩ s
+  simp only [mem_inter_iff]
+  -- ⊢ x ∈ s ∧ x ∈ t ↔ x ∈ t ∧ x ∈ s
+  exact ⟨fun h ↦ ⟨h.2, h.1⟩,
+         fun h ↦ ⟨h.2, h.1⟩⟩
 
 -- 3ª demostración
 -- ===============
 
 example : s ∩ t = t ∩ s :=
-by ext x; simp [and.comm]
+by
+  ext
+  -- x : α
+  -- ⊢ x ∈ s ∩ t ↔ x ∈ t ∩ s
+  exact ⟨fun h ↦ ⟨h.2, h.1⟩,
+         fun h ↦ ⟨h.2, h.1⟩⟩
 
 -- 4ª demostración
 -- ===============
 
 example : s ∩ t = t ∩ s :=
-inf_comm
+by
+  ext x
+  -- x : α
+  -- ⊢ x ∈ s ∩ t ↔ x ∈ t ∩ s
+  simp only [mem_inter_iff]
+  -- ⊢ x ∈ s ∧ x ∈ t ↔ x ∈ t ∧ x ∈ s
+  constructor
+  . -- ⊢ x ∈ s ∧ x ∈ t → x ∈ t ∧ x ∈ s
+    rintro ⟨xs, xt⟩
+    -- xs : x ∈ s
+    -- xt : x ∈ t
+    -- ⊢ x ∈ t ∧ x ∈ s
+    exact ⟨xt, xs⟩
+  . -- ⊢ x ∈ t ∧ x ∈ s → x ∈ s ∧ x ∈ t
+    rintro ⟨xt, xs⟩
+    -- xt : x ∈ t
+    -- xs : x ∈ s
+    -- ⊢ x ∈ s ∧ x ∈ t
+    exact ⟨xs, xt⟩
 
 -- 5ª demostración
 -- ===============
 
 example : s ∩ t = t ∩ s :=
-begin
-  apply subset.antisymm,
-  { rintros x ⟨xs, xt⟩,
-    exact ⟨xt, xs⟩ },
-  { rintros x ⟨xt, xs⟩,
-    exact ⟨xs, xt⟩ },
-end
+by
+  ext x
+  -- x : α
+  -- ⊢ x ∈ s ∩ t ↔ x ∈ t ∩ s
+  simp only [mem_inter_iff]
+  -- ⊢ x ∈ s ∧ x ∈ t ↔ x ∈ t ∧ x ∈ s
+  simp only [And.comm]
 
--- Prueba
--- ======
+-- 6ª demostración
+-- ===============
 
-/-
-α : Type u_1,
-s t : set α
-⊢ s ∩ t = t ∩ s
-  >> apply subset.antisymm,
-| ⊢ s ∩ t ⊆ t ∩ s
-|   >> { rintros x ⟨xs, xt⟩,
-| x : α,
-| xs : x ∈ s,
-| xt : x ∈ t
-| ⊢ x ∈ t ∩ s
-|   >>   exact ⟨xt, xs⟩ },
-⊢ t ∩ s ⊆ s ∩ t
-  >> { rintros x ⟨xt, xs⟩,
-x : α,
-xt : x ∈ t,
-xs : x ∈ s
-⊢ x ∈ s ∩ t
-  >>   exact ⟨xs, xt⟩ },
-no goals
--/
+example : s ∩ t = t ∩ s :=
+ext (fun _ ↦ And.comm)
+
+-- 7ª demostración
+-- ===============
+
+example : s ∩ t = t ∩ s :=
+by ext ; simp [And.comm]
+
+-- 8ª demostración
+-- ===============
+
+example : s ∩ t = t ∩ s :=
+inter_comm s t
+
+-- Lemas usados
+-- ============
+
+variable (x : α)
+variable (a b : Prop)
+#check (And.comm : a ∧ b ↔ b ∧ a)
+#check (inter_comm s t : s ∩ t = t ∩ s)
+#check (mem_inter_iff x s t : x ∈ s ∩ t ↔ x ∈ s ∧ x ∈ t)

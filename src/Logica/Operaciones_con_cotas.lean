@@ -104,12 +104,6 @@ example
   : FnLb (f + g) (a + b) :=
 λ x ↦ add_le_add (hfa x) (hgb x)
 
--- Lemas usados
--- ============
-
--- variable (c d : ℝ)
--- #check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
-
 -- ---------------------------------------------------------------------
 -- Ejercicio 3. Demostrar que el producto de dos funciones no negativas
 -- es no negativa.
@@ -197,11 +191,6 @@ example
   (nng : FnLb g 0)
   : FnLb (f * g) 0 :=
 λ x ↦ mul_nonneg (nnf x) (nng x)
-
--- Lemas usados
--- ============
-
--- #check (mul_nonneg : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 4. Demostrar que si a es una cota superior de f, b es una
@@ -332,5 +321,7 @@ example
 -- Lemas usados
 -- ============
 
--- variable (c d : ℝ)
--- #check (mul_le_mul : a ≤ b → c ≤ d → 0 ≤ c → 0 ≤ b → a * c ≤ b * d)
+variable (c d : ℝ)
+#check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)
+#check (mul_le_mul : a ≤ b → c ≤ d → 0 ≤ c → 0 ≤ b → a * c ≤ b * d)
+#check (mul_nonneg : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)

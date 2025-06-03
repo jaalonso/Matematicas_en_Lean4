@@ -5,111 +5,59 @@
 -- 3. Abrir los espacios de nombre set y nat.
 -- ----------------------------------------------------------------------
 
-import data.set.lattice   -- 1
-import data.nat.prime     -- 2
-open set nat              -- 3
+import Mathlib.Data.Set.Lattice
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.Data.Nat.Prime.Infinite
+
+open Set Nat
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Definir el conjunto de los números primos.
 -- ----------------------------------------------------------------------
 
-def primes : set ℕ := {x | prime x}
-
--- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que
---    (⋃ p ∈ primes, {x | p^2 ∣ x}) = {x | ∃ p ∈ primes, p^2 ∣ x} :=
--- ----------------------------------------------------------------------
-
--- 1ª demostración
--- ===============
-
-example : (⋃ p ∈ primes, {x | p^2 ∣ x}) = {x | ∃ p ∈ primes, p^2 ∣ x} :=
-begin
-  ext,
-  rw mem_bUnion_iff,
-  refl,
-end
-
--- Prueba
--- ======
-
-/-
-⊢ (⋃ (p : ℕ) (H : p ∈ primes), {x : ℕ | p ^ 2 ∣ x}) =
-    {x : ℕ | ∃ (p : ℕ) (H : p ∈ primes), p ^ 2 ∣ x}
-  >> ext,
-x : ℕ
-⊢ (x ∈ ⋃ (p : ℕ) (H : p ∈ primes), {x : ℕ | p ^ 2 ∣ x}) ↔
-    x ∈ {x : ℕ | ∃ (p : ℕ) (H : p ∈ primes), p ^ 2 ∣ x}
-  >> rw mem_bUnion_iff,
-⊢ (∃ (x_1 : ℕ) (H : x_1 ∈ primes), x ∈ {x : ℕ | x_1 ^ 2 ∣ x}) ↔
-    x ∈ {x : ℕ | ∃ (p : ℕ) (H : p ∈ primes), p ^ 2 ∣ x}
-  >> refl,
-no goals
--/
-
--- Comentario: Se ha usado el lema
--- + mem_bUnion_iff : y ∈ (⋃ x ∈ s, t x) ↔ ∃ x ∈ s, y ∈ t x
-
--- Comprobación:
-universes u v
-variable α : Type u
-variable β : Type v
-variable s : set α
-variable t : α → set β
-variable y : β
--- #check @mem_bUnion_iff α β s t y
-
-example : y ∈ (⋃ x ∈ s, t x) ↔ ∃ x ∈ s, y ∈ t x :=
-mem_bUnion_iff
-
--- 2ª demostración
--- ===============
-
-example : (⋃ p ∈ primes, {x | p^2 ∣ x}) = {x | ∃ p ∈ primes, p^2 ∣ x} :=
-by { ext, rw mem_bUnion_iff, refl }
+def primes : Set ℕ := {x | Nat.Prime x}
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
 --    (⋃ p ∈ primes, {x | p^2 ∣ x}) = {x | ∃ p ∈ primes, p^2 ∣ x}
 -- ----------------------------------------------------------------------
 
-example : (⋃ p ∈ primes, {x | p^2 ∣ x}) = {x | ∃ p ∈ primes, p^2 ∣ x} :=
-by { ext, simp }
+-- 1ª demostración
+-- ===============
+
+example : (⋃ p ∈ primes, { x | p ^ 2 ∣ x }) =
+          { x | ∃ p ∈ primes, p ^ 2 ∣ x } :=
+by
+  ext
+  -- ⊢ x ∈ ⋃ p ∈ primes, {x | p ^ 2 ∣ x} ↔ x ∈ {x | ∃ p ∈ primes, p ^ 2 ∣ x}
+  rw [mem_iUnion₂]
+  -- ⊢ (∃ i, ∃ (_ : i ∈ primes), x ∈ {x | i ^ 2 ∣ x}) ↔ x ∈ {x | ∃ p ∈ primes, p ^ 2 ∣ x}
+  simp
+
+-- 2ª demostración
+-- ===============
+
+example : (⋃ p ∈ primes, { x | p ^ 2 ∣ x }) = { x | ∃ p ∈ primes, p ^ 2 ∣ x } :=
+by
+  ext
+  -- ⊢ x ∈ ⋃ p ∈ primes, {x | p ^ 2 ∣ x} ↔ x ∈ {x | ∃ p ∈ primes, p ^ 2 ∣ x}
+  simp
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
---    (⋂ p ∈ primes, {x | ¬ p ∣ x}) ⊆ {x | x < 2}
+--    (⋂ p ∈ primes, {x | ¬ p ∣ x}) ⊆ {x | x = 1}
 -- ----------------------------------------------------------------------
 
-example : (⋂ p ∈ primes, {x | ¬ p ∣ x}) ⊆ {x | x < 2} :=
-begin
-  intro x,
-  contrapose!,
-  simp,
-  apply exists_prime_and_dvd,
-end
-
--- Prueba
--- ======
-
-/-
-⊢ (⋂ (p : ℕ) (H : p ∈ primes), {x : ℕ | ¬p ∣ x}) ⊆ {x : ℕ | x < 2}
-  >> intro x,
-x : ℕ
-⊢ (x ∈ ⋂ (p : ℕ) (H : p ∈ primes), {x : ℕ | ¬p ∣ x}) → x ∈ {x : ℕ | x < 2}
-  >> contrapose!,
-⊢ x ∉ {x : ℕ | x < 2} → (x ∉ ⋂ (p : ℕ) (H : p ∈ primes), {x : ℕ | ¬p ∣ x})
-  >> simp,
-⊢ 2 ≤ x → (∃ (x_1 : ℕ), x_1 ∈ primes ∧ x_1 ∣ x)
-  >> apply exists_prime_and_dvd,
-no goals
--/
-
--- Comentario: Se ha aplicado el lema
--- + exists_prime_and_dvd : 2 ≤ n → (∃ (p : ℕ), p.prime ∧ p ∣ n)
-
-variable n : ℕ
--- #check @exists_prime_and_dvd n
+example : (⋂ p ∈ primes, { x | ¬p ∣ x }) ⊆ { x | x = 1 } :=
+by
+  intro x
+  -- x : ℕ
+  -- ⊢ x ∈ ⋂ p ∈ primes, {x | ¬p ∣ x} → x ∈ {x | x = 1}
+  contrapose!
+  -- ⊢ x ∉ {x | x = 1} → x ∉ ⋂ p ∈ primes, {x | ¬p ∣ x}
+  simp
+  -- ⊢ ¬x = 1 → ∃ x_1 ∈ primes, x_1 ∣ x
+  apply Nat.exists_prime_and_dvd
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Demostrar que
@@ -117,40 +65,33 @@ variable n : ℕ
 -- ----------------------------------------------------------------------
 
 example : (⋃ p ∈ primes, {x | x ≤ p}) = univ :=
-begin
-  apply eq_univ_of_forall,
-  intro x,
-  simp,
-  rcases exists_infinite_primes x with ⟨p, pge, primep⟩,
-  use [p, primep, pge],
-end
+by
+  apply eq_univ_of_forall
+  -- ⊢ ∀ (x : ℕ), x ∈ ⋃ p ∈ primes, {x | x ≤ p}
+  intro x
+  -- x : ℕ
+  -- ⊢ x ∈ ⋃ p ∈ primes, {x | x ≤ p}
+  simp
+  -- ⊢ ∃ i ∈ primes, x ≤ i
+  dsimp [primes]
+  -- ⊢ ∃ i, Nat.Prime i ∧ x ≤ i
+  obtain ⟨p, pge, primep⟩ := exists_infinite_primes x
+  -- p : ℕ
+  -- pge : x ≤ p
+  -- primep : Nat.Prime p
+  use p
 
--- Prueba
--- ======
+-- Lemas usados
+-- ============
 
-/-
-⊢ (⋃ (p : ℕ) (H : p ∈ primes), {x : ℕ | x ≤ p}) = univ
-  >> apply eq_univ_of_forall,
-⊢ ∀ (x : ℕ), x ∈ ⋃ (p : ℕ) (H : p ∈ primes), {x : ℕ | x ≤ p}
-  >> intro x,
-x : ℕ
-⊢ x ∈ ⋃ (p : ℕ) (H : p ∈ primes), {x : ℕ | x ≤ p}
-  >> simp,
-⊢ ∃ (i : ℕ), i ∈ primes ∧ x ≤ i
-  >> rcases exists_infinite_primes x with ⟨p, pge, primep⟩,
-x p : ℕ,
-pge : x ≤ p,
-primep : p.prime
-⊢ ∃ (i : ℕ), i ∈ primes ∧ x ≤ i
-  >> use [p, primep, pge],
-no goals
--/
-
--- Comentario: Se han usado los lemas
--- + eq_univ_of_forall : (∀ x, x ∈ s) → s = univ
--- + exists_infinite_primes : ∀ (n : ℕ), ∃ (p : ℕ), n ≤ p ∧ p.prime
-
--- variable α : Type*
--- variable s : set α
--- #check @eq_univ_of_forall α s
--- #check exists_infinite_primes
+variable (α : Type u)
+variable (I : Type v)
+variable (J : Type w)
+variable (A : I → J → Set α)
+variable (x : α)
+variable (n : ℕ)
+variable (s : Set α)
+#check (Nat.exists_prime_and_dvd : n ≠ 1 → ∃ p, Nat.Prime p ∧ p ∣ n)
+#check (eq_univ_of_forall : (∀ x, x ∈ s) → s = univ)
+#check (exists_infinite_primes n : ∃ p, n ≤ p ∧ Nat.Prime p)
+#check (mem_iUnion₂ : x ∈ ⋃ i, ⋃ j, A i j ↔ ∃ i j, x ∈ A i j)

@@ -46,13 +46,15 @@
 -- ========================
 
 import src.Logica.Definicion_de_convergencia
+import Mathlib.Tactic
 
-variable {s t : ℕ → ℝ} {a b c : ℝ}
+variable {s t : ℕ → ℝ}
+variable {a b c : ℝ}
 
-lemma ConvergesTo_add
-  (cs : ConvergesTo s a)
-  (ct : ConvergesTo t b)
-  : ConvergesTo (s + t) (a + b) :=
+lemma limite_suma
+  (cs : limite s a)
+  (ct : limite t b)
+  : limite (s + t) (a + b) :=
 by
   intros ε εpos
   -- ε : ℝ
@@ -89,8 +91,8 @@ by
 -- Lemas usados
 -- ============
 
--- #check (half_pos : a > 0 → a / 2 > 0)
--- #check (le_of_max_le_left : max a b ≤ c → a ≤ c)
--- #check (le_of_max_le_right : max a b ≤ c → b ≤ c)
--- #check (abs_add a b : |a + b| ≤ |a| + |b|)
--- #check (add_halves a : a / 2 + a / 2 = a)
+#check (half_pos : a > 0 → a / 2 > 0)
+#check (le_of_max_le_left : max a b ≤ c → a ≤ c)
+#check (le_of_max_le_right : max a b ≤ c → b ≤ c)
+#check (abs_add a b : |a + b| ≤ |a| + |b|)
+#check (add_halves a : a / 2 + a / 2 = a)

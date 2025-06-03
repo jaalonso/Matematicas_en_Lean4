@@ -76,3 +76,9 @@ by exact le_refl x
 -- 3ª demostración
 example (x : ℝ) : x ≤ x :=
 le_refl x
+
+-- Lemas usados
+-- ============
+
+#check (le_refl x : x ≤ x)
+#check (le_trans : x ≤ y → y ≤ z → x ≤ z)

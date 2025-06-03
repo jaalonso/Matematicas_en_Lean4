@@ -1,7 +1,7 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que si s es un subconjunto del dominio de la
--- función f, entonces s está contenido en la imagen inversa de la
--- imagen de s por f; es decir,
+-- Demostrar que si s es un subconjunto del dominio de la función f,
+-- entonces s está contenido en la imagen inversa de la imagen de s por
+-- f; es decir,
 --    s ⊆ f⁻¹[f[s]]
 -- ----------------------------------------------------------------------
 
@@ -102,8 +102,8 @@ subset_preimage_image f s
 -- Lemas usados
 -- ============
 
-variable (x : α)
-variable (t : Set β)
-#check (mem_image_of_mem f : x ∈ s → f x ∈ f '' s)
-#check (mem_preimage : x ∈ f ⁻¹' t ↔ f x ∈ t)
-#check (subset_preimage_image f s : s ⊆ f ⁻¹' (f '' s))
+-- variable (x : α)
+-- variable (t : Set β)
+-- #check (mem_preimage : x ∈ f ⁻¹' t ↔ f x ∈ t)
+-- #check (mem_image_of_mem f : x ∈ s → f x ∈ f '' s)
+-- #check (subset_preimage_image f s : s ⊆ f ⁻¹' (f '' s))

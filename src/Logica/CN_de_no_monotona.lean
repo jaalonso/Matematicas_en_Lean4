@@ -50,11 +50,10 @@ by
   rcases h3 with ⟨b, hb⟩
   -- b : ℝ
   -- hb : ¬(a ≤ b → f a ≤ f b)
-  have h4 : a ≤ b ∧ ¬(f a ≤ f b) := not_imp.mp hb
+  have h4 : a ≤ b ∧ ¬(f a ≤ f b) := _root_.not_imp.mp hb
   have h5 : a ≤ b ∧ f b < f a := ⟨h4.1, lt_of_not_le h4.2⟩
   use a, b
   -- ⊢ a ≤ b ∧ f b < f a
-  exact h5
 
 -- 2ª demostración
 -- ===============
@@ -72,10 +71,10 @@ by
 -- Lemas usados
 -- ============
 
--- variable {α : Type _}
--- variable (P : α → Prop)
--- variable (p q : Prop)
--- variable (a b : ℝ)
--- #check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)
--- #check (not_imp : ¬(p → q) ↔ p ∧ ¬q)
--- #check (lt_of_not_le : ¬b ≤ a → a < b)
+variable {α : Type _}
+variable (P : α → Prop)
+variable (p q : Prop)
+variable (a b : ℝ)
+#check (_root_.not_imp : ¬(p → q) ↔ p ∧ ¬q)
+#check (lt_of_not_le : ¬b ≤ a → a < b)
+#check (not_forall : (¬∀ x, P x) ↔ ∃ x, ¬P x)

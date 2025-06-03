@@ -73,8 +73,8 @@ gcd_comm m n
 -- Lemas usados
 -- ============
 
--- #check (_root_.dvd_antisymm : m ∣ n → n ∣ m → m = n)
--- #check (dvd_gcd : k ∣ m → k ∣ n → k ∣ gcd m n)
--- #check (gcd_comm m n : gcd m n = gcd n m)
--- #check (gcd_dvd_left  m n: gcd m n ∣ m)
--- #check (gcd_dvd_right m n : gcd m n ∣ n)
+#check (_root_.dvd_antisymm : m ∣ n → n ∣ m → m = n)
+#check (dvd_gcd : k ∣ m → k ∣ n → k ∣ gcd m n)
+#check (gcd_comm m n : gcd m n = gcd n m)
+#check (gcd_dvd_left  m n: gcd m n ∣ m)
+#check (gcd_dvd_right m n : gcd m n ∣ n)

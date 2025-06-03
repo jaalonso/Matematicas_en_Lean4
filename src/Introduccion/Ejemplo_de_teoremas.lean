@@ -14,8 +14,7 @@ theorem facil : 2 + 3 = 5 := rfl
 -- 1. Para activar la ventana de objetivos (*Lean Goal*) se escribe
 --    C-c TAB
 -- 2. Se desactiva volviendo a escribir C-c TAB
--- 3. La táctica rfl (ver https://bit.ly/3OcOoZL) comprueba que 2+3 y 5
---    son iguales por definición.
+-- 3. La táctica rfl comprueba que 2+3 y 5 son iguales por definición.
 
 -- ---------------------------------------------------------------------
 -- Ejercicio. Calcular el tipo de facil
@@ -34,8 +33,8 @@ theorem facil : 2 + 3 = 5 := rfl
 def ultimo_teorema_de_Fermat :=
   ∀ x y z n : ℕ, n > 2 → x * y * z ≠ 0 → x^n + y^n ≠ z^n
 
-theorem dificil : ultimo_teorema_de_Fermat :=
-sorry
+-- theorem dificil : ultimo_teorema_de_Fermat :=
+-- sorry
 
 -- Comentarios:
 -- 1. La palabra sorry se usa para omitir la demostración.
@@ -50,7 +49,7 @@ sorry
 -- Ejercicio 3. Calcular el tipo de dificil.
 -- ---------------------------------------------------------------------
 
-#check dificil
+-- #check dificil
 
 -- Comentario: Al colocar el cursor sobre check se obtiene
 --    dificil : ultimo_teorema_de_Fermat

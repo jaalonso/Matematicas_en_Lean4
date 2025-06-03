@@ -1,70 +1,129 @@
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar el teorema de Cantor: No existe singuna
--- aplicación suprayectiva de un conjunto en su conjunto potencia.
+-- Demostrar el teorema de Cantor:
+--    ∀ f : α → Set α, ¬Surjective f
 -- ----------------------------------------------------------------------
 
-import data.set.basic
+-- Demostración en lenguaje natural
+-- ================================
 
-open function
+-- Sea f una función de α en el conjunto de los subconjuntos de
+-- α. Tenemos que demostrar que f no es suprayectiva. Lo haresmos por
+-- reducción al absurdo. Para ello, supongamos que f es suprayectiva y
+-- consideremos el conjunto
+--    S := {i ∈ α | i ∉ f(i)}                                        (1)
+-- Entonces, tiene que existir un j ∈ α tal que
+--   f(j) = S                                                        (2)
+-- Se pueden dar dos casos: j ∈ S ó j ∉ S. Veamos que ambos son
+-- imposibles.
+--
+-- Caso 1: Supongamos que j ∈ S. Entonces, por (1)
+--    j ∉ f(j)
+-- y, por (2),
+--    j ∉ S
+-- que es una contradicción.
+--
+-- Caso 2: Supongamos que j ∉ S. Entonces, por (1)
+--    j ∈ f(j)
+-- y, por (2),
+--    j ∈ S
+-- que es una contradicción.
 
-variable {α : Type*}
+-- Demostraciones con Lean4
+-- ========================
 
-theorem Cantor : ∀ f : α → set α, ¬ surjective f :=
-begin
-  intros f surjf,
-  let S := {i | i ∉ f i},
-  cases surjf S with j hj,
-  have h₁ : j ∉ f j,
-  { intro h',
-    have : j ∉ f j,
-      { by rwa hj at h' },
-    contradiction },
-  have h₂ : j ∈ S,
-    from h₁,
-  have h₃ : j ∉ S,
-    by rwa hj at h₁,
-  contradiction,
-end
+import Mathlib.Data.Set.Basic
 
--- Prueba
--- ======
+open Function
 
-/-
-α : Type u_1
-⊢ ∀ (f : α → set α), ¬surjective f
-  >> intros f surjf,
-f : α → set α,
-surjf : surjective f
-⊢ false
-  >> let S := { i | i ∉ f i},
-S : set α := {i : α | i ∉ f i}
-⊢ false
-  >> rcases surjf S with j,
-j : α,
-h : f j = S
-⊢ false
-  >> have h₁ : j ∉ f j,
-| ⊢ j ∉ f j
-|   >> { intro h',
-| h' : j ∈ f j
-| ⊢ false
-|   >>   have : j ∉ f j,
-| | ⊢ j ∉ f j
-| |   >>     { by rwa h at h' },
-| this : j ∉ f j
-| ⊢ false
-|   >>   contradiction },
-h₁ : j ∉ f j
-⊢ false
-  >> have h₂ : j ∈ S,
-| ⊢ j ∈ S
-|   >>   from h₁,
-h₂ : j ∈ S
-⊢ false
-  >> have h₃ : j ∉ S,
-  >>   by rwa h at h₁,
-h₃ : j ∉ S
-⊢ false
-  >> contradiction,
-no goals
--/
+variable {α : Type}
+
+-- 1ª demostración
+-- ===============
+
+example : ∀ f : α → Set α, ¬Surjective f :=
+by
+  intros f hf
+  -- f : α → Set α
+  -- hf : Surjective f
+  -- ⊢ False
+  let S := {i | i ∉ f i}
+  unfold Surjective at hf
+  -- hf : ∀ (b : Set α), ∃ a, f a = b
+  rcases hf S with ⟨j, hj⟩
+  -- j : α
+  -- hj : f j = S
+  by_cases h: j ∈ S
+  . -- h : j ∈ S
+    simp at h
+    -- h : ¬j ∈ f j
+    apply h
+    -- ⊢ j ∈ f j
+    rw [hj]
+    -- ⊢ j ∈ S
+    exact h
+  . -- h : ¬j ∈ S
+    apply h
+    -- ⊢ j ∈ S
+    rw [←hj] at h
+    -- h : ¬j ∈ f j
+    exact h
+
+-- 2ª demostración
+-- ===============
+
+example : ∀ f : α → Set α, ¬ Surjective f :=
+by
+  intros f hf
+  -- f : α → Set α
+  -- hf : Surjective f
+  -- ⊢ False
+  let S := {i | i ∉ f i}
+  rcases hf S with ⟨j, hj⟩
+  -- j : α
+  -- hj : f j = S
+  by_cases h: j ∈ S
+  . -- h : j ∈ S
+    apply h
+    -- ⊢ j ∈ f j
+    rwa [hj]
+  . -- h : ¬j ∈ S
+    apply h
+    rwa [←hj] at h
+
+-- 3ª demostración
+-- ===============
+
+example : ∀ f : α → Set α, ¬ Surjective f :=
+by
+  intros f hf
+  -- f : α → Set α
+  -- hf : Surjective f
+  -- ⊢ False
+  let S := {i | i ∉ f i}
+  rcases hf S with ⟨j, hj⟩
+  -- j : α
+  -- hj : f j = S
+  have h : (j ∈ S) = (j ∉ S) :=
+    calc  (j ∈ S)
+       = (j ∉ f j) := Set.mem_setOf_eq
+     _ = (j ∉ S)   := congrArg (j ∉ .) hj
+  exact iff_not_self (iff_of_eq h)
+
+-- 4ª demostración
+-- ===============
+
+example : ∀ f : α → Set α, ¬ Surjective f :=
+cantor_surjective
+
+-- Lemas usados
+-- ============
+
+variable (x y : α)
+variable (p : α → Prop)
+variable (a b : Prop)
+variable (f : α → α)
+#check (Set.mem_setOf_eq : (x ∈ {y : α | p y}) = p x)
+#check (cantor_surjective : ∀ f : α → Set α, ¬ Surjective f)
+#check (congrArg f : x = y → f x = f y)
+#check (iff_not_self : ¬(a ↔ ¬a))
+#check (iff_of_eq : a = b → (a ↔ b))

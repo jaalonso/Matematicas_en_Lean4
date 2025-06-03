@@ -5,9 +5,9 @@
 --    3. Declarar a y b como variables sobre R.
 -- ----------------------------------------------------------------------
 
-import Mathlib.Algebra.Order.Ring.Defs        -- 1
-variable {R : Type _} [StrictOrderedRing R]   -- 2
-variable (a b c : R)                          -- 3
+import Mathlib.Algebra.Order.Ring.Defs                                  -- 1
+variable {R : Type _} [Ring R] [PartialOrder R] [IsStrictOrderedRing R] -- 2
+variable (a b c : R)                                                    -- 3
 
 -- ---------------------------------------------------------------------
 -- Ejercicio 2. Calcular el tipo de las siguientes expresiones

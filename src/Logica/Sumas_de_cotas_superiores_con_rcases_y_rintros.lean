@@ -35,30 +35,12 @@ example
   : FnHasUb (f + g) :=
 by
   rcases ubf with ⟨a, ubfa⟩
+  -- a : ℝ
+  -- ubfa : FnUb f a
   rcases ubg with ⟨b, ubfb⟩
+  -- b : ℝ
+  -- ubfb : FnUb g b
   exact ⟨a + b, FnUb_add ubfa ubfb⟩
-
--- Su desarrollo es
---
--- f g : ℝ → ℝ
--- ubf : FnHasUb f
--- ubg : FnHasUb g
--- ⊢ FnHasUb (λ (x : ℝ), f x + g x)
---    >> rcases ubf with ⟨a, ubfa⟩
--- f g : ℝ → ℝ
--- ubg : FnHasUb g
--- a : ℝ
--- ubfa : FnUb f a
--- ⊢ FnHasUb (λ (x : ℝ), f x + g x)
---    >> rcases ubg with ⟨b, ubfb⟩
--- f g : ℝ → ℝ
--- a : ℝ
--- ubfa : FnUb f a
--- b : ℝ
--- ubfb : FnUb g b
--- ⊢ FnHasUb (λ (x : ℝ), f x + g x)
---    >> exact ⟨a + b, FnUb_add ubfa ubfb⟩
--- no goals
 
 -- 2ª demostración
 -- ===============
@@ -69,21 +51,12 @@ example :
   FnHasUb (f + g) :=
 by
   rintro ⟨a, ubfa⟩ ⟨b, ubfb⟩
+  -- a b : ℝ
+  -- ubfa : FnUb f a
+  -- b : ℝ
+  -- ubfb : FnUb g b
+  -- ⊢ FnHasUb (f + g)
   exact ⟨a + b, FnUb_add ubfa ubfb⟩
-
--- Su desarrollo es
---
--- f g : ℝ → ℝ
--- ⊢ FnHasUb f → FnHasUb g → FnHasUb (λ (x : ℝ), f x + g x)
---    >> rintros ⟨a, ubfa⟩ ⟨b, ubfb⟩
--- f g : ℝ → ℝ
--- a : ℝ
--- ubfa : FnUb f a
--- b : ℝ
--- ubfb : FnUb g b
--- ⊢ FnHasUb (λ (x : ℝ), f x + g x)
---    >> exact ⟨a + b, FnUb_add ubfa ubfb⟩
--- no goals
 
 -- 3ª demostración
 -- ===============
@@ -91,3 +64,10 @@ by
 example : FnHasUb f → FnHasUb g →
   FnHasUb (f + g) :=
 fun ⟨a, ubfa⟩ ⟨b, ubfb⟩ ↦ ⟨a + b, FnUb_add ubfa ubfb⟩
+
+-- Lemas usados
+-- ============
+
+variable (c d : ℝ)
+#check (FnUb_add : FnUb f a → FnUb g b → FnUb (f + g) (a + b))
+#check (add_le_add : a ≤ b → c ≤ d → a + c ≤ b + d)

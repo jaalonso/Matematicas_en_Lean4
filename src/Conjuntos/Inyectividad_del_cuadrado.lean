@@ -1,81 +1,57 @@
-import data.real.basic
-import data.real.sqrt
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Sqrt
 
-open set real
+open Set Real
 
 -- ---------------------------------------------------------------------
--- Ejercicio. Demostrar que la función cuadrado es inyectiva sobre los
--- números no negativos.
+-- Ejercicio. Demostrar que la función raíz cuadrada es inyectiva sobre
+-- los números no negativos.
 -- ----------------------------------------------------------------------
 
-example : inj_on sqrt { x | x ≥ 0 } :=
-begin
-  intros x hx y hy,
-  intro e,
+example : InjOn sqrt { x | x ≥ 0 } :=
+by
+  intro x hx y hy
+  -- x : ℝ
+  -- hx : x ∈ {x | x ≥ 0}
+  -- y : ℝ
+  -- hy : y ∈ {x | x ≥ 0}
+  intro e
+  -- e : √x = √y
+  -- ⊢ x = y
   calc
-    x   = (sqrt x)^2 : by finish
-    ... = (sqrt y)^2 : congr_arg (λ x, x^2) e
-    ... = y          : by finish
-end
+    x = sqrt x ^ 2 := by rw [sq_sqrt hx]
+    _ = sqrt y ^ 2 := by rw [e]
+    _ = y := by rw [sq_sqrt hy]
 
--- Prueba
--- ======
+-- ---------------------------------------------------------------------
+-- Ejercicio. Demostrar que la función cuadrado es inyectiva sobre
+-- los números no negativos.
+-- ----------------------------------------------------------------------
 
-/-
-⊢ inj_on sqrt {x : ℝ | x ≥ 0}
-  >> intros x y xnonneg ynonneg,
-⊢ inj_on sqrt {x : ℝ | x ≥ 0}
-  >> intro e,
-e : x.sqrt = y.sqrt
-⊢ x = y
-  >> calc
-  >>   x   = (sqrt x)^2 : by rw sqr_sqrt xnonneg
-  >>   ... = (sqrt y)^2 : by rw e
-  >>   ... = y          : by rw sqr_sqrt ynonneg,
-no goals
--/
+example : InjOn (fun x ↦ x ^ 2) { x : ℝ | x ≥ 0 } :=
+by
+  intro x hx y hy
+  -- x : ℝ
+  -- hx : x ∈ {x | x ≥ 0}
+  -- y : ℝ
+  -- hy : y ∈ {x | x ≥ 0}
+  -- ⊢ (fun x => x ^ 2) x = (fun x => x ^ 2) y → x = y
+  intro e
+  -- e : (fun x => x ^ 2) x = (fun x => x ^ 2) y
+  -- ⊢ x = y
+  dsimp at *
+  -- hx : x ≥ 0
+  -- hy : y ≥ 0
+  -- e : x ^ 2 = y ^ 2
+  -- ⊢ x = y
+  calc
+    x = sqrt (x ^ 2) := by rw [sqrt_sq hx]
+    _ = sqrt (y ^ 2) := by rw [e]
+    _ = y := by rw [sqrt_sq hy]
 
--- Comentario: Se ha usado el lema
--- + sqr_sqrt : 0 ≤ x → (sqrt x) ^ 2 = x
+-- Lemas usados
+-- ============
 
--- Comprobación:
 variable (x : ℝ)
--- #check @sqr_sqrt x
-
-example : inj_on (λ (x : ℝ), x^2) { x | x ≥ 0 } :=
-begin
-  intros x xnonneg y ynonneg,
-  simp,
-  intro e,
-  calc
-    x   = sqrt (x ^ 2) : by finish
-    ... = sqrt (y ^ 2) : by rw e
-    ... = y            : by finish
-end
-
--- Prueba
--- ======
-
-/-
-⊢ inj_on (λ (x : ℝ), x ^ 2) {x : ℝ | x ≥ 0}
-  >> intros x y xnonneg ynonneg,
-x y : ℝ,
-xnonneg : x ∈ {x : ℝ | x ≥ 0},
-ynonneg : y ∈ {x : ℝ | x ≥ 0}
-⊢ (λ (x : ℝ), x ^ 2) x = (λ (x : ℝ), x ^ 2) y → x = y
-  >> simp,
-⊢ x ^ 2 = y ^ 2 → x = y
-  >> intro e,
-e : x ^ 2 = y ^ 2
-⊢ x = y
-  >> calc
-  >>   x   = sqrt (x ^ 2) : by rw sqrt_sqr xnonneg
-  >>   ... = sqrt (y ^ 2) : by rw e
-  >>   ... = y            : by rw sqrt_sqr ynonneg,
-no goals
--/
-
--- Comentario: Se ha usado el lema
--- + sqrt_sqr : 0 ≤ x → (x ^ 2).sqrt = x
-
--- #check @sqrt_sqr x
+#check (sq_sqrt : 0 ≤ x → √x ^ 2 = x)
+#check (sqrt_sq : 0 ≤ x → √(x ^ 2) = x)
