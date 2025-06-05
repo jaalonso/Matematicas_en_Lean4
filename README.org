@@ -666,12 +666,13 @@ conjuntistas y sobre las funciones.
 
 * Bibliografía
 
-+ [[https://raw.githubusercontent.com/madvorak/lean4-cheatsheet/main/lean-tactics.pdf][Lean 4 cheatsheet]]. ~ Martin Dvořák.
++ [[https://djvelleman.github.io/HTPIwL/][How to prove it with Lean]]. ~ Daniel Velleman .
 + [[https://leanprover.github.io/lean4/doc/whatIsLean.html][Lean 4 manual]].
++ [[https://leanprover-community.github.io/papers/lean-tactics.pdf][Lean 4 cheatsheet]]. ~ Martin Dvořák.
 + [[https://leanprover-community.github.io/mathematics_in_lean/mathematics_in_lean.pdf][Mathematics in Lean]]. ~ Jeremy Avigad y Patrick Massot.
-+ [[https://github.com/madvorak/lean3-tactic-lean4/blob/main/README.md][Reference sheet for people who know Lean 3 and want to write tactic-based proofs in Lean 4]]. ~ Martin Dvořák.
-+ [[https://leanprover.github.io/theorem_proving_in_lean4/title_page.html][Theorem proving in Lean 4]]. ~ Jeremy Avigad, Leonardo de Moura, Soonho
-  Kong y Sebastian Ullrich.
++ [[https://hrmacbeth.github.io/math2001/][The mechanics of proof]]. ~ Heather Macbeth.
++ [[https://adam.math.hhu.de/#/g/hhu-adam/NNG4][The natural number game]]. ~ Kevin Buzzard, Jon Eugster, and Mohammad Pedramfar.
++ [[https://leanprover.github.io/theorem_proving_in_lean4/title_page.html][Theorem proving in Lean 4]]. ~ Jeremy Avigad, Leonardo de Moura, Soonho Kong y Sebastian Ullrich.
 + [[https://leanprover-community.github.io/undergrad.html][Undergraduate mathematics in mathlib]].
 
 #+LATEX: \end{document}
