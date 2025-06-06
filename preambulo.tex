@@ -30,11 +30,23 @@
 \renewcommand{\cftsubsubsecleader}{\cftdotfill{\cftsubsubsecdotsep}} % Y para subsubsecciones
 
 \usepackage{fontspec}
+\usepackage{xunicode}
 \usepackage{xltxtra}
-\defaultfontfeatures{Ligatures=TeX,Numbers=OldStyle}
+\defaultfontfeatures{Ligatures=TeX}
 \setromanfont{DejaVu Sans}
-% \setsansfont{Arial}
 \setmonofont{DejaVu Sans Mono}[Scale={0.90}]
+
+% Pdte: Para los problemas de espaciado
+\tolerance=1000
+\emergencystretch=2em
+\raggedbottom
+
+% Pdte: Para los caracteres faltantes
+\usepackage{newunicodechar}
+\newunicodechar{⦃}{\textbraceleft}
+\newunicodechar{⦄}{\textbraceright}
+\newunicodechar{⟹}{\ensuremath{\mathnormal\Longrightarrow}}
+\newunicodechar{⟸}{\ensuremath{\mathnormal\Longleftarrow}}
 
 % Notas: La lista de fuentes disponibles se obtiene con fc-list
 
@@ -49,6 +61,7 @@
 % \usepackage{cmtt}
 % \renewcommand{\ttdefault}{cmtt}
 \usepackage{a4wide}
+\usepackage{amssymb, amsmath, mathtools}
 
 \usepackage[dvipsnames]{xcolor}
 

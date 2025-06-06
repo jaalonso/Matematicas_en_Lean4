@@ -7,28 +7,6 @@
 
 #+LATEX: \input preambulo
 
-* Contenido                                                             :TOC:
-- [[#introducción][Introducción]]
-  - [[#resumen][Resumen]]
-  - [[#presentación-panorámica-de-lean][Presentación panorámica de Lean]]
-- [[#aspectos-básicos-del-razonamiento-matemático-en-lean][Aspectos básicos del razonamiento matemático en Lean]]
-  - [[#cálculos][Cálculos]]
-  - [[#demostraciones-en-estructuras-algebraicas][Demostraciones en estructuras algebraicas]]
-  - [[#uso-de-lemas-y-teoremas][Uso de lemas y teoremas]]
-  - [[#más-sobre-orden-y-divisibilidad][Más sobre orden y divisibilidad]]
-  - [[#demostraciones-sobre-estructuras-algebraicas][Demostraciones sobre estructuras algebraicas]]
-- [[#lógica][Lógica]]
-  - [[#implicación-y-cuantificación-universal][Implicación y cuantificación universal]]
-  - [[#el-cuantificador-existencial][El cuantificador existencial]]
-  - [[#la-negación][La negación]]
-  - [[#conjunción-y-bicondicional][Conjunción y bicondicional]]
-  - [[#disyunción][Disyunción]]
-  - [[#sucesiones-y-convergencia][Sucesiones y convergencia]]
-- [[#conjuntos-y-funciones][Conjuntos y funciones]]
-  - [[#conjuntos][Conjuntos]]
-  - [[#funciones][Funciones]]
-- [[#bibliografía][Bibliografía]]
-
 * Introducción
 
 ** Resumen
@@ -37,8 +15,8 @@ El objetivo de este trabajo es presentar el uso de [[https://leanprover.github.i
 matemática [[https://github.com/leanprover-community/mathlib4][mathlib4]]) mediante ejemplos matemáticos. Está basado en el
 libro [[https://leanprover-community.github.io/mathematics_in_lean/mathematics_in_lean.pdf][Mathematics in Lean]] de Jeremy Avigad y Patrick Massot.
 
-Los ejercicios se han ido publicando, desde el 10 de julio de 2022, en
-el blog [[https://www.glc.us.es/~jalonso/calculemus][Calculemus]] y su código en [[https://github.com/jaalonso/Calculemus2][GitHub]].
+Los ejercicios se han ido publicando en el blog [[https://jaalonso.github.io/calculemus/][Calculemus]] y su código
+en [[https://github.com/jaalonso/Calculemus2][GitHub]].
 
 #+BEGIN_COMMENT
 # ** Creación del proyecto
@@ -629,7 +607,8 @@ conjuntistas y sobre las funciones.
 #+INCLUDE: "./src/Conjuntos/Inclusion_de_la_imagen.lean" src lean
 
 *** [[./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean][Ejercicios de imágenes y preimágenes]]
-#+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean" src lean
+#+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean" src lean :lines "1-1045"
+#+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_preimagenes.lean" src lean :lines "1046-"
 
 *** [[./src/Conjuntos/Ejercicios_de_imagenes_y_uniones.lean][Ejercicios de imágenes y uniones]]
 #+INCLUDE: "./src/Conjuntos/Ejercicios_de_imagenes_y_uniones.lean" src lean
